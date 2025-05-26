@@ -6,6 +6,7 @@
 	"exports": "./dist/app.js",
 	"scripts": {
 		"dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/app.ts",
+		"copy:views": "cp -R ./src/Views ./dist/" ,
 		"build": "tsc && node dist/postbuild.js"
 	},
 	"author": "",
