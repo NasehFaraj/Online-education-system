@@ -1,26 +1,26 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 
-interface IAssessment {
+interface IQuiz {
     title: string;
     description: string;
-    courseId: Types.ObjectId;
-    teacherId: Types.ObjectId;
+    courseID: Types.ObjectId;
+    teacherID: Types.ObjectId;
     questions: {
         text: string;
         options: string[];
-        correctAnswer: string;
+        correctAnswer: number ;
     }[];
     dueDate: Date;
     submissions: {
         studentId: Types.ObjectId;
-        answers: string[];
+        answers: number[];
         score?: number;
     }[];
 }
 
-type AssessmentDocument = HydratedDocument<IAssessment>;
+type QuizDocument = HydratedDocument<IQuiz> ;
 
-const assessmentSchema = new Schema<AssessmentDocument>(
+const quizSchema = new Schema<QuizDocument>(
     {
         title: {
             type: String,
@@ -30,20 +30,20 @@ const assessmentSchema = new Schema<AssessmentDocument>(
             type: String,
             default: ""
         },
-        courseId: {
+        courseID: {
             type: Schema.Types.ObjectId,
             ref: "Course",
             required: true
         },
-        teacherId: {
+        teacherID: {
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true
         },
         questions: [{
-            text: { type: String, required: true },
-            options: { type: [String], required: true },
-            correctAnswer: { type: String, required: true }
+            text: { type: String , required: true },
+            options: { type: [String] , required: true },
+            correctAnswer: { type: Number , required: true }
         }],
         dueDate: {
             type: Date,
@@ -52,16 +52,16 @@ const assessmentSchema = new Schema<AssessmentDocument>(
         submissions: [{
             studentId: {
                 type: Schema.Types.ObjectId,
-                ref: "User", // يشير إلى الطالب
+                ref: "User" , 
                 required: true
             },
             answers: {
-                type: [String],
+                type: [Number] ,
                 required: true
             },
             score: {
-                type: Number,
-                min: 0,
+                type: Number ,
+                min: 0 ,
                 max: 100
             }
         }]
@@ -69,4 +69,4 @@ const assessmentSchema = new Schema<AssessmentDocument>(
     { timestamps: true }
 );
 
-export const assessment = model<AssessmentDocument>("assessment", assessmentSchema);
+export const quiz = model<QuizDocument>("quiz", quizSchema);

@@ -15,11 +15,11 @@ router.post("/course/get/all" , alllUsersMiddleware , courseControlers.getCourse
 
 router.post("/course/get" , alllUsersMiddleware , courseControlers.getCourse) ;
 
-router.post("/library/add" , alllUsersMiddleware , courseControlers.addCourseToLibrary) ;
+router.post("/course/library/add" , alllUsersMiddleware , courseControlers.addCourseToLibrary) ;
 
-router.post("/library/delete" , alllUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
+router.post("/course/library/delete" , alllUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
 
-router.post("/library/get/all" , alllUsersMiddleware , courseControlers.getLibrary) ;
+router.post("/course/library/get/all" , alllUsersMiddleware , courseControlers.getLibrary) ;
 
 
 export default router ;

@@ -21,6 +21,7 @@ const addCourse =  async (req : Request , res: Response) : Promise<void> => {
         }) ;
 
         newCourse.save() ;
+        
         res.status(201).send({massage: "The course has been added successfully"}) ;
 
     } catch (error) {
