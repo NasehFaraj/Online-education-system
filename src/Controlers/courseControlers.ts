@@ -1,8 +1,10 @@
 import { Request , Response } from "express";
+import fs from "fs" ;
+
+
 import { course } from "../Models/course";
 import { ICourseResponse } from "../Interfaces/ICourseResponse";
 import { library } from "../Models/Library";
-import fs from "fs" ;
 
 const addCourse =  async (req : Request , res: Response) : Promise<void> => {
 

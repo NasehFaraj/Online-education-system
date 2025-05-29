@@ -1,4 +1,6 @@
 import { Request , Response } from "express";
+
+
 import { quiz } from "../Models/quiz" ;
 import { todoList } from "../Models/todoList" ;
 
@@ -205,16 +207,6 @@ const getTodoList = async (req : Request , res: Response) : Promise<void> => {
 } ;
 
 
-const submitSolution = async (req : Request , res: Response) : Promise<void> => { 
-
-    const { userID } = req.payload ;
-    
-    let myTodoList = await todoList.find({userID: userID}) ;
-    
-    res.status(201).send({myTodoList: myTodoList}) ;
-
-} ;
-
 
 export default {
 
@@ -226,6 +218,5 @@ export default {
     addQuizToTodoList ,
     deleteQuizFromTodoList ,
     getTodoList , 
-    submitSolution
 
 }
