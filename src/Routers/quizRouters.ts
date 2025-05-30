@@ -5,20 +5,20 @@ import { allUsersMiddleware } from "../Middlewares/allUsersMiddleware";
 
 const router = Router() ;
 
-router.put("/quiz" , teacherMiddleware , quizControlers.addQuiz) ;
+router.post("/quiz/add" , teacherMiddleware , quizControlers.addQuiz) ;
 
-router.patch("/quiz" , teacherMiddleware , quizControlers.editQuiz) ;
+router.post("/quiz/edit" , teacherMiddleware , quizControlers.editQuiz) ;
 
-router.delete("/quiz" , teacherMiddleware , quizControlers.deleteQuiz) ;
+router.post("/quiz/delete" , teacherMiddleware , quizControlers.deleteQuiz) ;
 
-router.get("/quiz/all" , allUsersMiddleware , quizControlers.getQuizs) ;
+router.post("/quiz/get/all" , allUsersMiddleware , quizControlers.getQuizs) ;
 
-router.get("/quiz" , allUsersMiddleware , quizControlers.getQuiz) ;
+router.post("/quiz/get" , allUsersMiddleware , quizControlers.getQuiz) ;
 
-router.put("/quiz/todo" , allUsersMiddleware , quizControlers.addQuizToTodoList) ;
+router.post("/quiz/todo/add" , allUsersMiddleware , quizControlers.addQuizToTodoList) ;
 
-router.delete("/quiz/todo/delete" , allUsersMiddleware , quizControlers.deleteQuizFromTodoList) ;
+router.post("/quiz/todo/delete" , allUsersMiddleware , quizControlers.deleteQuizFromTodoList) ;
 
-router.get("/quiz/todo/all" , allUsersMiddleware , quizControlers.getTodoList) ;
+router.post("/quiz/todo/get/all" , allUsersMiddleware , quizControlers.getTodoList) ;
 
 export default router ;
