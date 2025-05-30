@@ -5,21 +5,21 @@ import { allUsersMiddleware } from "../Middlewares/allUsersMiddleware";
 
 const router = Router() ;
 
-router.put("/course" , teacherMiddleware , courseControlers.addCourse) ;
+router.post("/course/add" , teacherMiddleware , courseControlers.addCourse) ;
 
-router.patch("/course/edit" , teacherMiddleware , courseControlers.editCourse) ;
+router.post("/course/edit" , teacherMiddleware , courseControlers.editCourse) ;
 
-router.delete("/course/delete" , teacherMiddleware , courseControlers.deleteCourse) ;
+router.post("/course/delete" , teacherMiddleware , courseControlers.deleteCourse) ;
 
-router.get("/course/all" , allUsersMiddleware , courseControlers.getCourses) ;
+router.post("/course/get/all" , allUsersMiddleware , courseControlers.getCourses) ;
 
-router.get("/course/get" , allUsersMiddleware , courseControlers.getCourse) ;
+router.post("/course/get" , allUsersMiddleware , courseControlers.getCourse) ;
 
-router.put("/course/library" , allUsersMiddleware , courseControlers.addCourseToLibrary) ;
+router.post("/course/library/add" , allUsersMiddleware , courseControlers.addCourseToLibrary) ;
 
-router.delete("/course/library" , allUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
+router.post("/course/library/delete" , allUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
 
-router.get("/course/library/all" , allUsersMiddleware , courseControlers.getLibrary) ;
+router.post("/course/library/get/all" , allUsersMiddleware , courseControlers.getLibrary) ;
 
 
 export default router ;

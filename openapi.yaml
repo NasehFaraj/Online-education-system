@@ -2,12 +2,13 @@ openapi: 3.0.0
 info:
   title: Online Education System APIs
   version: 1.0.0
-  description: APIs for Online Education System
+  description: All API endpoints using POST method
 
 servers:
   - url: https://online-education-system-quch.onrender.com/api
 
 paths:
+  # Authentication Endpoints
   /auth/signup:
     post:
       summary: Register a new user
@@ -16,63 +17,26 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "Ali Ahmed"
-                email:
-                  type: string
-                  format: email
-                  example: "user@example.com"
-                password:
-                  type: string
-                  example: "P@ssw0rd123"
-                role:
-                  type: string
-                  enum: ["student", "teacher", "admin"]
-                  example: "student"
-                gender:
-                  type: string
-                  enum: ["male", "female"]
-                  example: "male"
-              required:
-                - name
-                - email
-                - password
-                - role
-                - gender
+              $ref: '#/components/schemas/SignupRequest'
       responses:
         '201':
           description: User created successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User created successfully"
+                $ref: '#/components/schemas/MessageResponse'
         '409':
           description: Email already registered
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email is already registered"
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Registration error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "An error occurred during registration"
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/verify-email:
     post:
@@ -82,62 +46,32 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: "user@example.com"
-                code:
-                  type: integer
-                  example: 12345
-              required:
-                - email
-                - code
+              $ref: '#/components/schemas/VerifyEmailRequest'
       responses:
         '200':
           description: Email verified successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email verified successfully"
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                $ref: '#/components/schemas/VerifyResponse'
         '401':
           description: Invalid verification code
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid verification code"
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User not found"
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Verification error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Verification process failed"
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/login:
     post:
@@ -147,75 +81,38 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: "user@example.com"
-                password:
-                  type: string
-                  example: "P@ssw0rd123"
-              required:
-                - email
-                - password
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
           description: Login successful
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Login successful"
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                  isBlocked:
-                    type: boolean
-                    example: false
+                $ref: '#/components/schemas/LoginResponse'
         '401':
           description: Invalid credentials
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid password"
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Account not verified
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Account not verified"
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Email not registered
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email not registered"
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Login error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Login process failed"
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/send-code:
     post:
@@ -225,60 +122,32 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: "user@example.com"
-                typeCode:
-                  type: string
-                  enum: ["verify", "reset"]
-                  example: "verify"
-              required:
-                - email
-                - typeCode
+              $ref: '#/components/schemas/SendCodeRequest'
       responses:
         '201':
           description: Code sent successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Code resent successfully"
+                $ref: '#/components/schemas/MessageResponse'
         '404':
           description: Email not registered
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email not registered"
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Account not verified
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email is not Verified"
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error sending code
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "An error occurred during resend code"
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/reset-password:
     post:
@@ -288,78 +157,42 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: "user@example.com"
-                code:
-                  type: integer
-                  example: 12345
-                newPassword:
-                  type: string
-                  example: "NewP@ssw0rd123"
-              required:
-                - email
-                - code
-                - newPassword
+              $ref: '#/components/schemas/ResetPasswordRequest'
       responses:
         '200':
           description: Password reset successful
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Password reset successfully"
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                $ref: '#/components/schemas/VerifyResponse'
         '401':
           description: Invalid verification code
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid verification code"
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User not found"
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Account not verified
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email is not Verified"
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Password reset error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Reset password process failed"
-  /course:
-    put:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Course Endpoints
+  /course/add:
+    post:
       summary: Add a new course
       security:
         - bearerAuth: []
@@ -368,51 +201,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "Introduction to Programming"
-                description:
-                  type: string
-                  example: "Learn programming basics"
-                category:
-                  type: string
-                  example: "Programming"
-                videoPath:
-                  type: string
-                  example: "/videos/intro.mp4"
-                pdfPath:
-                  type: string
-                  example: "/pdfs/intro.pdf"
-              required:
-                - title
-                - description
-                - category
+              $ref: '#/components/schemas/AddCourseRequest'
       responses:
         '201':
           description: Course added successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "The course has been added successfully"
-        '500':
-          description: Course addition failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "add course process failed"
+                $ref: '#/components/schemas/MessageResponse'
 
   /course/edit:
-    patch:
+    post:
       summary: Edit an existing course
       security:
         - bearerAuth: []
@@ -421,65 +220,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                courseID:
-                  type: string
-                  example: "64c9a8e5f7d4b83d9c7d3e8f"
-                title:
-                  type: string
-                  example: "Advanced Programming"
-                description:
-                  type: string
-                  example: "Advanced programming concepts"
-              required:
-                - courseID
-                - title
-                - description
+              $ref: '#/components/schemas/EditCourseRequest'
       responses:
         '201':
           description: Course edited successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "The course has been edit successfully"
-        '401':
-          description: Course not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course not found"
-        '403':
-          description: Permission denied
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "You do not have permission to perform this action"
-        '500':
-          description: Course edit failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "edit course process failed"
+                $ref: '#/components/schemas/MessageResponse'
 
   /course/delete:
-    delete:
+    post:
       summary: Delete a course
       security:
         - bearerAuth: []
@@ -488,121 +239,55 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                courseID:
-                  type: string
-                  example: "64c9a8e5f7d4b83d9c7d3e8f"
-              required:
-                - courseID
+              $ref: '#/components/schemas/DeleteCourseRequest'
       responses:
         '201':
           description: Course deleted successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "The course has been delete successfully"
-        '401':
-          description: Course not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course not found"
-        '403':
-          description: Permission denied
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "You do not have permission to perform this action"
-        '500':
-          description: Course deletion failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "delete course process failed"
+                $ref: '#/components/schemas/MessageResponse'
 
-  /course/all:
-    get:
+  /course/get/all:
+    post:
       summary: Get all courses with pagination
       security:
         - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
-        - name: limit
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCoursesRequest'
       responses:
         '201':
           description: Courses retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  courses:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Course'
+                $ref: '#/components/schemas/CoursesResponse'
 
   /course/get:
-    get:
+    post:
       summary: Get a specific course
       security:
         - bearerAuth: []
-      parameters:
-        - name: courseID
-          in: query
-          required: true
-          schema:
-            type: string
-            example: "64c9a8e5f7d4b83d9c7d3e8f"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCourseRequest'
       responses:
         '201':
           description: Course retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  course:
-                    $ref: '#/components/schemas/CourseResponse'
-        '401':
-          description: Course not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course not found"
+                $ref: '#/components/schemas/CourseResponse'
 
-  /course/library:
-    put:
+  /course/library/add:
+    post:
       summary: Add course to user's library
       security:
         - bearerAuth: []
@@ -611,46 +296,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                courseID:
-                  type: string
-                  example: "64c9a8e5f7d4b83d9c7d3e8f"
-              required:
-                - courseID
+              $ref: '#/components/schemas/LibraryRequest'
       responses:
         '201':
           description: Course added to library
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course has been added to library"
-        '401':
-          description: Course already in library
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course is already added"
-        '500':
-          description: Addition to library failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "add course to library process failed"
+                $ref: '#/components/schemas/MessageResponse'
 
-    delete:
+  /course/library/delete:
+    post:
       summary: Remove course from user's library
       security:
         - bearerAuth: []
@@ -659,47 +315,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                courseID:
-                  type: string
-                  example: "64c9a8e5f7d4b83d9c7d3e8f"
-              required:
-                - courseID
+              $ref: '#/components/schemas/LibraryRequest'
       responses:
         '201':
           description: Course removed from library
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course has been deleted from library"
-        '401':
-          description: Course not in library
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "course is already deleted"
-        '500':
-          description: Removal from library failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "delete course from library process failed"
+                $ref: '#/components/schemas/MessageResponse'
 
-  /course/library/all:
-    get:
+  /course/library/get/all:
+    post:
       summary: Get all courses in user's library
       security:
         - bearerAuth: []
@@ -709,88 +335,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  myLibrary:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/LibraryItem'
+                $ref: '#/components/schemas/LibraryResponse'
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-  schemas:
-    Course:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8f"
-        title:
-          type: string
-          example: "Introduction to Programming"
-        teacherID:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8a"
-        category:
-          type: string
-          example: "Programming"
-        description:
-          type: string
-          example: "Learn programming basics"
-        videoPath:
-          type: string
-          example: "/videos/intro.mp4"
-        pdfPath:
-          type: string
-          example: "/pdfs/intro.pdf"
-
-    CourseResponse:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8f"
-        title:
-          type: string
-          example: "Introduction to Programming"
-        teacherID:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8a"
-        category:
-          type: string
-          example: "Programming"
-        description:
-          type: string
-          example: "Learn programming basics"
-        videoPath:
-          type: string
-          example: "/videos/intro.mp4"
-        pdfPath:
-          type: string
-          example: "/pdfs/intro.pdf"
-        isInLibrary:
-          type: boolean
-          example: true
-
-    LibraryItem:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e90"
-        userID:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8a"
-        courseID:
-          type: string
-          example: "64c9a8e5f7d4b83d9c7d3e8f"
+  # File Endpoints
   /file/upload:
-    put:
+    post:
       summary: Upload a file (video or PDF)
       security:
         - bearerAuth: []
@@ -804,61 +353,31 @@ components:
                 file:
                   type: string
                   format: binary
-                  description: The file to upload (video or PDF)
       responses:
         '200':
           description: File uploaded successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Uploaded successfully"
-                  type:
-                    type: string
-                    enum: ["video", "pdf"]
-                    example: "video"
-                  path:
-                    type: string
-                    example: "/uploads/videos/lesson1.mp4"
-                  size:
-                    type: integer
-                    example: 10485760
-        '400':
-          description: No file uploaded
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "No file uploaded"
-        '500':
-          description: File upload failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "File upload error"
+                $ref: '#/components/schemas/FileUploadResponse'
 
   /file/stream:
-    get:
+    post:
       summary: Stream a file (video or PDF)
       security:
         - bearerAuth: []
-      parameters:
-        - name: filePath
-          in: query
-          required: true
-          schema:
-            type: string
-            example: "/uploads/videos/lesson1.mp4"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                  example: "/uploads/videos/lesson1.mp4"
+              required:
+                - filePath
       responses:
         '200':
           description: File streamed successfully
@@ -871,29 +390,294 @@ components:
               schema:
                 type: string
                 format: binary
-        '404':
-          description: File not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "File not found"
-        '500':
-          description: File streaming failed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Error streaming file"
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+  schemas:
+    # Request Schemas
+    SignupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Ali Ahmed"
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          example: "P@ssw0rd123"
+        role:
+          type: string
+          enum: ["student", "teacher", "admin"]
+          example: "student"
+        gender:
+          type: string
+          enum: ["male", "female"]
+          example: "male"
+      required:
+        - name
+        - email
+        - password
+        - role
+        - gender
+
+    VerifyEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        code:
+          type: integer
+          example: 12345
+      required:
+        - email
+        - code
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          example: "P@ssw0rd123"
+      required:
+        - email
+        - password
+
+    SendCodeRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        typeCode:
+          type: string
+          enum: ["verify", "reset"]
+          example: "verify"
+      required:
+        - email
+        - typeCode
+
+    ResetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        code:
+          type: integer
+          example: 12345
+        newPassword:
+          type: string
+          example: "NewP@ssw0rd123"
+      required:
+        - email
+        - code
+        - newPassword
+
+    AddCourseRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Introduction to Programming"
+        description:
+          type: string
+          example: "Learn programming basics"
+        category:
+          type: string
+          example: "Programming"
+        videoPath:
+          type: string
+          example: "/videos/intro.mp4"
+        pdfPath:
+          type: string
+          example: "/pdfs/intro.pdf"
+      required:
+        - title
+        - description
+        - category
+
+    EditCourseRequest:
+      type: object
+      properties:
+        courseID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+        title:
+          type: string
+          example: "Advanced Programming"
+        description:
+          type: string
+          example: "Advanced programming concepts"
+      required:
+        - courseID
+        - title
+        - description
+
+    DeleteCourseRequest:
+      type: object
+      properties:
+        courseID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+      required:
+        - courseID
+
+    GetCoursesRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+      required:
+        - page
+        - limit
+
+    GetCourseRequest:
+      type: object
+      properties:
+        courseID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+      required:
+        - courseID
+
+    LibraryRequest:
+      type: object
+      properties:
+        courseID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+      required:
+        - courseID
+
+    # Response Schemas
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: string
+
+    VerifyResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+        isBlocked:
+          type: boolean
+
+    FileUploadResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+          enum: ["video", "pdf"]
+        path:
+          type: string
+        size:
+          type: integer
+
+    Course:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        teacherID:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        videoPath:
+          type: string
+        pdfPath:
+          type: string
+
+    CourseResponse:
+      type: object
+      properties:
+        course:
+          type: object
+          properties:
+            _id:
+              type: string
+            title:
+              type: string
+            teacherID:
+              type: string
+            category:
+              type: string
+            description:
+              type: string
+            videoPath:
+              type: string
+            pdfPath:
+              type: string
+            isInLibrary:
+              type: boolean
+
+    CoursesResponse:
+      type: object
+      properties:
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+
+    LibraryResponse:
+      type: object
+      properties:
+        myLibrary:
+          type: array
+          items:
+            $ref: '#/components/schemas/LibraryItem'
+
+    LibraryItem:
+      type: object
+      properties:
+        _id:
+          type: string
+        userID:
+          type: string
+        courseID:
+          type: string
