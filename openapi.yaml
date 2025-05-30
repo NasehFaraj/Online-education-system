@@ -1,360 +1,899 @@
 openapi: 3.0.0
 info:
-    title: Online Education System APIs
-    version: 1.0.0
-    description: APIs for Online Education Systet
+  title: Online Education System APIs
+  version: 1.0.0
+  description: APIs for Online Education System
 
 servers:
-    - url: https://online-education-system-quch.onrender.com/api
+  - url: https://online-education-system-quch.onrender.com/api
 
 paths:
-    /auth/signup:
-        post:
-            summary: Register a new user
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                    example: "Ali Ahmed"
-                                email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"
-                                password:
-                                    type: string
-                                    example: "P@ssw0rd123"
-                                role:
-                                    type: string
-                                    enum: ["student", "teacher", "admin"]
-                                    example: "student"
-                                gender:
-                                    type: string
-                                    enum: ["male", "female"]
-                                    example: "male"
-                            required:
-                                - name
-                                - email
-                                - password
-                                - role
-                                - gender
-            responses:
-                '201':
-                    description: User created successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "User created successfully"
-                '409':
-                    description: Email already registered
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email is already registered"
-                '500':
-                    description: Registration error
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "An error occurred during registration"
+  /auth/signup:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Ali Ahmed"
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "P@ssw0rd123"
+                role:
+                  type: string
+                  enum: ["student", "teacher", "admin"]
+                  example: "student"
+                gender:
+                  type: string
+                  enum: ["male", "female"]
+                  example: "male"
+              required:
+                - name
+                - email
+                - password
+                - role
+                - gender
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User created successfully"
+        '409':
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email is already registered"
+        '500':
+          description: Registration error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An error occurred during registration"
 
-    /auth/verify-email:
-        post:
-            summary: Verify user's email
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"
-                                code:
-                                    type: integer
-                                    example: 12345
-                            required:
-                                - email
-                                - code
-            responses:
-                '200':
-                    description: Email verified successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email verified successfully"
-                                    token:
-                                        type: string
-                                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                '401':
-                    description: Invalid verification code
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Invalid verification code"
-                '404':
-                    description: User not found
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "User not found"
-                '500':
-                    description: Verification error
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Verification process failed"
+  /auth/verify-email:
+    post:
+      summary: Verify user's email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                code:
+                  type: integer
+                  example: 12345
+              required:
+                - email
+                - code
+      responses:
+        '200':
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email verified successfully"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Invalid verification code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid verification code"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: Verification error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Verification process failed"
 
-    /auth/login:
-        post:
-            summary: Authenticate user
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"
-                                password:
-                                    type: string
-                                    example: "P@ssw0rd123"
-                            required:
-                                - email
-                                - password
-            responses:
-                '200':
-                    description: Login successful
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Login successful"
-                                    token:
-                                        type: string
-                                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                                    isBlocked:
-                                        type: boolean
-                                        example: false
-                '401':
-                    description: Invalid credentials
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Invalid password"
-                '403':
-                    description: Account not verified
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Account not verified"
-                '404':
-                    description: Email not registered
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email not registered"
-                '500':
-                    description: Login error
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Login process failed"
+  /auth/login:
+    post:
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "P@ssw0rd123"
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  isBlocked:
+                    type: boolean
+                    example: false
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid password"
+        '403':
+          description: Account not verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account not verified"
+        '404':
+          description: Email not registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email not registered"
+        '500':
+          description: Login error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login process failed"
 
-    /auth/send-code:
-        post:
-            summary: Send verification or reset code
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"
-                                typeCode:
-                                    type: string
-                                    enum: ["verify", "reset"]
-                                    example: "verify"
-                            required:
-                                - email
-                                - typeCode
-            responses:
-                '201':
-                    description: Code sent successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Code resent successfully"
-                '404':
-                    description: Email not registered
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email not registered"
-                '409':
-                    description: Account not verified
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email is not Verified"
-                '500':
-                    description: Error sending code
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "An error occurred during resend code"
+  /auth/send-code:
+    post:
+      summary: Send verification or reset code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                typeCode:
+                  type: string
+                  enum: ["verify", "reset"]
+                  example: "verify"
+              required:
+                - email
+                - typeCode
+      responses:
+        '201':
+          description: Code sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Code resent successfully"
+        '404':
+          description: Email not registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email not registered"
+        '409':
+          description: Account not verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email is not Verified"
+        '500':
+          description: Error sending code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An error occurred during resend code"
 
-    /auth/reset-password:
-        post:
-            summary: Reset user password
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"
-                                code:
-                                    type: integer
-                                    example: 12345
-                                newPassword:
-                                    type: string
-                                    example: "NewP@ssw0rd123"
-                            required:
-                                - email
-                                - code
-                                - newPassword
-            responses:
-                '200':
-                    description: Password reset successful
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Password reset successfully"
-                                    token:
-                                        type: string
-                                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                '401':
-                    description: Invalid verification code
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Invalid verification code"
-                '404':
-                    description: User not found
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "User not found"
-                '409':
-                    description: Account not verified
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Email is not Verified"
-                '500':
-                    description: Password reset error
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: "Reset password process failed"
+  /auth/reset-password:
+    post:
+      summary: Reset user password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                code:
+                  type: integer
+                  example: 12345
+                newPassword:
+                  type: string
+                  example: "NewP@ssw0rd123"
+              required:
+                - email
+                - code
+                - newPassword
+      responses:
+        '200':
+          description: Password reset successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password reset successfully"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Invalid verification code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid verification code"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        '409':
+          description: Account not verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email is not Verified"
+        '500':
+          description: Password reset error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Reset password process failed"
+  /course:
+    put:
+      summary: Add a new course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Introduction to Programming"
+                description:
+                  type: string
+                  example: "Learn programming basics"
+                category:
+                  type: string
+                  example: "Programming"
+                videoPath:
+                  type: string
+                  example: "/videos/intro.mp4"
+                pdfPath:
+                  type: string
+                  example: "/pdfs/intro.pdf"
+              required:
+                - title
+                - description
+                - category
+      responses:
+        '201':
+          description: Course added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The course has been added successfully"
+        '500':
+          description: Course addition failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "add course process failed"
+
+  /course/edit:
+    patch:
+      summary: Edit an existing course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseID:
+                  type: string
+                  example: "64c9a8e5f7d4b83d9c7d3e8f"
+                title:
+                  type: string
+                  example: "Advanced Programming"
+                description:
+                  type: string
+                  example: "Advanced programming concepts"
+              required:
+                - courseID
+                - title
+                - description
+      responses:
+        '201':
+          description: Course edited successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The course has been edit successfully"
+        '401':
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course not found"
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You do not have permission to perform this action"
+        '500':
+          description: Course edit failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "edit course process failed"
+
+  /course/delete:
+    delete:
+      summary: Delete a course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseID:
+                  type: string
+                  example: "64c9a8e5f7d4b83d9c7d3e8f"
+              required:
+                - courseID
+      responses:
+        '201':
+          description: Course deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The course has been delete successfully"
+        '401':
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course not found"
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You do not have permission to perform this action"
+        '500':
+          description: Course deletion failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "delete course process failed"
+
+  /course/all:
+    get:
+      summary: Get all courses with pagination
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '201':
+          description: Courses retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+
+  /course/get:
+    get:
+      summary: Get a specific course
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: courseID
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "64c9a8e5f7d4b83d9c7d3e8f"
+      responses:
+        '201':
+          description: Course retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course:
+                    $ref: '#/components/schemas/CourseResponse'
+        '401':
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course not found"
+
+  /course/library:
+    put:
+      summary: Add course to user's library
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseID:
+                  type: string
+                  example: "64c9a8e5f7d4b83d9c7d3e8f"
+              required:
+                - courseID
+      responses:
+        '201':
+          description: Course added to library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course has been added to library"
+        '401':
+          description: Course already in library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course is already added"
+        '500':
+          description: Addition to library failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "add course to library process failed"
+
+    delete:
+      summary: Remove course from user's library
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                courseID:
+                  type: string
+                  example: "64c9a8e5f7d4b83d9c7d3e8f"
+              required:
+                - courseID
+      responses:
+        '201':
+          description: Course removed from library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course has been deleted from library"
+        '401':
+          description: Course not in library
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "course is already deleted"
+        '500':
+          description: Removal from library failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "delete course from library process failed"
+
+  /course/library/all:
+    get:
+      summary: Get all courses in user's library
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Library retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  myLibrary:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LibraryItem'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Course:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+        title:
+          type: string
+          example: "Introduction to Programming"
+        teacherID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8a"
+        category:
+          type: string
+          example: "Programming"
+        description:
+          type: string
+          example: "Learn programming basics"
+        videoPath:
+          type: string
+          example: "/videos/intro.mp4"
+        pdfPath:
+          type: string
+          example: "/pdfs/intro.pdf"
+
+    CourseResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+        title:
+          type: string
+          example: "Introduction to Programming"
+        teacherID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8a"
+        category:
+          type: string
+          example: "Programming"
+        description:
+          type: string
+          example: "Learn programming basics"
+        videoPath:
+          type: string
+          example: "/videos/intro.mp4"
+        pdfPath:
+          type: string
+          example: "/pdfs/intro.pdf"
+        isInLibrary:
+          type: boolean
+          example: true
+
+    LibraryItem:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e90"
+        userID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8a"
+        courseID:
+          type: string
+          example: "64c9a8e5f7d4b83d9c7d3e8f"
+  /file/upload:
+    put:
+      summary: Upload a file (video or PDF)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload (video or PDF)
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Uploaded successfully"
+                  type:
+                    type: string
+                    enum: ["video", "pdf"]
+                    example: "video"
+                  path:
+                    type: string
+                    example: "/uploads/videos/lesson1.mp4"
+                  size:
+                    type: integer
+                    example: 10485760
+        '400':
+          description: No file uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No file uploaded"
+        '500':
+          description: File upload failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "File upload error"
+
+  /file/stream:
+    get:
+      summary: Stream a file (video or PDF)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: filePath
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "/uploads/videos/lesson1.mp4"
+      responses:
+        '200':
+          description: File streamed successfully
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "File not found"
+        '500':
+          description: File streaming failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error streaming file"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

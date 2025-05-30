@@ -11,7 +11,6 @@ Online Education System is a backend API for an academic platform that enables m
 - TypeScript
 - MongoDB + Mongoose
 - JWT (JSON Web Tokens) for authentication
-- dotenv for environment configuration
 
 # ⚙️ Features
 
