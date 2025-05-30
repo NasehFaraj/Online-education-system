@@ -58,7 +58,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             
             const htmlContent = await ejs.renderFile(templatePath , {emailSubject: emailSubject , name: name , code: newCode }) ;
 
-            // await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
+            await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
 
             await newUser.save() ;
             await newVerifyCode.save() ;
@@ -238,7 +238,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
         const htmlContent = await ejs.renderFile(templatePath , { emailSubject:emailSubject,  name: oldUser.name , code: newCode }) ;
 
-        // await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
+        await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
         
         res.status(201).json({ message: "code resent successfully" }) ;
 
@@ -253,7 +253,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
 const resetPassword =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , code , password } = req.body ;
+    const { email , code , newPassword } = req.body ;
     
     try {
 
@@ -274,7 +274,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
             return ;
         }
 
-        const hashedPassword = await hash(password , 12) ;
+        const hashedPassword = await hash(newPassword , 12) ;
 
         const session = await startSession();
         session.startTransaction();

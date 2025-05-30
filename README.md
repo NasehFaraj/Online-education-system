@@ -32,12 +32,11 @@ Online Education System is a backend API for an academic platform that enables m
 
 npm install
 
-
 3. Setup environment variables:
 
 Create a .env file in the root directory and add the following:
 
-PORT=5000
+PORT=3000
 MONGODB_URI=your_mongo_connection_string
 JWT_SECRET=your_secret_key
 
@@ -51,18 +50,6 @@ npm run dev
 🧪 API Testing
 
 Use Postman or any REST client to test the API endpoints. All routes are defined in the /routes directory.
-
-📁 Project Structure
-
-src/
-│
-├── config/         # Database connection and environment config
-├── controllers/    # Request handlers (business logic)
-├── models/         # Mongoose models
-├── routes/         # API route definitions
-├── middlewares/    # Auth and validation middleware
-└── index.ts        # Entry point of the application
-
 
 ---
 

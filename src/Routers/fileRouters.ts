@@ -11,4 +11,4 @@ router.post("/file/upload" , teacherMiddleware , upload.single("file") , fileUpl
 
 router.post("/file/stream" , allUsersMiddleware , sendFileControlers.streamFile) ;
 
-export default router ;
+export default router ; 
