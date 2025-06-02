@@ -163,14 +163,16 @@ const addCourseToLibrary =  async (req : Request , res: Response) : Promise<void
     const { userID } = req.payload ;
     const { courseID } = req.body ;
 
-    let oldCourse = await library.findOne({courseID: courseID , userID: userID}) ;
-
-    if(oldCourse){
-        res.status(409).send({massage: "course is already added"}) ;
-        return ;
-    }
-
+    
     try {
+
+        let oldCourse = await library.findOne({courseID: courseID , userID: userID}) ;
+
+        if(oldCourse){
+            res.status(409).send({massage: "course is already added"}) ;
+            return ;
+        }
+
         
         let newlirary = new library({
             userID: userID ,
@@ -196,14 +198,14 @@ const deleteCourseFromLibrary =  async (req : Request , res: Response) : Promise
     const { userID } = req.payload ;
     const { courseID } = req.body ;
 
-    let oldCourse = await library.findOne({courseID: courseID , userID: userID}) ;
-
-    if(!oldCourse){
-        res.status(401).send({massage: "course is already deleted"}) ;
-        return ;
-    }
-
     try {
+
+        let oldCourse = await library.findOne({courseID: courseID , userID: userID}) ;
+
+        if(!oldCourse){
+            res.status(401).send({massage: "course is already deleted"}) ;
+            return ;
+        }
         
         await library.findByIdAndDelete(oldCourse._id) ;
         res.status(201).send({Message: "course has been deleted from library"}) ;
@@ -223,6 +225,7 @@ const deleteCourseFromLibrary =  async (req : Request , res: Response) : Promise
 const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
     try {
+
         const { userID } = req.payload ;
 
         let myLibrary = await library.find({userID: userID}) ;
@@ -231,12 +234,11 @@ const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
         for(let i = 0 ; i < myLibrary.length ; i ++){
 
-            let oldCourse = await course.findById(myLibrary[i]) ;
-            
+            let oldCourse = await course.findById(myLibrary[i].courseID) ;
+
             if(oldCourse)courseMyLibrary.push(oldCourse) ;
 
         }
-
         res.status(201).send({courseMyLibrary: courseMyLibrary}) ;
 
     } catch (error) {

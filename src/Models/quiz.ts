@@ -22,8 +22,9 @@ const quizSchema = new Schema<quizDocument>(
             required: true
         },
         description: {
-            type: String,
-            default: ""
+            type: String ,
+            default: "" ,
+            equired: true 
         },
         courseID: {
             type: Schema.Types.ObjectId,

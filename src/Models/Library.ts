@@ -13,10 +13,12 @@ type libraryDocument = HydratedDocument<iLibrary>;
 const librarySchema = new Schema<libraryDocument>({
     
     userID: {
-        type: Schema.Types.ObjectId 
+        type: Schema.Types.ObjectId ,
+        required: true 
     } ,
     courseID: {
-        type: Schema.Types.ObjectId 
+        type: Schema.Types.ObjectId ,
+        equired: true 
     }
 
 }, { timestamps : true }) ;
