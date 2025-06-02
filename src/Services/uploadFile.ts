@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
     destination: (req , file , cb) => {
 
-        let uploadPath = path.join(__dirname , "../uploads") ;
+        let uploadPath = path.join(__dirname , "../../../uploads") ;
         console.log(uploadPath) ;
         
         if (file.mimetype.startsWith('video/')) {
