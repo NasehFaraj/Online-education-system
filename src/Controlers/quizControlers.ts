@@ -3,6 +3,8 @@ import { Request , Response } from "express";
 
 import { quiz } from "../Models/quiz" ;
 import { todoList } from "../Models/todoList" ;
+import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
+import { submission } from "../Models/post";
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -71,7 +73,7 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
 
     try {
 
-        let oldQuiz = await quiz.findById(quizID) ;
+        let oldQuiz = await quiz.findById(quizID);
 
         if(!oldQuiz){
             res.status(401).send({massage: "quiz not found"}) ;
@@ -103,7 +105,7 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
 
     try {
         
-        let oldQuiz = await quiz.findById(quizID) ;
+        let oldQuiz = await quiz.findById(quizID) as IQuizResponse ;
 
         if(!oldQuiz){
             res.status(401).send({massage: "quiz not found"}) ;
@@ -122,15 +124,26 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
 
 } ;
 
-const getQuizs = async (req : Request , res: Response) : Promise<void> => { 
+const getQuizzes = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { page , limit } = req.body ;
+
+    try {
+        const { page , limit } = req.body ;
     
-    const skip = (page - 1) * limit ;
+        const skip = (page - 1) * limit ;
 
-    const quizes = await quiz.find().skip(skip).limit(limit) ;
+        const quizes = await quiz.find().skip(skip).limit(limit) as IQuizResponse[] ;
 
-    res.status(201).send({quizes: quizes}) ;
+        res.status(201).send({quizes: quizes}) ;
+
+    } catch (error) {
+        console.error('get quizzes error:' , error) ;
+        res.status(500).send({
+            message: "get quizzes process failed" ,
+            error: error
+        });
+    }
+    
 
 } ;
 
@@ -199,16 +212,90 @@ const deleteQuizFromTodoList = async (req : Request , res: Response) : Promise<v
 
 const getTodoList = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { userID } = req.payload ;
+    try {
+        
+        const { userID } = req.payload ;
+
+        let myTodoList = await todoList.find({userID: userID}) ;
     
-    let myTodoList = await todoList.find({userID: userID}) ;
+        res.status(201).send({myTodoList: myTodoList}) ;
+
+    } catch (error) {
+        console.error('get todo list error:' , error) ;
+        res.status(500).send({
+            message: "get todo list process failed" ,
+            error: error
+        });
+    }
+
     
-    res.status(201).send({myTodoList: myTodoList}) ;
 
 } ;
 
 
 const submitSolution = async (req : Request , res: Response) : Promise<void> => { 
+
+    try {
+        let { answers , courseID } = req.body ;
+        let { userID } = req.payload ;
+
+        let sumOfDegree = 0 ;
+
+        let oldQuiz = await quiz.findById(courseID) ;
+        
+        if(!oldQuiz){
+            res.status(401).send({massage: "Quiz not found"}) ;
+            return ;
+        }
+
+        let { questions } = oldQuiz ;
+
+        for (let i = 0; i < questions.length; i ++) {
+            if(answers[i] == questions[i])sumOfDegree ++ ;
+        }
+
+        let score = ((sumOfDegree / questions.length) * 100) | 0 ;
+        
+        let newSubmission = new submission({
+            courseID ,
+            studentId: userID ,
+            answers ,
+            score
+        })
+
+        await newSubmission.save() ;
+
+        res.status(201).send({score: score}) ;
+
+    } catch (error) {
+        console.error('submit solutiont error:' , error) ;
+        res.status(500).send({
+            message: "submit solution process failed" ,
+            error: error
+        });
+    }
+
+} ; 
+
+
+const getNumberOfQuizes = async (req : Request , res: Response) : Promise<void> => {
+
+    try {
+
+        let numberOfQuizzes = await quiz.countDocuments() ;
+
+        res.status(201).send({numberOfQuizzes: numberOfQuizzes}) ;
+
+    } catch (error) {
+
+        console.error('get number of quizzes error:' , error) ;
+        res.status(500).send({
+            message: "get number of quizzes process failed" ,
+            error: error
+        });
+
+    }
+    
 
 } ; 
 
@@ -220,10 +307,11 @@ export default {
     editQuiz ,
     deleteQuiz ,
     getQuiz ,
-    getQuizs ,
+    getQuizzes ,
     addQuizToTodoList ,
     deleteQuizFromTodoList ,
     getTodoList , 
     submitSolution ,
+    getNumberOfQuizes
 
 }

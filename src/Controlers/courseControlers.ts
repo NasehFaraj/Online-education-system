@@ -3,8 +3,9 @@ import fs from "fs" ;
 
 
 import { course } from "../Models/course";
-import { ICourseResponse } from "../Interfaces/ICourseResponse";
-import { library } from "../Models/Library";
+import { ICourseResponse } from "../Interfaces/ICourseResponse" ;
+import { library } from "../Models/Library" ;
+import { ICourse } from "../Models/course" ;
 
 const addCourse =  async (req : Request , res: Response) : Promise<void> => {
 
@@ -112,13 +113,23 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
 
 const getCourses =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { page , limit } = req.body ;
 
-    const skip = (page - 1) * limit ;
+    try {
+        const { page , limit } = req.body ;
 
-    const courses = await course.find().skip(skip).limit(limit) ;
+        const skip = (page - 1) * limit ;
 
-    res.status(201).send({courses: courses}) ;
+        const courses = await course.find().skip(skip).limit(limit) ;
+
+        res.status(201).send({courses: courses}) ;
+
+    } catch (error) {
+        console.error('get Courses error:' , error) ;
+        res.status(500).send({
+            message: "get Courses process failed" ,
+            error: error
+        });
+    }
 
 } ; 
 
@@ -216,7 +227,17 @@ const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
         let myLibrary = await library.find({userID: userID}) ;
 
-        res.status(201).send({myLibrary: myLibrary}) ;
+        let courseMyLibrary:ICourse[] = [] ;
+
+        for(let i = 0 ; i < myLibrary.length ; i ++){
+
+            let oldCourse = await course.findById(myLibrary[i]) ;
+            
+            if(oldCourse)courseMyLibrary.push(oldCourse) ;
+
+        }
+
+        res.status(201).send({courseMyLibrary: courseMyLibrary}) ;
 
     } catch (error) {
         console.error('get library error:' , error) ;
@@ -250,6 +271,30 @@ const getNumberOfCourses = async (req : Request , res: Response) : Promise<void>
 } ; 
 
 
+const getNumberOfCoursesAtLibrary = async (req : Request , res: Response) : Promise<void> => {
+
+    try {
+
+        let { userID } = req.payload ;
+
+        let numberOfCourses = await library.countDocuments({userID: userID}) ;
+
+        res.status(201).send({numberOfCourses: numberOfCourses}) ;
+
+    } catch (error) {
+
+        console.error('get number of courses at Library error:' , error) ;
+        res.status(500).send({
+            message: "get number of courses at Library process failed" ,
+            error: error
+        });
+
+    }
+    
+
+} ; 
+
+
 export default {
 
     addCourse ,
@@ -260,6 +305,7 @@ export default {
     addCourseToLibrary ,
     deleteCourseFromLibrary ,
     getLibrary , 
-    getNumberOfCourses
+    getNumberOfCourses , 
+    getNumberOfCoursesAtLibrary 
 
 }

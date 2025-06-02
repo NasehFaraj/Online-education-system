@@ -23,5 +23,7 @@ router.post("/course/library/delete" , allUsersMiddleware , courseControlers.del
 
 router.post("/course/library/get/all" , allUsersMiddleware , courseControlers.getLibrary) ;
 
+router.post("/course/library/number-of-courses" , allUsersMiddleware , courseControlers.getNumberOfCoursesAtLibrary) ;
+
 
 export default router ;

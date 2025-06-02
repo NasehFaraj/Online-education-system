@@ -1,6 +1,6 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 
-interface IQuiz {
+export interface IQuiz {
     title: string;
     description: string;
     courseID: Types.ObjectId;

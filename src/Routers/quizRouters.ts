@@ -11,9 +11,11 @@ router.post("/quiz/edit" , teacherMiddleware , quizControlers.editQuiz) ;
 
 router.post("/quiz/delete" , teacherMiddleware , quizControlers.deleteQuiz) ;
 
-router.post("/quiz/get/all" , allUsersMiddleware , quizControlers.getQuizs) ;
+router.post("/quiz/get/all" , allUsersMiddleware , quizControlers.getQuizzes) ;
 
 router.post("/quiz/get" , allUsersMiddleware , quizControlers.getQuiz) ;
+
+router.post("/course/get/number-of-quizes" , allUsersMiddleware , quizControlers.getNumberOfQuizes) ;
 
 router.post("/quiz/submit-solution" , allUsersMiddleware , quizControlers.submitSolution) ;
 
