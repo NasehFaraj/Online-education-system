@@ -155,7 +155,7 @@ const addCourseToLibrary =  async (req : Request , res: Response) : Promise<void
     let oldCourse = await library.findOne({courseID: courseID , userID: userID}) ;
 
     if(oldCourse){
-        res.status(401).send({massage: "course is already added"}) ;
+        res.status(409).send({massage: "course is already added"}) ;
         return ;
     }
 
@@ -211,14 +211,43 @@ const deleteCourseFromLibrary =  async (req : Request , res: Response) : Promise
 
 const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { userID } = req.payload ;
+    try {
+        const { userID } = req.payload ;
 
-    let myLibrary = await library.find({userID: userID}) ;
+        let myLibrary = await library.find({userID: userID}) ;
 
-    res.status(201).send({myLibrary: myLibrary}) ;
+        res.status(201).send({myLibrary: myLibrary}) ;
+
+    } catch (error) {
+        console.error('get library error:' , error) ;
+        res.status(500).send({
+            message: "get library process failed" ,
+            error: error
+        });
+    }
 
 } ; 
 
+const getNumberOfCourses = async (req : Request , res: Response) : Promise<void> => {
+
+    try {
+
+        let numberOfCourses = await course.countDocuments() ;
+
+        res.status(201).send({numberOfCourses: numberOfCourses}) ;
+
+    } catch (error) {
+
+        console.error('get number of courses error:' , error) ;
+        res.status(500).send({
+            message: "get number of courses process failed" ,
+            error: error
+        });
+
+    }
+    
+
+} ; 
 
 
 export default {
@@ -230,6 +259,7 @@ export default {
     getCourse ,
     addCourseToLibrary ,
     deleteCourseFromLibrary ,
-    getLibrary
+    getLibrary , 
+    getNumberOfCourses
 
 }

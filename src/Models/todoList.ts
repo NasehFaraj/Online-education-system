@@ -5,6 +5,7 @@ interface iTodoList {
     
     userID: Schema.Types.ObjectId ;
     quizID: Schema.Types.ObjectId ;
+    date: Date ;
 
 }
 
@@ -17,7 +18,10 @@ const todoListSchema = new Schema<todoListDocument>({
     } ,
     quizID: {
         type: Schema.Types.ObjectId 
-    }
+    } ,
+    date: {
+        type: Date 
+    } 
 
 }, { timestamps : true }) ;
 

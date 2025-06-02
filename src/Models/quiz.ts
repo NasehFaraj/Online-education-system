@@ -11,16 +11,11 @@ interface IQuiz {
         correctAnswer: number ;
     }[];
     dueDate: Date;
-    submissions: {
-        studentId: Types.ObjectId;
-        answers: number[];
-        score?: number;
-    }[];
 }
 
-type QuizDocument = HydratedDocument<IQuiz> ;
+type quizDocument = HydratedDocument<IQuiz> ;
 
-const quizSchema = new Schema<QuizDocument>(
+const quizSchema = new Schema<quizDocument>(
     {
         title: {
             type: String,
@@ -48,25 +43,9 @@ const quizSchema = new Schema<QuizDocument>(
         dueDate: {
             type: Date,
             required: true
-        },
-        submissions: [{
-            studentId: {
-                type: Schema.Types.ObjectId,
-                ref: "User" , 
-                required: true
-            },
-            answers: {
-                type: [Number] ,
-                required: true
-            },
-            score: {
-                type: Number ,
-                min: 0 ,
-                max: 100
-            }
-        }]
+        }
     },
     { timestamps: true }
 );
 
-export const quiz = model<QuizDocument>("quiz", quizSchema);
+export const quiz = model<quizDocument>("quiz" , quizSchema) ;

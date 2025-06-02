@@ -137,7 +137,7 @@ const getQuizs = async (req : Request , res: Response) : Promise<void> => {
 const addQuizToTodoList = async (req : Request , res: Response) : Promise<void> => { 
 
     const { userID } = req.payload ;
-    const { quizID } = req.body ;
+    const { quizID , date } = req.body ;
 
     let oldQuiz = await todoList.findOne({quizID: quizID , userID: userID}) ;
 
@@ -150,7 +150,8 @@ const addQuizToTodoList = async (req : Request , res: Response) : Promise<void> 
         
         let newElement = new todoList({
             userID: userID ,
-            quizID: quizID
+            quizID: quizID ,
+            date: date 
         }) ;
 
         await newElement.save() ;
@@ -207,6 +208,11 @@ const getTodoList = async (req : Request , res: Response) : Promise<void> => {
 } ;
 
 
+const submitSolution = async (req : Request , res: Response) : Promise<void> => { 
+
+} ; 
+
+
 
 export default {
 
@@ -218,5 +224,6 @@ export default {
     addQuizToTodoList ,
     deleteQuizFromTodoList ,
     getTodoList , 
+    submitSolution ,
 
 }

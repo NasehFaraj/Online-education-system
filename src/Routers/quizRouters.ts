@@ -15,6 +15,8 @@ router.post("/quiz/get/all" , allUsersMiddleware , quizControlers.getQuizs) ;
 
 router.post("/quiz/get" , allUsersMiddleware , quizControlers.getQuiz) ;
 
+router.post("/quiz/submit-solution" , allUsersMiddleware , quizControlers.submitSolution) ;
+
 router.post("/quiz/todo/add" , allUsersMiddleware , quizControlers.addQuizToTodoList) ;
 
 router.post("/quiz/todo/delete" , allUsersMiddleware , quizControlers.deleteQuizFromTodoList) ;
