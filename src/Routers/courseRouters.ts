@@ -15,6 +15,8 @@ router.post("/course/get/all" , allUsersMiddleware , courseControlers.getCourses
 
 router.post("/course/get" , allUsersMiddleware , courseControlers.getCourse) ;
 
+router.post("/course/get/number-of-courses" , allUsersMiddleware , courseControlers.getNumberOfCourses) ;
+
 router.post("/course/library/add" , allUsersMiddleware , courseControlers.addCourseToLibrary) ;
 
 router.post("/course/library/delete" , allUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
