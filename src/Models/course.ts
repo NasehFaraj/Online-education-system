@@ -3,6 +3,7 @@ import { Category } from "../enums/Category" ;
 
 export interface ICourse {
 
+    _id: Types.ObjectId ;
     title: string ;
     description: string ;
     teacherID: Types.ObjectId ;

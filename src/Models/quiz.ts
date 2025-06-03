@@ -1,6 +1,8 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 
 export interface IQuiz {
+
+    _id: Types.ObjectId ;
     title: string;
     description: string;
     courseID: Types.ObjectId;
@@ -11,6 +13,7 @@ export interface IQuiz {
         correctAnswer: number ;
     }[];
     dueDate: Date;
+    
 }
 
 type quizDocument = HydratedDocument<IQuiz> ;

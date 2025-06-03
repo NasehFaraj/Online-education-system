@@ -111,12 +111,22 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
 const getCourses =  async (req : Request , res: Response) : Promise<void> => {
 
     const { page , limit } = req.body ;
+    const { userID } = req.payload ;
 
     try {
         
         const skip = (page - 1) * limit ;
 
-        const courses = await course.find().skip(skip).limit(limit) ;
+        const courses:ICourseResponse[] = await course.find().skip(skip).limit(limit) ;
+
+        for(let i = 0 ; i < courses.length ; i ++){
+
+            let inLibrary = await library.findOne({userID: userID , courseID: courses[i]._id}) ;
+
+            if(inLibrary)courses[i].isInLibrary = true ;
+            else courses[i].isInLibrary = false ;
+
+        }
 
         res.status(201).send({courses: courses}) ;
 

@@ -1,11 +1,14 @@
-import { HydratedDocument, Schema, model } from "mongoose";
+import { HydratedDocument , Schema , model , Types } from "mongoose";
 import { TypeCode } from "../enums/TypeCode"; 
 
 interface IVerifyCode {
+
+    _id: Types.ObjectId ;
     email: string ;
     code: number ;
     typeCode: TypeCode ;
     expiresAt: Date ;
+
 }
 
 type VerifyCodeDocument = HydratedDocument<IVerifyCode>;

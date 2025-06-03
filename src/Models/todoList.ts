@@ -1,8 +1,9 @@
-import { Schema , model , HydratedDocument } from "mongoose";
+import { Schema , model , HydratedDocument , Types } from "mongoose";
 
 
 interface iTodoList {
-    
+
+    _id: Types.ObjectId ;
     userID: Schema.Types.ObjectId ;
     quizID: Schema.Types.ObjectId ;
     date: Date ;

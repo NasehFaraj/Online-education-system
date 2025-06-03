@@ -2,6 +2,7 @@ import { Schema , model , HydratedDocument , Types } from "mongoose";
 
 interface IPost {
 
+    _id: Types.ObjectId ;
     postedBy: Schema.Types.ObjectId ;
     title: string ;
     article: string ;

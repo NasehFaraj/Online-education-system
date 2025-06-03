@@ -2,6 +2,7 @@ import { Schema , model , HydratedDocument , Types } from "mongoose";
 
 interface ISubmission {
 
+    _id: Types.ObjectId ;
     courseID: Types.ObjectId ;
     studentId: Types.ObjectId ;
     answers: number[] ;

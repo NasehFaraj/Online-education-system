@@ -1,8 +1,10 @@
-import { Schema , model , HydratedDocument } from "mongoose";
+import { Schema , model , HydratedDocument , Types } from "mongoose";
 import { Role } from "../enums/Role";
 import { Gender } from "../enums/Gender";
 
 interface iUser {
+
+    _id: Types.ObjectId ;
     name: string ;
     email: string ;
     password: string ;

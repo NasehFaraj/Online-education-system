@@ -4,7 +4,7 @@ import { Request , Response } from "express";
 import { quiz } from "../Models/quiz" ;
 import { todoList } from "../Models/todoList" ;
 import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
-import { submission } from "../Models/post";
+import { submission } from "../Models/submission";
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 

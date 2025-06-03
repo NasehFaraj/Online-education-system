@@ -2,7 +2,6 @@ import { Request , Response } from "express" ;
 import fs from "fs" ;
 
 import { post } from "../Models/post";
-import { user } from "../Models/user";
 
 const addPost =  async (req : Request , res: Response) : Promise<void> => {
     
