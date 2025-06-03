@@ -119,7 +119,7 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
                 } ,
                 process.env.JWT_SECRET! ,
                 {
-                    expiresIn: '1h' ,
+                    expiresIn: '1m' ,
                     algorithm: 'HS256'
                 }
             ) ;
