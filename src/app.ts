@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors" ; 
 
 import { connectDB } from "./Database/connect";
+import postRouters from "./Routers/postRouters" ;
 import fileRouters from "./Routers/fileRouters" ;
 import authRouters from "./Routers/authRouters" ;
 import courseRouters from "./Routers/courseRouters" ;
@@ -14,6 +15,7 @@ dotenv.config() ;
 connectDB() ;
 app.use(json()) ;
 app.use(cors()) ;
+app.use(postRouters) ;
 app.use(fileRouters) ;
 app.use(authRouters) ;
 app.use(courseRouters) ;

@@ -2,6 +2,8 @@ import { Schema , model , HydratedDocument , Types } from "mongoose";
 
 interface IPost {
 
+    postedBy: Schema.Types.ObjectId ;
+    title: string ;
     article: string ;
     photoPath: string ;
     
@@ -11,15 +13,25 @@ interface IPost {
 type postDocument = HydratedDocument<IPost> ;
 
 const postSchema = new Schema<postDocument>({
-    
+
+    postedBy : {
+        type: Schema.Types.ObjectId , 
+        required: true 
+    } ,
+    title: {
+        type: String , 
+        required: true 
+    },
     article: {
+        required: true ,
         type: String 
     } ,
     photoPath: {
+        required: true ,
         type: String 
     }
 
 }) ;
 
 
-export const submission = model<postDocument>("post" , postSchema);
+export const post = model<postDocument>("post" , postSchema);

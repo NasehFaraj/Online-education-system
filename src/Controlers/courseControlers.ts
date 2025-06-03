@@ -43,24 +43,21 @@ const editCourse =  async (req : Request , res: Response) : Promise<void> => {
     const { courseID , title , description } = req.body ;
     const { userID } = req.payload ;
 
-    const oldCourse = await course.findById(courseID) ;
-
-    if(!oldCourse) {
-        res.status(401).send({massage: "course not found"}) ;
-        return ;
-    }
-
-    if(oldCourse.teacherID != userID){
-        res.status(403).send({massage: "You do not have permission to perform this action"}) ;
-        return ;
-    }
-
-    oldCourse.title = title ;
-    oldCourse.description = description ;
-
     try {
+
+        const oldCourse = await course.findById(courseID) ;
+
+        if(!oldCourse) {
+            res.status(401).send({massage: "course not found"}) ;
+            return ;
+        }
+
+        if(oldCourse.teacherID != userID){
+            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            return ;
+        }
         
-        await oldCourse.save() ;
+        await course.findByIdAndUpdate(courseID , {title , description}) ;
 
         res.status(201).send({massage: "The course has been edit successfully"}) ;
 
@@ -79,20 +76,20 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
     const { courseID } = req.body ;
     const { userID } = req.payload ;
 
-    const oldCourse = await course.findById(courseID) ;
-
-    if(!oldCourse) {
-        res.status(401).send({massage: "course not found"}) ;
-        return ;
-    }
-
-    if(oldCourse.teacherID != userID){
-        res.status(403).send({massage: "You do not have permission to perform this action"}) ;
-        return ;
-    }
-
     try {
         
+        const oldCourse = await course.findById(courseID) ;
+
+        if(!oldCourse) {
+            res.status(401).send({massage: "course not found"}) ;
+            return ;
+        }
+
+        if(oldCourse.teacherID != userID){
+            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            return ;
+        }
+            
         if(oldCourse.pdfPath)fs.unlinkSync(oldCourse.pdfPath) ;
         if(oldCourse.videoPath)fs.unlinkSync(oldCourse.videoPath) ;
 
@@ -113,10 +110,10 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
 
 const getCourses =  async (req : Request , res: Response) : Promise<void> => {
 
+    const { page , limit } = req.body ;
 
     try {
-        const { page , limit } = req.body ;
-
+        
         const skip = (page - 1) * limit ;
 
         const courses = await course.find().skip(skip).limit(limit) ;
@@ -140,21 +137,31 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
     const { userID } = req.payload ;
     const { courseID } = req.body ;
 
-    let oldCourse = await course.findById(courseID) ;
+    try {
+        
+        let oldCourse = await course.findById(courseID) ;
 
-    if(!oldCourse){
-        res.status(401).send({massage: "course not found"}) ;
-        return ;
+        if(!oldCourse){
+            res.status(401).send({massage: "course not found"}) ;
+            return ;
+        }
+
+        let courseRes:ICourseResponse = oldCourse ;
+
+        let inLibrary = await library.findOne({userID: userID , courseID: courseID}) ;
+
+        if(inLibrary)courseRes.isInLibrary = true ;
+        else courseRes.isInLibrary = false ;
+
+        res.status(201).send({course: courseRes}) ;
+
+    } catch (error) {
+        console.error('get Course error:' , error) ;
+        res.status(500).send({
+            message: "get Course process failed" ,
+            error: error
+        });
     }
-
-    let courseRes:ICourseResponse = oldCourse ;
-
-    let inLibrary = await library.findOne({userID: userID , courseID: courseID}) ;
-
-    if(inLibrary)courseRes.isInLibrary = true ;
-    else courseRes.isInLibrary = false ;
-
-    res.status(201).send({course: courseRes}) ;
 
 } ; 
 
@@ -224,11 +231,14 @@ const deleteCourseFromLibrary =  async (req : Request , res: Response) : Promise
 
 const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
+    const { page , limit } = req.body ;
+    const { userID  } = req.payload ; 
+
     try {
 
-        const { userID } = req.payload ;
+        const skip = (page - 1) * limit ;
 
-        let myLibrary = await library.find({userID: userID}) ;
+        let myLibrary = await library.find({userID: userID}).skip(skip).limit(limit) ; ;
 
         let courseMyLibrary:ICourse[] = [] ;
 
@@ -274,10 +284,10 @@ const getNumberOfCourses = async (req : Request , res: Response) : Promise<void>
 
 
 const getNumberOfCoursesAtLibrary = async (req : Request , res: Response) : Promise<void> => {
+    
+    let { userID } = req.payload ;
 
     try {
-
-        let { userID } = req.payload ;
 
         let numberOfCourses = await library.countDocuments({userID: userID}) ;
 

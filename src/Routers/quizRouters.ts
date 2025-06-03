@@ -1,28 +1,30 @@
 import { Router } from "express";
+
+
 import quizControlers from "../Controlers/quizControlers";
-import { teacherMiddleware } from "../Middlewares/teacherMiddleware" ;
-import { allUsersMiddleware } from "../Middlewares/allUsersMiddleware";
+import { Role } from "../enums/Role";
+import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 
 const router = Router() ;
 
-router.post("/quiz/add" , teacherMiddleware , quizControlers.addQuiz) ;
+router.post("/quiz/add" , usersMiddleware([Role.Teacher]) , quizControlers.addQuiz) ;
 
-router.post("/quiz/edit" , teacherMiddleware , quizControlers.editQuiz) ;
+router.post("/quiz/edit" , usersMiddleware([Role.Teacher]) , quizControlers.editQuiz) ;
 
-router.post("/quiz/delete" , teacherMiddleware , quizControlers.deleteQuiz) ;
+router.post("/quiz/delete" , usersMiddleware([Role.Teacher]) , quizControlers.deleteQuiz) ;
 
-router.post("/quiz/get/all" , allUsersMiddleware , quizControlers.getQuizzes) ;
+router.post("/quiz/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getQuizzes) ;
 
-router.post("/quiz/get" , allUsersMiddleware , quizControlers.getQuiz) ;
+router.post("/quiz/get" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getQuiz) ;
 
-router.post("/course/get/number-of-quizes" , allUsersMiddleware , quizControlers.getNumberOfQuizes) ;
+router.post("/course/get/number-of-quizes" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getNumberOfQuizes) ;
 
-router.post("/quiz/submit-solution" , allUsersMiddleware , quizControlers.submitSolution) ;
+router.post("/quiz/submit-solution" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.submitSolution) ;
 
-router.post("/quiz/todo/add" , allUsersMiddleware , quizControlers.addQuizToTodoList) ;
+router.post("/quiz/todo/add" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.addQuizToTodoList) ;
 
-router.post("/quiz/todo/delete" , allUsersMiddleware , quizControlers.deleteQuizFromTodoList) ;
+router.post("/quiz/todo/delete" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.deleteQuizFromTodoList) ;
 
-router.post("/quiz/todo/get/all" , allUsersMiddleware , quizControlers.getTodoList) ;
+router.post("/quiz/todo/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getTodoList) ;
 
 export default router ;

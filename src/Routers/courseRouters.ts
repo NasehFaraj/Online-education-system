@@ -1,29 +1,31 @@
 import { Router } from "express";
+
+
 import courseControlers from "../Controlers/courseControlers" ;
-import { teacherMiddleware } from "../Middlewares/teacherMiddleware" ;
-import { allUsersMiddleware } from "../Middlewares/allUsersMiddleware";
+import { Role } from "../enums/Role" ;
+import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 
 const router = Router() ;
 
-router.post("/course/add" , teacherMiddleware , courseControlers.addCourse) ;
+router.post("/course/add" , usersMiddleware([Role.Teacher]) , courseControlers.addCourse) ;
 
-router.post("/course/edit" , teacherMiddleware , courseControlers.editCourse) ;
+router.post("/course/edit" , usersMiddleware([Role.Teacher]) , courseControlers.editCourse) ;
 
-router.post("/course/delete" , teacherMiddleware , courseControlers.deleteCourse) ;
+router.post("/course/delete" , usersMiddleware([Role.Teacher]) , courseControlers.deleteCourse) ;
 
-router.post("/course/get/all" , allUsersMiddleware , courseControlers.getCourses) ;
+router.post("/course/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getCourses) ;
 
-router.post("/course/get" , allUsersMiddleware , courseControlers.getCourse) ;
+router.post("/course/get" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getCourse) ;
 
-router.post("/course/get/number-of-courses" , allUsersMiddleware , courseControlers.getNumberOfCourses) ;
+router.post("/course/get/number-of-courses" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getNumberOfCourses) ;
 
-router.post("/course/library/add" , allUsersMiddleware , courseControlers.addCourseToLibrary) ;
+router.post("/course/library/add" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.addCourseToLibrary) ;
 
-router.post("/course/library/delete" , allUsersMiddleware , courseControlers.deleteCourseFromLibrary) ;
+router.post("/course/library/delete" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.deleteCourseFromLibrary) ;
 
-router.post("/course/library/get/all" , allUsersMiddleware , courseControlers.getLibrary) ;
+router.post("/course/library/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getLibrary) ;
 
-router.post("/course/library/number-of-courses" , allUsersMiddleware , courseControlers.getNumberOfCoursesAtLibrary) ;
+router.post("/course/library/number-of-courses" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getNumberOfCoursesAtLibrary) ;
 
 
 export default router ;

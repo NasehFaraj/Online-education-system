@@ -1,14 +1,15 @@
 import { Router } from "express" ;
+
+
+import fileControlers from "../Controlers/fileControlers" ;
+import { Role } from "../enums/Role";
 import { upload } from "../Services/uploadFile" ;
-import { teacherMiddleware } from "../Middlewares/teacherMiddleware" ;
-import { allUsersMiddleware } from "../Middlewares/allUsersMiddleware";
-import fileUploadControlers from "../Controlers/fileUploadControlers" ;
-import sendFileControlers from "../Controlers/sendFileControlers" ;
+import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 
 const router = Router() ;
 
-router.post("/file/upload" , teacherMiddleware , upload.single("file") , fileUploadControlers.uploadFile) ;
+router.post("/file/upload" , usersMiddleware([Role.Teacher]) , upload.single("file") , fileControlers.uploadFile) ;
 
-router.post("/file/stream" , allUsersMiddleware , sendFileControlers.streamFile) ;
+router.post("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
 
 export default router ; 
