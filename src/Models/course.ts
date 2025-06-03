@@ -11,6 +11,8 @@ export interface ICourse {
     studentsEnrolled?: Types.ObjectId[] ;
     videoPath?: string ;
     pdfPath?: string ;
+    createdAt: Date ;
+    updatedAt: Date ;
 
 }
 

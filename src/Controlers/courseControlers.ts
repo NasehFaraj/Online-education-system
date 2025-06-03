@@ -117,18 +117,31 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (page - 1) * limit ;
 
-        const courses:ICourseResponse[] = await course.find().skip(skip).limit(limit) ;
+        let courses = await course.find().skip(skip).limit(limit) ;
+        let resCourses:ICourseResponse[] = [] ; 
 
         for(let i = 0 ; i < courses.length ; i ++){
+            
+            resCourses.push({
+                _id : courses[i]._id ,
+                title: courses[i].title ,
+                description: courses[i].description ,
+                teacherID: courses[i].teacherID ,
+                category: courses[i].category ,
+                studentsEnrolled: courses[i].studentsEnrolled ,
+                videoPath: courses[i].videoPath ,
+                pdfPath: courses[i].pdfPath ,
+                createdAt: courses[i].createdAt ,
+                updatedAt: courses[i].updatedAt ,
+                isInLibrary : false 
+            })
 
             let inLibrary = await library.findOne({userID: userID , courseID: courses[i]._id}) ;
-
-            if(inLibrary)courses[i].isInLibrary = true ;
-            else courses[i].isInLibrary = false ;
-
+            
+            if(inLibrary)resCourses[i].isInLibrary = true ;
         }
-
-        res.status(201).send({courses: courses}) ;
+        
+        res.status(201).send({courses: resCourses}) ;
 
     } catch (error) {
         console.error('get Courses error:' , error) ;
@@ -156,12 +169,23 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        let courseRes:ICourseResponse = oldCourse ;
+        let courseRes:ICourseResponse = {
+            _id : oldCourse._id ,
+            title: oldCourse.title ,
+            description: oldCourse.description ,
+            teacherID: oldCourse.teacherID ,
+            category: oldCourse.category ,
+            studentsEnrolled: oldCourse.studentsEnrolled ,
+            videoPath: oldCourse.videoPath ,
+            pdfPath: oldCourse.pdfPath ,
+            createdAt: oldCourse.createdAt ,
+            updatedAt: oldCourse.updatedAt ,
+            isInLibrary : false 
+        } ;
 
         let inLibrary = await library.findOne({userID: userID , courseID: courseID}) ;
 
         if(inLibrary)courseRes.isInLibrary = true ;
-        else courseRes.isInLibrary = false ;
 
         res.status(201).send({course: courseRes}) ;
 
