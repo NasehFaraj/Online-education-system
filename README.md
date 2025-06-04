@@ -30,7 +30,7 @@ This is a simple and scalable Online Education System built with Node.js, TypeSc
 # 🛠️ Installation & Running Locally
 
 1. Clone the repository:
-   `bash
+
    git clone https://github.com/NasehFaraj/Online-education-system
    cd Online-education-system
 
