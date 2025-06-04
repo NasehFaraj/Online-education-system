@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express' ;
-import jwt , { JwtPayload } from 'jsonwebtoken' ;
+import jwt from 'jsonwebtoken' ;
 import dotenv from 'dotenv' ;
 import { Role } from '../enums/Role' ;
 import { payload } from '../Interfaces/payloadInterface';
@@ -24,7 +24,7 @@ export const usersMiddleware = (roles: Role[]) => {
             }
 
 
-            const decoded = jwt.verify(token , JWT_SECRET) ;
+            const decoded = jwt.verify(token , JWT_SECRET as jwt.Secret | jwt.PublicKey) ;
 
             if (typeof decoded === 'string' || !('role' in decoded)) {
                 res.status(403).json({ 

@@ -2,6 +2,8 @@ import { Request , Response } from "express" ;
 import { hash , compare } from "bcryptjs";
 import { startSession } from "mongoose" ;
 import { fileURLToPath } from 'url' ;
+import { StringValue } from "ms" ;
+import { Algorithm , SignOptions , JwtPayload } from "jsonwebtoken" ;
 import jwt from "jsonwebtoken" ;
 import ejs from "ejs" ;
 import path from 'path';
@@ -13,6 +15,7 @@ import { user } from "../Models/user" ;
 import { verifyCode } from "../Models/verifyCode" ;
 import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
+import { error } from "console";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -58,7 +61,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             
             const htmlContent = await ejs.renderFile(templatePath , {emailSubject: emailSubject , name: name , code: newCode }) ;
 
-            await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
+            await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
 
             await newUser.save() ;
             await newVerifyCode.save() ;
@@ -110,34 +113,17 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
             await verifyCode.findByIdAndDelete(verificationCode._id) ;
             await user.findByIdAndUpdate(oldUser._id , { isVerified: true }) ;
 
-            const token = jwt.sign(
-                {
-                    userID: oldUser._id ,
-                    email: oldUser.email ,
-                    name: oldUser.name ,
-                    role: oldUser.role
-                } ,
-                process.env.JWT_SECRET! ,
-                {
-                    expiresIn: '1m' ,
-                    algorithm: 'HS256'
-                }
-            ) ;
-
-            res.status(200).json({
-                message: "Email verified successfully",
-                token: token 
-            }) ;
+            res.status(200).json({message: "Email verified successfully"}) ;
 
             await session.commitTransaction() ;
-            session.endSession() ;
           
         } catch (error) {
             await session.abortTransaction();
             console.error('Transaction Error:' , error) ;
             res.status(500).json({ message: 'An error occurred verifition' }) ;
+        } finally { 
             session.endSession() ;
-        } 
+        }
 
 
     } catch (error) {
@@ -175,19 +161,27 @@ const login = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        const token = jwt.sign(
-            {
-                userID: oldUser._id ,
-                email: oldUser.email ,
-                name: oldUser.name ,
-                role: oldUser.role
-            } ,
-            process.env.JWT_SECRET! ,
-            {
-                expiresIn: '1d' ,
-                algorithm: 'HS256'
-            }
-        );
+        if(!process.env.EXPIRESIN){
+            throw new Error(".env.EXPIRESIN is not configured") ;
+        }
+
+        if(!process.env.JWT_SECRET){
+            throw new Error(".env.JWT_SECRET is not configured") ;
+        }
+
+        const signOptions: SignOptions = {
+            expiresIn: (process.env.EXPIRESIN as number | StringValue) || '1h' ,
+            algorithm: (process.env.ALGORITHM as Algorithm) || 'HS256'
+        };
+
+        const payload: JwtPayload = {
+            userID: oldUser._id ,
+            email: oldUser.email ,
+            name: oldUser.name ,
+            role: oldUser.role
+        } ;
+
+        const token = jwt.sign(payload , process.env.JWT_SECRET , signOptions) ; 
 
         res.status(200).json({
             message: "Login successful" ,
@@ -238,7 +232,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
         const htmlContent = await ejs.renderFile(templatePath , { emailSubject:emailSubject,  name: oldUser.name , code: newCode }) ;
 
-        await sendEmail(process.env.MAIL_USERNAME , email , emailSubject , htmlContent) ;
+        await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
         
         res.status(201).json({ message: "code resent successfully" }) ;
 

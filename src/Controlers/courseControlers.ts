@@ -90,9 +90,6 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
             
-        if(oldCourse.pdfPath)fs.unlinkSync(oldCourse.pdfPath) ;
-        if(oldCourse.videoPath)fs.unlinkSync(oldCourse.videoPath) ;
-
         await course.findByIdAndDelete(courseID) ;
 
         res.status(201).send({massage: "The course has been delete successfully"}) ;
