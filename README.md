@@ -41,30 +41,44 @@ npm install
 3. Setup environment variables:
 
 Create a .env file in the root directory and add the following:
+
+
 ## 🌱 Environment Variables
 
-To run this project locally, create a .env file in the root directory and add the following environment variables:
-
-`env
 # Database
+
 DATABASE_URL=your-mongodb-uri
 
 # Email Service (Gmail SMTP or OAuth2)
+
 EMAIL_SERVICE=Gmail
+
 MAIL_USERNAME=your-email@gmail.com
+
 MAIL_PASSWORD=your-app-password-or-oauth-password
+
 MAIL_CLIENT_ID=your-client-id
+
 MAIL_CLIENT_SECRET=your-client-secret
+
 MAIL_REFRESH_TOKEN=your-refresh-token
+
 MAIL_REDIRECT_URL=http://localhost/callback
 
+
 # App
+
 PORT=3000
 
+
 # JWT
+
 JWT_SECRET=your-jwt-secret
+
 EXPIRESIN=300
+
 ALGORITHM=HS256
+
 
 
 4. Build the server:
