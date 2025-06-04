@@ -43,13 +43,13 @@ npm install
 Create a .env file in the root directory and add the following:
 
 
-## 🌱 Environment Variables
+# 🌱 Environment Variables
 
-# Database
+### Database
 
 DATABASE_URL=your-mongodb-uri
 
-# Email Service (Gmail SMTP or OAuth2)
+### Email Service (Gmail SMTP or OAuth2)
 
 EMAIL_SERVICE=Gmail
 
@@ -66,12 +66,12 @@ MAIL_REFRESH_TOKEN=your-refresh-token
 MAIL_REDIRECT_URL=http://localhost/callback
 
 
-# App
+### App
 
 PORT=3000
 
 
-# JWT
+### JWT
 
 JWT_SECRET=your-jwt-secret
 
@@ -95,16 +95,16 @@ node dist/app.js
 Visit http://localhost:5000 to start interacting with the app.
 
 
-## 🧪 API Testing
+# 🧪 API Testing
 
 Use Postman or any REST client to test the API endpoints. All routes are defined in the /routes directory.
 
 
-## 💼 Deployment
+# 💼 Deployment
 
 For deployment, you can use platforms like Render, Heroku, or Vercel. You can set up Continuous Integration (CI) to automatically deploy changes to your application.
 
-## 🔨 Future Features
+# 🔨 Future Features
 
 Add a recommendation engine for course suggestions
 
@@ -115,7 +115,7 @@ Enhanced analytics dashboard for instructors
 
 ---
 
-👨‍💻 Author
+# 👨‍💻 Author
 
 Naseh Faraj
 Backend Developer | GitHub: @NasehFaraj | Linkedin: https://linkedin.com/in/naseh-faraj-432b7b233
