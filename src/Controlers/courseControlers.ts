@@ -1,9 +1,6 @@
 import { Request , Response } from "express";
-import fs from "fs" ;
-
 
 import { course } from "../Models/course";
-import { ICourseResponse } from "../Interfaces/ICourseResponse" ;
 import { library } from "../Models/Library" ;
 import { ICourse } from "../Models/course" ;
 
@@ -115,27 +112,14 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (page - 1) * limit ;
 
         let courses = await course.find().skip(skip).limit(limit) ;
-        let resCourses:ICourseResponse[] = [] ; 
+        let resCourses = courses.map(course => Object.assign({} , course.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < courses.length ; i ++){
             
-            resCourses.push({
-                _id : courses[i]._id ,
-                title: courses[i].title ,
-                description: courses[i].description ,
-                teacherID: courses[i].teacherID ,
-                category: courses[i].category ,
-                studentsEnrolled: courses[i].studentsEnrolled ,
-                videoPath: courses[i].videoPath ,
-                pdfPath: courses[i].pdfPath ,
-                createdAt: courses[i].createdAt ,
-                updatedAt: courses[i].updatedAt ,
-                isInLibrary : false 
-            })
-
             let inLibrary = await library.findOne({userID: userID , courseID: courses[i]._id}) ;
             
             if(inLibrary)resCourses[i].isInLibrary = true ;
+
         }
         
         res.status(201).send({courses: resCourses}) ;
@@ -166,19 +150,7 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        let courseRes:ICourseResponse = {
-            _id : oldCourse._id ,
-            title: oldCourse.title ,
-            description: oldCourse.description ,
-            teacherID: oldCourse.teacherID ,
-            category: oldCourse.category ,
-            studentsEnrolled: oldCourse.studentsEnrolled ,
-            videoPath: oldCourse.videoPath ,
-            pdfPath: oldCourse.pdfPath ,
-            createdAt: oldCourse.createdAt ,
-            updatedAt: oldCourse.updatedAt ,
-            isInLibrary : false 
-        } ;
+        let courseRes = Object.assign({} , oldCourse.toObject() , {isInLibrary: false}) ;
 
         let inLibrary = await library.findOne({userID: userID , courseID: courseID}) ;
 
