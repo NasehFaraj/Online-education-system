@@ -112,13 +112,13 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (page - 1) * limit ;
 
         let Courses = await Course.find().skip(skip).limit(limit) ;
-        let resCourses = Courses.map(Course => Object.assign({} , Course.toObject() , {isInLibraryy: false})) ;
+        let resCourses = Courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < Courses.length ; i ++){
             
-            let inLibraryy = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
+            let inLibrary = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
             
-            if(inLibraryy)resCourses[i].isInLibraryy = true ;
+            if(inLibrary)resCourses[i].isInLibrary = true ;
 
         }
         
@@ -150,11 +150,11 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        let CourseRes = Object.assign({} , oldCourse.toObject() , {isInLibraryy: false}) ;
+        let CourseRes = Object.assign({} , oldCourse.toObject() , {isInLibrary: false}) ;
 
-        let inLibraryy = await Library.findOne({userID: userID , courseID: courseID}) ;
+        let inLibrary = await Library.findOne({userID: userID , courseID: courseID}) ;
 
-        if(inLibraryy)CourseRes.isInLibraryy = true ;
+        if(inLibrary)CourseRes.isInLibrary = true ;
 
         res.status(201).send({Course: CourseRes}) ;
 
@@ -168,7 +168,7 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
 
 } ; 
 
-const addCourseToLibraryy =  async (req : Request , res: Response) : Promise<void> => {
+const addCourseToLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
     const { userID } = req.payload ;
     const { courseID } = req.body ;
@@ -203,7 +203,7 @@ const addCourseToLibraryy =  async (req : Request , res: Response) : Promise<voi
 
 } ; 
 
-const deleteCourseFromLibraryy =  async (req : Request , res: Response) : Promise<void> => {
+const deleteCourseFromLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
     const { userID } = req.payload ;
     const { courseID } = req.body ;
@@ -232,7 +232,7 @@ const deleteCourseFromLibraryy =  async (req : Request , res: Response) : Promis
 } ; 
 
 
-const getLibraryy =  async (req : Request , res: Response) : Promise<void> => {
+const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
     const { page , limit } = req.body ;
     const { userID  } = req.payload ; 
@@ -241,18 +241,18 @@ const getLibraryy =  async (req : Request , res: Response) : Promise<void> => {
 
         const skip = (page - 1) * limit ;
 
-        let myLibraryy = await Library.find({userID: userID}).skip(skip).limit(limit) ; ;
+        let myLibrary = await Library.find({userID: userID}).skip(skip).limit(limit) ; ;
 
-        let CourseMyLibraryy:ICourse[] = [] ;
+        let CourseMyLibrary:ICourse[] = [] ;
 
-        for(let i = 0 ; i < myLibraryy.length ; i ++){
+        for(let i = 0 ; i < myLibrary.length ; i ++){
 
-            let oldCourse = await Course.findById(myLibraryy[i].courseID) ;
+            let oldCourse = await Course.findById(myLibrary[i].courseID) ;
 
-            if(oldCourse)CourseMyLibraryy.push(oldCourse) ;
+            if(oldCourse)CourseMyLibrary.push(oldCourse) ;
 
         }
-        res.status(201).send({CourseMyLibraryy: CourseMyLibraryy}) ;
+        res.status(201).send({CourseMyLibrary: CourseMyLibrary}) ;
 
     } catch (error) {
         console.error('get Library error:' , error) ;
@@ -286,7 +286,7 @@ const getNumberOfCourses = async (req : Request , res: Response) : Promise<void>
 } ; 
 
 
-const getNumberOfCoursesAtLibraryy = async (req : Request , res: Response) : Promise<void> => {
+const getNumberOfCoursesAtLibrary = async (req : Request , res: Response) : Promise<void> => {
     
     let { userID } = req.payload ;
 
@@ -298,9 +298,9 @@ const getNumberOfCoursesAtLibraryy = async (req : Request , res: Response) : Pro
 
     } catch (error) {
 
-        console.error('get number of Courses at Libraryy error:' , error) ;
+        console.error('get number of Courses at Library error:' , error) ;
         res.status(500).send({
-            message: "get number of Courses at Libraryy process failed" ,
+            message: "get number of Courses at Library process failed" ,
             error: error
         });
 
@@ -317,10 +317,10 @@ export default {
     deleteCourse ,
     getCourses ,
     getCourse ,
-    addCourseToLibraryy ,
-    deleteCourseFromLibraryy ,
-    getLibraryy , 
+    addCourseToLibrary ,
+    deleteCourseFromLibrary ,
+    getLibrary , 
     getNumberOfCourses , 
-    getNumberOfCoursesAtLibraryy 
+    getNumberOfCoursesAtLibrary 
 
 }
