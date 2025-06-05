@@ -33,19 +33,19 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
 
 const editPost =  async (req : Request , res: Response) : Promise<void> => {
     
-    const { title , article , PostID } = req.body ;
+    const { title , article , postID } = req.body ;
 
 
     try {
 
-        let oldPost = await Post.findById(PostID) ;
+        let oldPost = await Post.findById(postID) ;
 
         if(!oldPost){
             res.status(401).send({massage: "Post not found"}) ;
             return ;
         }
 
-        await Post.findByIdAndUpdate(PostID , {article , title}) ;
+        await Post.findByIdAndUpdate(postID , {article , title}) ;
 
         res.status(201).send({massage: "The Post has been edit successfully"}) ;
 
@@ -63,18 +63,18 @@ const editPost =  async (req : Request , res: Response) : Promise<void> => {
 
 const deletePost =  async (req : Request , res: Response) : Promise<void> => {
     
-    const { PostID } = req.body ;
+    const { postID } = req.body ;
 
     try {
         
-        const oldPost = await Post.findById(PostID) ;
+        const oldPost = await Post.findById(postID) ;
 
         if(!oldPost) {
             res.status(401).send({massage: "Post not found"}) ;
             return ;
         }
 
-        await Post.findByIdAndDelete(PostID) ;
+        await Post.findByIdAndDelete(postID) ;
 
         res.status(201).send({massage: "The Post has been delete successfully"}) ;
 

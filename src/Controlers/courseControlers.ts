@@ -37,12 +37,12 @@ const addCourse =  async (req : Request , res: Response) : Promise<void> => {
 
 const editCourse =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { CourseID , title , description } = req.body ;
+    const { courseID , title , description } = req.body ;
     const { userID } = req.payload ;
 
     try {
 
-        const oldCourse = await Course.findById(CourseID) ;
+        const oldCourse = await Course.findById(courseID) ;
 
         if(!oldCourse) {
             res.status(401).send({massage: "Course not found"}) ;
@@ -54,7 +54,7 @@ const editCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
         
-        await Course.findByIdAndUpdate(CourseID , {title , description}) ;
+        await Course.findByIdAndUpdate(courseID , {title , description}) ;
 
         res.status(201).send({massage: "The Course has been edit successfully"}) ;
 
@@ -70,12 +70,12 @@ const editCourse =  async (req : Request , res: Response) : Promise<void> => {
 
 const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { CourseID } = req.body ;
+    const { courseID } = req.body ;
     const { userID } = req.payload ;
 
     try {
         
-        const oldCourse = await Course.findById(CourseID) ;
+        const oldCourse = await Course.findById(courseID) ;
 
         if(!oldCourse) {
             res.status(401).send({massage: "Course not found"}) ;
@@ -87,7 +87,7 @@ const deleteCourse =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
             
-        await Course.findByIdAndDelete(CourseID) ;
+        await Course.findByIdAndDelete(courseID) ;
 
         res.status(201).send({massage: "The Course has been delete successfully"}) ;
 
@@ -116,7 +116,7 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
 
         for(let i = 0 ; i < Courses.length ; i ++){
             
-            let inLibraryy = await Library.findOne({userID: userID , CourseID: Courses[i]._id}) ;
+            let inLibraryy = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
             
             if(inLibraryy)resCourses[i].isInLibraryy = true ;
 
@@ -139,11 +139,11 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
 const getCourse =  async (req : Request , res: Response) : Promise<void> => {
     
     const { userID } = req.payload ;
-    const { CourseID } = req.body ;
+    const { courseID } = req.body ;
 
     try {
         
-        let oldCourse = await Course.findById(CourseID) ;
+        let oldCourse = await Course.findById(courseID) ;
 
         if(!oldCourse){
             res.status(401).send({massage: "Course not found"}) ;
@@ -152,7 +152,7 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
 
         let CourseRes = Object.assign({} , oldCourse.toObject() , {isInLibraryy: false}) ;
 
-        let inLibraryy = await Library.findOne({userID: userID , CourseID: CourseID}) ;
+        let inLibraryy = await Library.findOne({userID: userID , courseID: courseID}) ;
 
         if(inLibraryy)CourseRes.isInLibraryy = true ;
 
@@ -171,12 +171,12 @@ const getCourse =  async (req : Request , res: Response) : Promise<void> => {
 const addCourseToLibraryy =  async (req : Request , res: Response) : Promise<void> => {
 
     const { userID } = req.payload ;
-    const { CourseID } = req.body ;
+    const { courseID } = req.body ;
 
     
     try {
 
-        let oldCourse = await Library.findOne({CourseID: CourseID , userID: userID}) ;
+        let oldCourse = await Library.findOne({courseID: courseID , userID: userID}) ;
 
         if(oldCourse){
             res.status(409).send({massage: "Course is already added"}) ;
@@ -186,7 +186,7 @@ const addCourseToLibraryy =  async (req : Request , res: Response) : Promise<voi
         
         let newlirary = new Library({
             userID: userID ,
-            CourseID: CourseID
+            courseID: courseID
         }) ;
 
         await newlirary.save() ;
@@ -206,11 +206,11 @@ const addCourseToLibraryy =  async (req : Request , res: Response) : Promise<voi
 const deleteCourseFromLibraryy =  async (req : Request , res: Response) : Promise<void> => {
 
     const { userID } = req.payload ;
-    const { CourseID } = req.body ;
+    const { courseID } = req.body ;
 
     try {
 
-        let oldCourse = await Library.findOne({CourseID: CourseID , userID: userID}) ;
+        let oldCourse = await Library.findOne({courseID: courseID , userID: userID}) ;
 
         if(!oldCourse){
             res.status(401).send({massage: "Course is already deleted"}) ;

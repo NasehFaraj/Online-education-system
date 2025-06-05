@@ -175,7 +175,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
         };
 
         const payload: JwtPayload = {
-            UserID: oldUser._id ,
+            userID: oldUser._id ,
             email: oldUser.email ,
             name: oldUser.name ,
             role: oldUser.role
@@ -281,7 +281,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
 
             const token = jwt.sign(
                 {
-                    UserID: oldUser._id ,
+                    userID: oldUser._id ,
                     email: oldUser.email ,
                     name: oldUser.name ,
                     role: oldUser.role

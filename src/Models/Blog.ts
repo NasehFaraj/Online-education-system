@@ -6,7 +6,7 @@ export interface IBlog {
     _id: Types.ObjectId ;
     title: string ;
     userID: Types.ObjectId ;
-    category: Category ;
+    category?: Category ;
     createdAt: Date ;
     updatedAt: Date ;
 
