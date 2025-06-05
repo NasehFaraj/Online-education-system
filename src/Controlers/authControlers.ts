@@ -3,8 +3,7 @@ import { hash , compare } from "bcryptjs";
 import { startSession } from "mongoose" ;
 import { fileURLToPath } from 'url' ;
 import { StringValue } from "ms" ;
-import { Algorithm , SignOptions , JwtPayload } from "jsonwebtoken" ;
-import jwt from "jsonwebtoken" ;
+import jwt , { Algorithm , SignOptions , JwtPayload } from "jsonwebtoken" ;
 import ejs from "ejs" ;
 import path from 'path';
 import dotenv from 'dotenv' ;
@@ -15,7 +14,6 @@ import { User } from "../Models/User" ;
 import { VerifyCode } from "../Models/VerifyCode" ;
 import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
-import { error } from "console";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -30,7 +28,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
     
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
-            res.status(409).json({ message: 'Email is already registered' }) ;
+            res.status(409).send({ message: 'Email is already registered' }) ;
             return ;
         }
     
@@ -65,7 +63,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
 
             await newUser.save() ;
             await newVerifyCode.save() ;
-            res.status(201).json({ message: 'User created successfully' }) ;
+            res.status(201).send({ message: 'User created successfully' }) ;
 
             await session.commitTransaction() ;
             session.endSession() ;
@@ -73,14 +71,14 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         } catch (error) {
             await session.abortTransaction() ;
             console.error('Transaction Error:', error) ;
-            res.status(500).json({ message: 'An error occurred during registration' }) ;
+            res.status(500).send({ message: 'An error occurred during registration' }) ;
             session.endSession() ;
         } 
      
 
     } catch (error) {
         console.error('Signup Error:', error) ;
-        res.status(500).json({ message: 'An error occurred during registration' }) ;
+        res.status(500).send({ message: 'An error occurred during registration' }) ;
     }
 
 };
@@ -95,13 +93,13 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
 
         const oldUser = await User.findOne({ email:email }) ;
         if (!oldUser) {
-            res.status(404).json({ message: "User not found" }) ;
+            res.status(404).send({ message: "User not found" }) ;
             return ; 
         }
 
         const verificationCode = await VerifyCode.findOne({ email: email , typeCode: "verify" }) ;
         if (!verificationCode || verificationCode.code != code) {
-            res.status(401).json({ message: "Invalid verification code"}) ;
+            res.status(401).send({ message: "Invalid verification code"}) ;
             return ;
         }
 
@@ -113,14 +111,14 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
             await VerifyCode.findByIdAndDelete(verificationCode._id) ;
             await User.findByIdAndUpdate(oldUser._id , { isVerified: true }) ;
 
-            res.status(200).json({message: "Email verified successfully"}) ;
+            res.status(200).send({message: "Email verified successfully"}) ;
 
             await session.commitTransaction() ;
           
         } catch (error) {
             await session.abortTransaction();
             console.error('Transaction Error:' , error) ;
-            res.status(500).json({ message: 'An error occurred verifition' }) ;
+            res.status(500).send({ message: 'An error occurred verifition' }) ;
         } finally { 
             session.endSession() ;
         }
@@ -128,7 +126,7 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
 
     } catch (error) {
         console.error('Verification error:' , error) ;
-        res.status(500).json({
+        res.status(500).send({
             message: "Verification process failed" ,
             error: error
         });
@@ -146,18 +144,18 @@ const login = async (req : Request , res: Response) : Promise<void> => {
         const oldUser = await User.findOne({ email:email }) ;
         
         if (!oldUser) {
-            res.status(404).json({ message: "Email not registered" }) ;
+            res.status(404).send({ message: "Email not registered" }) ;
             return ;
         }
 
         if (!oldUser.isVerified) {
-            res.status(403).json({ message: "Account not verified" }) ;
+            res.status(403).send({ message: "Account not verified" }) ;
             return ;
         }
 
         const isPasswordValid = await compare(password , oldUser.password) ;
         if (!isPasswordValid) {
-            res.status(401).json({ message: "Invalid password" }) ;
+            res.status(401).send({ message: "Invalid password" }) ;
             return ;
         }
 
@@ -183,7 +181,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
 
         const token = jwt.sign(payload , process.env.JWT_SECRET , signOptions) ; 
 
-        res.status(200).json({
+        res.status(200).send({
             message: "Login successful" ,
             token:token ,
             isBlocked: oldUser.isBlocked
@@ -191,7 +189,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
 
     } catch (error) {
         console.error('Login error:', error) ;
-        res.status(500).json({
+        res.status(500).send({
             message: "Login process failed" ,
             error: error
         }) ;
@@ -207,12 +205,12 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
         let oldUser = await User.findOne({email:email}) ;
 
         if(!oldUser){
-            res.status(404).json({ message: "Email not registered" }) ;
+            res.status(404).send({ message: "Email not registered" }) ;
             return ;
         }
 
         if(!oldUser.isVerified) {
-            res.status(409).json({ message: 'Email is not Verified' }) ;
+            res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
 
@@ -234,11 +232,11 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
         await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
         
-        res.status(201).json({ message: "code resent successfully" }) ;
+        res.status(201).send({ message: "code resent successfully" }) ;
 
     } catch (error) {
         console.error('resend code Error:' , error) ;
-        res.status(500).json({ message: 'An error occurred during resend code' }) ;
+        res.status(500).send({ message: 'An error occurred during resend code' }) ;
     }
 
 
@@ -253,18 +251,18 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
 
         const oldUser = await User.findOne({ email:email }) ;
         if (!oldUser) {
-            res.status(404).json({ message: "User not found" }) ;
+            res.status(404).send({ message: "User not found" }) ;
             return ; 
         }
 
         if(oldUser.isVerified) {
-            res.status(409).json({ message: 'Email is not Verified' }) ;
+            res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
 
         const verificationCode = await VerifyCode.findOne({ email: email}) ;
         if (!verificationCode || verificationCode.code != code) {
-            res.status(401).json({ message: "Invalid verification code"}) ;
+            res.status(401).send({ message: "Invalid verification code"}) ;
             return ;
         }
 
@@ -293,7 +291,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
                 }
             ) ;
 
-            res.status(200).json({
+            res.status(200).send({
                 message: "Email verified successfully",
                 token:token 
             }) ;
@@ -304,14 +302,14 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
         } catch (error) {
             await session.abortTransaction();
             console.error('Transaction Error:' , error) ;
-            res.status(500).json({ message: 'An error occurred reset password' }) ;
+            res.status(500).send({ message: 'An error occurred reset password' }) ;
             session.endSession() ;
         } 
 
 
     } catch (error) {
         console.error('reset password error:' , error) ;
-        res.status(500).json({
+        res.status(500).send({
             message: "reset password process failed" ,
             error: error
         });

@@ -111,23 +111,23 @@ const getCourses =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (page - 1) * limit ;
 
-        let Courses = await Course.find().skip(skip).limit(limit) ;
-        let resCourses = Courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
+        let courses = await Course.find().skip(skip).limit(limit) ;
+        let resCourses = courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
 
-        for(let i = 0 ; i < Courses.length ; i ++){
+        for(let i = 0 ; i < courses.length ; i ++){
             
-            let inLibrary = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
+            let inLibrary = await Library.findOne({userID: userID , courseID: courses[i]._id}) ;
             
             if(inLibrary)resCourses[i].isInLibrary = true ;
 
         }
         
-        res.status(201).send({Courses: resCourses}) ;
+        res.status(201).send({courses: resCourses}) ;
 
     } catch (error) {
-        console.error('get Courses error:' , error) ;
+        console.error('get courses error:' , error) ;
         res.status(500).send({
-            message: "get Courses process failed" ,
+            message: "get courses process failed" ,
             error: error
         });
     }
@@ -243,16 +243,16 @@ const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
         let myLibrary = await Library.find({userID: userID}).skip(skip).limit(limit) ; ;
 
-        let CourseMyLibrary:ICourse[] = [] ;
+        let courseMyLibrary:ICourse[] = [] ;
 
         for(let i = 0 ; i < myLibrary.length ; i ++){
 
             let oldCourse = await Course.findById(myLibrary[i].courseID) ;
 
-            if(oldCourse)CourseMyLibrary.push(oldCourse) ;
+            if(oldCourse)courseMyLibrary.push(oldCourse) ;
 
         }
-        res.status(201).send({CourseMyLibrary: CourseMyLibrary}) ;
+        res.status(201).send({courseMyLibrary: courseMyLibrary}) ;
 
     } catch (error) {
         console.error('get Library error:' , error) ;
@@ -274,9 +274,9 @@ const getNumberOfCourses = async (req : Request , res: Response) : Promise<void>
 
     } catch (error) {
 
-        console.error('get number of Courses error:' , error) ;
+        console.error('get number of courses error:' , error) ;
         res.status(500).send({
-            message: "get number of Courses process failed" ,
+            message: "get number of courses process failed" ,
             error: error
         });
 
@@ -298,9 +298,9 @@ const getNumberOfCoursesAtLibrary = async (req : Request , res: Response) : Prom
 
     } catch (error) {
 
-        console.error('get number of Courses at Library error:' , error) ;
+        console.error('get number of courses at Library error:' , error) ;
         res.status(500).send({
-            message: "get number of Courses at Library process failed" ,
+            message: "get number of courses at Library process failed" ,
             error: error
         });
 
@@ -321,9 +321,9 @@ const getNumberOfMyCourses = async (req : Request , res: Response) : Promise<voi
 
     } catch (error) {
 
-        console.error('get number of Courses at Library error:' , error) ;
+        console.error('get number of courses at Library error:' , error) ;
         res.status(500).send({
-            message: "get number of Courses at Library process failed" ,
+            message: "get number of courses at Library process failed" ,
             error: error
         });
 
@@ -342,23 +342,23 @@ const getMyCourses = async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (page - 1) * limit ;
 
-        let Courses = await Course.find({teacherID: userID}).skip(skip).limit(limit) ;
-        let resCourses = Courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
+        let courses = await Course.find({teacherID: userID}).skip(skip).limit(limit) ;
+        let resCourses = courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
 
-        for(let i = 0 ; i < Courses.length ; i ++){
+        for(let i = 0 ; i < courses.length ; i ++){
             
-            let inLibrary = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
+            let inLibrary = await Library.findOne({userID: userID , courseID: courses[i]._id}) ;
             
             if(inLibrary)resCourses[i].isInLibrary = true ;
 
         }
         
-        res.status(201).send({Courses: resCourses}) ;
+        res.status(201).send({courses: resCourses}) ;
 
     } catch (error) {
-        console.error('get Courses error:' , error) ;
+        console.error('get courses error:' , error) ;
         res.status(500).send({
-            message: "get Courses process failed" ,
+            message: "get courses process failed" ,
             error: error
         });
     }

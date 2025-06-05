@@ -98,14 +98,14 @@ const getPosts =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (page - 1) * limit ;
 
-        const Posts = await Post.find().skip(skip).limit(limit) ;
+        const posts = await Post.find().skip(skip).limit(limit) ;
 
-        res.status(201).send({Posts: Posts}) ;
+        res.status(201).send({posts: posts}) ;
 
     } catch (error) {
-        console.error('get Posts error:' , error) ;
+        console.error('get posts error:' , error) ;
         res.status(500).send({
-            message: "get Posts process failed" ,
+            message: "get posts process failed" ,
             error: error
         });
     }

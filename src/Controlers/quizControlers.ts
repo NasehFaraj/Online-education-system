@@ -109,7 +109,7 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        res.status(201).send({massage: "get Quiz has been successful" , Quiz: oldQuiz}) ;
+        res.status(201).send({massage: "get Quiz has been successful" , quiz: oldQuiz}) ;
 
     } catch (error) {
         console.error('delete Quiz error:' , error) ;
@@ -129,9 +129,9 @@ const getQuizzes = async (req : Request , res: Response) : Promise<void> => {
     
         const skip = (page - 1) * limit ;
 
-        const Quizes = await Quiz.find().skip(skip).limit(limit) as IQuizResponse[] ;
+        const quizes = await Quiz.find().skip(skip).limit(limit) as IQuizResponse[] ;
 
-        res.status(201).send({Quizes: Quizes}) ;
+        res.status(201).send({quizes: quizes}) ;
 
     } catch (error) {
         console.error('get Quizzes error:' , error) ;

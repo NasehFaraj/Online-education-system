@@ -7,11 +7,11 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware";
 
 const router = Router() ;
 
-router.post("/blog/add" , usersMiddleware([Role.Admin]) , blogControlers.addBlog) ;
+router.post("/blog/add" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addBlog) ;
 
-router.post("/blog/edit" , usersMiddleware([Role.Admin]) , blogControlers.editBlog) ;
+router.post("/blog/edit" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.editBlog) ;
 
-router.post("/blog/delete" , usersMiddleware([Role.Admin]) , blogControlers.deleteBlog) ;
+router.post("/blog/delete" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.deleteBlog) ;
 
 router.post("/blog/get/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getBlogs) ;
 

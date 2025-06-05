@@ -6,7 +6,7 @@
 	"exports": "./dist/app.js",
 	"scripts": {
 		"dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/app.ts",
-		"copy:views": "cp -R ./src/Views ./dist/" ,
+		"copy:views": "cp -R ./src/Views ./dist/",
 		"build": "tsc && node dist/postbuild.js"
 	},
 	"author": "",
@@ -38,6 +38,8 @@
 		"@types/node": "^22.15.18",
 		"@types/nodemailer": "^6.4.17",
 		"@types/winston": "^2.4.4",
+		"swagger-jsdoc": "^6.2.8",
+		"swagger-ui-express": "^5.0.1",
 		"typescript": "^5.8.3"
 	}
 }
