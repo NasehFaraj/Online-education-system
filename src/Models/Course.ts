@@ -37,6 +37,7 @@ const courseSchema = new Schema<courseDocument>(
         category: {
             type: String ,
             enum: Category ,
+            required: true
         },
         studentsEnrolled: [{
             type: Schema.Types.ObjectId,
@@ -52,4 +53,4 @@ const courseSchema = new Schema<courseDocument>(
     { timestamps: true }
 );
 
-export const course = model<courseDocument>("course", courseSchema);
+export const Course = model<courseDocument>("Course", courseSchema);

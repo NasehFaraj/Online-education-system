@@ -27,7 +27,7 @@ const quizSchema = new Schema<quizDocument>(
         description: {
             type: String ,
             default: "" ,
-            equired: true 
+            required: true
         },
         courseID: {
             type: Schema.Types.ObjectId,
@@ -52,4 +52,4 @@ const quizSchema = new Schema<quizDocument>(
     { timestamps: true }
 );
 
-export const quiz = model<quizDocument>("quiz" , quizSchema) ;
+export const Quiz = model<quizDocument>("Quiz" , quizSchema) ;

@@ -1,4 +1,4 @@
-import { IQuiz } from "../Models/quiz"; 
+import { IQuiz } from "../Models/Quiz"; 
 
 type QuestionWithoutAnswer = Omit<IQuiz["questions"][number], "correctAnswer"> ;
 

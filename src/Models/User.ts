@@ -38,6 +38,7 @@ const userSchema = new Schema<UserDocument>({
     gender: {
         type: String ,
         enum: Gender ,
+        required: true
     } ,
     isVerified: {
         type: Boolean,
@@ -50,4 +51,4 @@ const userSchema = new Schema<UserDocument>({
 }, { timestamps : true }) ;
 
 
-export const user = model<UserDocument>("user" , userSchema) ;
+export const User = model<UserDocument>("User" , userSchema) ;

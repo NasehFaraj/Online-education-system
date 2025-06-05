@@ -36,4 +36,4 @@ const verifyCodeSchema = new Schema<VerifyCodeDocument>({
 
 verifyCodeSchema.index({ email: 1 , typeCode: 1 } , { unique: true }) ;
 
-export const verifyCode = model<VerifyCodeDocument>("verifyCode", verifyCodeSchema) ;
+export const VerifyCode = model<VerifyCodeDocument>("VerifyCode", verifyCodeSchema) ;

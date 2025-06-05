@@ -38,4 +38,4 @@ const submissionSchema = new Schema<submissionDocument>({
 }) ;
 
 
-export const submission = model<submissionDocument>("submission" , submissionSchema);
+export const Submission = model<submissionDocument>("Submission" , submissionSchema);

@@ -11,8 +11,8 @@ import dotenv from 'dotenv' ;
 
 
 
-import { user } from "../Models/user" ;
-import { verifyCode } from "../Models/verifyCode" ;
+import { User } from "../Models/User" ;
+import { VerifyCode } from "../Models/VerifyCode" ;
 import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
 import { error } from "console";
@@ -28,7 +28,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
     
     try {
     
-        const existingUser = await user.findOne({ email: email });
+        const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             res.status(409).json({ message: 'Email is already registered' }) ;
             return ;
@@ -36,7 +36,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
     
         const hashedPassword = await hash(password , 12) ;
     
-        const newUser = new user({
+        const newUser = new User({
             name: name ,
             email: email ,
             password: hashedPassword ,
@@ -45,7 +45,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         });
     
         const newCode:number = (Math.random() * (99999 - 10000) + 10000) | 0 ;
-        const newVerifyCode = new verifyCode({
+        const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
             typeCode: TypeCode.Verify ,
@@ -93,13 +93,13 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
     try {
 
 
-        const oldUser = await user.findOne({ email:email }) ;
+        const oldUser = await User.findOne({ email:email }) ;
         if (!oldUser) {
             res.status(404).json({ message: "User not found" }) ;
             return ; 
         }
 
-        const verificationCode = await verifyCode.findOne({ email: email , typeCode: "verify" }) ;
+        const verificationCode = await VerifyCode.findOne({ email: email , typeCode: "verify" }) ;
         if (!verificationCode || verificationCode.code != code) {
             res.status(401).json({ message: "Invalid verification code"}) ;
             return ;
@@ -110,8 +110,8 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
 
         try { 
 
-            await verifyCode.findByIdAndDelete(verificationCode._id) ;
-            await user.findByIdAndUpdate(oldUser._id , { isVerified: true }) ;
+            await VerifyCode.findByIdAndDelete(verificationCode._id) ;
+            await User.findByIdAndUpdate(oldUser._id , { isVerified: true }) ;
 
             res.status(200).json({message: "Email verified successfully"}) ;
 
@@ -143,7 +143,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
 
     try {
 
-        const oldUser = await user.findOne({ email:email }) ;
+        const oldUser = await User.findOne({ email:email }) ;
         
         if (!oldUser) {
             res.status(404).json({ message: "Email not registered" }) ;
@@ -175,7 +175,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
         };
 
         const payload: JwtPayload = {
-            userID: oldUser._id ,
+            UserID: oldUser._id ,
             email: oldUser.email ,
             name: oldUser.name ,
             role: oldUser.role
@@ -204,7 +204,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
   
     try {
 
-        let oldUser = await user.findOne({email:email}) ;
+        let oldUser = await User.findOne({email:email}) ;
 
         if(!oldUser){
             res.status(404).json({ message: "Email not registered" }) ;
@@ -216,10 +216,10 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        await verifyCode.findOneAndDelete({email:email , typeCode:typeCode}) ;
+        await VerifyCode.findOneAndDelete({email:email , typeCode:typeCode}) ;
         
         const newCode = (Math.random() * (99999 - 10000) + 10000) | 0 ;
-        const newVerifyCode = new verifyCode({
+        const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
             typeCode: typeCode ,
@@ -251,7 +251,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
     
     try {
 
-        const oldUser = await user.findOne({ email:email }) ;
+        const oldUser = await User.findOne({ email:email }) ;
         if (!oldUser) {
             res.status(404).json({ message: "User not found" }) ;
             return ; 
@@ -262,7 +262,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
             return ;
         }
 
-        const verificationCode = await verifyCode.findOne({ email: email}) ;
+        const verificationCode = await VerifyCode.findOne({ email: email}) ;
         if (!verificationCode || verificationCode.code != code) {
             res.status(401).json({ message: "Invalid verification code"}) ;
             return ;
@@ -275,13 +275,13 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
 
         try { 
 
-            await verifyCode.findByIdAndDelete(verificationCode._id) ;
-            await user.findByIdAndUpdate(oldUser._id , { password: hashedPassword}) ;
+            await VerifyCode.findByIdAndDelete(verificationCode._id) ;
+            await User.findByIdAndUpdate(oldUser._id , { password: hashedPassword}) ;
       
 
             const token = jwt.sign(
                 {
-                    userID: oldUser._id ,
+                    UserID: oldUser._id ,
                     email: oldUser.email ,
                     name: oldUser.name ,
                     role: oldUser.role

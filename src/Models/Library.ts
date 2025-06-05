@@ -19,10 +19,10 @@ const librarySchema = new Schema<libraryDocument>({
     } ,
     courseID: {
         type: Schema.Types.ObjectId ,
-        equired: true 
+        required: true
     }
 
 }, { timestamps : true }) ;
 
 
-export const library = model<libraryDocument>("library" , librarySchema) ;
+export const Library = model<libraryDocument>("Library" , librarySchema) ;

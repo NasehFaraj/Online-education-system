@@ -16,18 +16,18 @@ const todoListSchema = new Schema<todoListDocument>({
     
     userID: {
         type: Schema.Types.ObjectId ,
-        equired: true 
+        required: true
     } ,
     quizID: {
         type: Schema.Types.ObjectId , 
-        equired: true 
+        required: true
     } ,
     date: {
         type: Date ,
-        equired: true 
+        required: true
     } 
 
 }, { timestamps : true }) ;
 
 
-export const todoList = model<todoListDocument>("todoList" , todoListSchema) ;
+export const TodoList = model<todoListDocument>("TodoList" , todoListSchema) ;

@@ -28,11 +28,10 @@ const postSchema = new Schema<postDocument>({
         type: String 
     } ,
     photoPath: {
-        required: true ,
         type: String 
     }
 
 }) ;
 
 
-export const post = model<postDocument>("post" , postSchema);
+export const Post = model<postDocument>("Post" , postSchema);
