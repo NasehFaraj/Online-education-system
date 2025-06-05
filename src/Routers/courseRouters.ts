@@ -17,6 +17,10 @@ router.post("/course/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Rol
 
 router.post("/course/get" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getCourse) ;
 
+router.post("/course/get/my" , usersMiddleware([Role.Teacher]) , courseControlers.getMyCourses) ;
+
+router.post("/course/get/my/number-of-courses" , usersMiddleware([Role.Teacher]) , courseControlers.getNumberOfMyCourses) ;
+
 router.post("/course/get/number-of-courses" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.getNumberOfCourses) ;
 
 router.post("/course/library/add" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , courseControlers.addCourseToLibrary) ;

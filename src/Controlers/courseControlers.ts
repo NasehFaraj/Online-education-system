@@ -309,6 +309,61 @@ const getNumberOfCoursesAtLibrary = async (req : Request , res: Response) : Prom
 
 } ; 
 
+const getNumberOfMyCourses = async (req : Request , res: Response) : Promise<void> => {
+
+    let { userID } = req.payload ;
+
+    try {
+
+        let numberOfCourses = await Course.countDocuments({teacherID: userID}) ;
+
+        res.status(201).send({numberOfCourses: numberOfCourses}) ;
+
+    } catch (error) {
+
+        console.error('get number of Courses at Library error:' , error) ;
+        res.status(500).send({
+            message: "get number of Courses at Library process failed" ,
+            error: error
+        });
+
+    }
+
+}
+
+
+const getMyCourses = async (req : Request , res: Response) : Promise<void> => {
+
+
+    const { page , limit } = req.body ;
+    const { userID } = req.payload ;
+
+    try {
+        
+        const skip = (page - 1) * limit ;
+
+        let Courses = await Course.find({teacherID: userID}).skip(skip).limit(limit) ;
+        let resCourses = Courses.map(Course => Object.assign({} , Course.toObject() , {isInLibrary: false})) ;
+
+        for(let i = 0 ; i < Courses.length ; i ++){
+            
+            let inLibrary = await Library.findOne({userID: userID , courseID: Courses[i]._id}) ;
+            
+            if(inLibrary)resCourses[i].isInLibrary = true ;
+
+        }
+        
+        res.status(201).send({Courses: resCourses}) ;
+
+    } catch (error) {
+        console.error('get Courses error:' , error) ;
+        res.status(500).send({
+            message: "get Courses process failed" ,
+            error: error
+        });
+    }
+
+}
 
 export default {
 
@@ -321,6 +376,8 @@ export default {
     deleteCourseFromLibrary ,
     getLibrary , 
     getNumberOfCourses , 
-    getNumberOfCoursesAtLibrary 
+    getNumberOfCoursesAtLibrary , 
+    getNumberOfMyCourses , 
+    getMyCourses
 
 }
