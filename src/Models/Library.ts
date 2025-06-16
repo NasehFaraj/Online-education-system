@@ -5,7 +5,7 @@ interface iLibrary {
     
     _id: Types.ObjectId ;
     userID: Schema.Types.ObjectId ;
-    courseID: Schema.Types.ObjectId ;
+    lessonID: Schema.Types.ObjectId ;
 
 }
 
@@ -17,7 +17,7 @@ const librarySchema = new Schema<libraryDocument>({
         type: Schema.Types.ObjectId ,
         required: true 
     } ,
-    courseID: {
+    lessonID: {
         type: Schema.Types.ObjectId ,
         required: true
     }

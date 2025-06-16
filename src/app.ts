@@ -6,7 +6,7 @@ import { connectDB } from "./Database/connect";
 import postRouters from "./Routers/postRouters" ;
 import fileRouters from "./Routers/fileRouters" ;
 import authRouters from "./Routers/authRouters" ;
-import courseRouters from "./Routers/courseRouters" ;
+import courseRouters from "./Routers/lessonRouters" ;
 import assessmentRouters from "./Routers/quizRouters" ;
  
 const app = express() ;

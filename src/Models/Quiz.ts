@@ -5,14 +5,12 @@ export interface IQuiz {
     _id: Types.ObjectId ;
     title: string;
     description: string;
-    courseID: Types.ObjectId;
     teacherID: Types.ObjectId;
     questions: {
         text: string;
         options: string[];
         correctAnswer: number ;
     }[];
-    dueDate: Date;
     
 }
 
@@ -29,11 +27,6 @@ const quizSchema = new Schema<quizDocument>(
             default: "" ,
             required: true
         },
-        courseID: {
-            type: Schema.Types.ObjectId,
-            ref: "Course",
-            required: true
-        },
         teacherID: {
             type: Schema.Types.ObjectId,
             ref: "User",
@@ -44,10 +37,6 @@ const quizSchema = new Schema<quizDocument>(
             options: { type: [String] , required: true },
             correctAnswer: { type: Number , required: true }
         }],
-        dueDate: {
-            type: Date,
-            required: true
-        }
     },
     { timestamps: true }
 );

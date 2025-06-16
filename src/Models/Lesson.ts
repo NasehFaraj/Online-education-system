@@ -1,7 +1,7 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 import { Category } from "../enums/Category" ;
 
-export interface ICourse {
+export interface ILesson {
 
     _id: Types.ObjectId ;
     title: string ;
@@ -17,9 +17,9 @@ export interface ICourse {
 }
 
 
-type courseDocument = HydratedDocument<ICourse>;
+type lessonDocument = HydratedDocument<ILesson>;
 
-const courseSchema = new Schema<courseDocument>(
+const lessonSchema = new Schema<lessonDocument>(
     {
         title: {
             type: String ,
@@ -53,4 +53,4 @@ const courseSchema = new Schema<courseDocument>(
     { timestamps: true }
 );
 
-export const Course = model<courseDocument>("Course", courseSchema);
+export const Lesson = model<lessonDocument>("Lesson", lessonSchema);

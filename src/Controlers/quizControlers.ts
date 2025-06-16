@@ -9,12 +9,12 @@ import { Submission } from "../Models/Submission";
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { title , description , courseID , questions , dueDate } = req.body ;
+    const { title , description  , questions  } = req.body ;
     const teacherID = req.payload.userID ;
 
     try {
         
-        let newQuiz = new Quiz({ title , description , courseID , teacherID , questions , dueDate }) ;
+        let newQuiz = new Quiz({ title , description  , teacherID , questions }) ;
 
         await newQuiz.save() ;
 
@@ -32,7 +32,7 @@ const addQuiz = async (req : Request , res: Response) : Promise<void> => {
 
 const editQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { quizID , title , description , courseID , questions , dueDate } = req.body ;
+    const { quizID , title , description , questions  } = req.body ;
     const teacherID = req.payload.userID ;
 
     try {
@@ -49,7 +49,7 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
         
-        await Quiz.findByIdAndUpdate(quizID , { title , description , courseID , teacherID , questions , dueDate }) ;
+        await Quiz.findByIdAndUpdate(quizID , { title , description , teacherID , questions  }) ;
 
         res.status(201).send({massage: "Quiz has been edited"}) ;
 
