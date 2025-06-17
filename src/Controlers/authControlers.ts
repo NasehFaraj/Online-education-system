@@ -42,7 +42,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             gender : gender
         });
     
-        const newCode:number = (Math.random() * (99999 - 10000) + 10000) | 0 ;
+        const newCode:number = (Math.random() * (999999 - 100000) + 100000) | 0 ;
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
@@ -216,7 +216,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
         await VerifyCode.findOneAndDelete({email:email , typeCode:typeCode}) ;
         
-        const newCode = (Math.random() * (99999 - 10000) + 10000) | 0 ;
+        const newCode = (Math.random() * (999999 - 100000) + 100000) | 0 ;
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
