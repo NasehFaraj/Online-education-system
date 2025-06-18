@@ -9,7 +9,7 @@ import fileRouters from "./Routers/fileRouters" ;
 import authRouters from "./Routers/authRouters" ;
 import blogRouters from "./Routers/blogRouters" ;
 import quiztRouters from "./Routers/quizRouters" ;
-import courseRouters from "./Routers/lessonRouters" ;
+import lessonRouters from "./Routers/lessonRouters" ;
  
 const app = express() ;
 dotenv.config() ;
@@ -23,7 +23,7 @@ app.use(authRouters) ;
 app.use(userRouters) ;
 app.use(blogRouters) ;
 app.use(quiztRouters) ;
-app.use(courseRouters) ;
+app.use(lessonRouters) ;
 
 app.listen(process.env.PORT , (error) => {
 

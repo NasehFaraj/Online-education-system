@@ -11,7 +11,7 @@ router.patch("/user/block" , usersMiddleware([Role.Admin]) , userControlers.bloc
 
 router.get("/user/count" , usersMiddleware([Role.Admin]) , userControlers.getNumberOfUser) ;
 
-router.get("/user?page?limit" , usersMiddleware([Role.Admin]) , userControlers.getUsers) ;
+router.get("/user" , usersMiddleware([Role.Admin]) , userControlers.getUsers) ;
 
 
 export default router ;
