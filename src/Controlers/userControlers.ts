@@ -17,6 +17,8 @@ const blockUser =  async (req : Request , res: Response) : Promise<void> => {
 
         oldUser.isBlocked = true ;
 
+        await oldUser.save() ;
+
         res.status(201).send({massage: "user has been blocked"}) ;
 
     } catch (error) {
