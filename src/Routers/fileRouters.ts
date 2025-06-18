@@ -8,8 +8,8 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 
 const router = Router() ;
 
-router.post("/file/upload" , usersMiddleware([Role.Teacher]) , upload.single("file") , fileControlers.uploadFile) ;
+router.put("/file/upload" , usersMiddleware([Role.Teacher]) , upload.single("file") , fileControlers.uploadFile) ;
 
-router.post("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
+router.get("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
 
 export default router ; 
