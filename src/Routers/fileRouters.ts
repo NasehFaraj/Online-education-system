@@ -10,6 +10,6 @@ const router = Router() ;
 
 router.put("/file/upload" , usersMiddleware([Role.Teacher]) , upload.single("file") , fileControlers.uploadFile) ;
 
-router.get("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
+router.post("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
 
 export default router ; 
