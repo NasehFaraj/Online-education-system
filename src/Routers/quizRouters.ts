@@ -27,4 +27,9 @@ router.post("/quiz/todo/delete" , usersMiddleware([Role.Teacher , Role.Admin , R
 
 router.post("/quiz/todo/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getTodoList) ;
 
+router.post("/quiz/get/my" , usersMiddleware([Role.Teacher]) , quizControlers.getMyQuizzes) ;
+
+router.post("/quiz/get/my/number-of-lessons" , usersMiddleware([Role.Teacher]) , quizControlers.getNumberOfMyQuizzes) ;
+
+
 export default router ;

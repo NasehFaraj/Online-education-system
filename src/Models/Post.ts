@@ -6,7 +6,7 @@ interface IPost {
     postedBy: Schema.Types.ObjectId ;
     title: string ;
     article: string ;
-    photoPath: string ;
+    photoPath?: string ;
     
 }
 

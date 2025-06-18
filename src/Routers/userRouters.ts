@@ -7,8 +7,11 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware";
 
 const router = Router() ;
 
-router.post("/user/block" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
+router.patch("/user/block" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
 
+router.get("/user/count?page?limit" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
+
+router.get("/user" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
 
 
 export default router ;

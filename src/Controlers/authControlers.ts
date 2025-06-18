@@ -22,7 +22,7 @@ dotenv.config() ;
 
 const signup = async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , name , password , role , gender } = req.body ;
+    const { email , name , password , gender } = req.body ;
     
     try {
     
@@ -38,7 +38,6 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             name: name ,
             email: email ,
             password: hashedPassword ,
-            role : role ,
             gender : gender
         });
     

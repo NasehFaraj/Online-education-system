@@ -299,6 +299,55 @@ const getNumberOfQuizes = async (req : Request , res: Response) : Promise<void> 
 
 
 
+const getNumberOfMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
+
+    let { userID } = req.payload ;
+
+    try {
+
+        let numberOfQuizzes = await Quiz.countDocuments({teacherID: userID}) ;
+
+        res.status(201).send({numberOfQuizzes: numberOfQuizzes}) ;
+
+    } catch (error) {
+
+        console.error('get number of quizzes at Library error:' , error) ;
+        res.status(500).send({
+            message: "get number of quizzes at Library process failed" ,
+            error: error
+        });
+
+    }
+
+}
+
+
+const getMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
+
+
+    const { page , limit } = req.body ;
+    const { userID } = req.payload ;
+
+    try {
+        
+        const skip = (page - 1) * limit ;
+
+        let quizzes = await Quiz.find({teacherID: userID}).skip(skip).limit(limit) ;
+ 
+        res.status(201).send({quizzes: quizzes}) ;
+
+    } catch (error) {
+        console.error('get quizzes error:' , error) ;
+        res.status(500).send({
+            message: "get quizzes process failed" ,
+            error: error
+        });
+    }
+
+}
+
+
+
 export default {
 
     addQuiz ,
@@ -310,6 +359,8 @@ export default {
     deleteQuizFromTodoList ,
     getTodoList , 
     submitSolution ,
-    getNumberOfQuizes
+    getNumberOfQuizes ,
+    getNumberOfMyQuizzes , 
+    getMyQuizzes
 
 }

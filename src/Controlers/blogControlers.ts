@@ -33,7 +33,7 @@ const addBlog =  async (req : Request , res: Response) : Promise<void> => {
 
 const editBlog =  async (req : Request , res: Response) : Promise<void> => {
     
-    const { title , article , blogID } = req.body ;
+    const { title , article , category , blogID } = req.body ;
 
 
     try {
@@ -45,7 +45,7 @@ const editBlog =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        await Blog.findByIdAndUpdate(blogID , {article , title}) ;
+        await Blog.findByIdAndUpdate(blogID , {article , title , category}) ;
 
         res.status(201).send({massage: "The Blog has been edit successfully"}) ;
 
