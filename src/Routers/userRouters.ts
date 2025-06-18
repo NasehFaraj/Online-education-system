@@ -9,9 +9,9 @@ const router = Router() ;
 
 router.patch("/user/block" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
 
-router.get("/user/count?page?limit" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
+router.get("/user/count" , usersMiddleware([Role.Admin]) , userControlers.getNumberOfUser) ;
 
-router.get("/user" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
+router.get("/user?page?limit" , usersMiddleware([Role.Admin]) , userControlers.getUsers) ;
 
 
 export default router ;
