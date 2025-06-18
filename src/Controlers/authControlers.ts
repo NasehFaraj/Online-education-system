@@ -152,6 +152,11 @@ const login = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
+        if (oldUser.isBlocked) {
+            res.status(403).send({ message: "Account is Blocked" }) ;
+            return ;
+        }
+
         const isPasswordValid = await compare(password , oldUser.password) ;
         if (!isPasswordValid) {
             res.status(401).send({ message: "Invalid password" }) ;
