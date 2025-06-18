@@ -4,10 +4,12 @@ import cors from "cors" ;
 
 import { connectDB } from "./Database/connect";
 import postRouters from "./Routers/postRouters" ;
+import userRouters from "./Routers/userRouters" ;
 import fileRouters from "./Routers/fileRouters" ;
 import authRouters from "./Routers/authRouters" ;
+import blogRouters from "./Routers/blogRouters" ;
+import quiztRouters from "./Routers/quizRouters" ;
 import courseRouters from "./Routers/lessonRouters" ;
-import assessmentRouters from "./Routers/quizRouters" ;
  
 const app = express() ;
 dotenv.config() ;
@@ -18,8 +20,10 @@ app.use(cors()) ;
 app.use(postRouters) ;
 app.use(fileRouters) ;
 app.use(authRouters) ;
+app.use(userRouters) ;
+app.use(blogRouters) ;
+app.use(quiztRouters) ;
 app.use(courseRouters) ;
-app.use(assessmentRouters) ;
 
 app.listen(process.env.PORT , (error) => {
 
