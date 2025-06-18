@@ -7,12 +7,12 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware";
 
 const router = Router() ;
 
-router.post("/post/add" , usersMiddleware([Role.Admin]) , postControlers.addPost) ;
+router.put("/post" , usersMiddleware([Role.Admin]) , postControlers.addPost) ;
 
-router.post("/post/edit" , usersMiddleware([Role.Admin]) , postControlers.editPost) ;
+router.patch("/post" , usersMiddleware([Role.Admin]) , postControlers.editPost) ;
 
-router.post("/post/delete" , usersMiddleware([Role.Admin]) , postControlers.deletePost) ;
+router.delete("/post" , usersMiddleware([Role.Admin]) , postControlers.deletePost) ;
 
-router.post("/post/get/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , postControlers.getPosts) ;
+router.get("/post/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , postControlers.getPosts) ;
 
 export default router ;

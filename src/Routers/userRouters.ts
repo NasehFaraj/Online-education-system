@@ -9,6 +9,8 @@ const router = Router() ;
 
 router.patch("/user/block" , usersMiddleware([Role.Admin]) , userControlers.blockUser) ;
 
+router.patch("/user/unblock" , usersMiddleware([Role.Admin]) , userControlers.unblockUser) ;
+
 router.get("/user/count" , usersMiddleware([Role.Admin]) , userControlers.getNumberOfUser) ;
 
 router.get("/user" , usersMiddleware([Role.Admin]) , userControlers.getUsers) ;

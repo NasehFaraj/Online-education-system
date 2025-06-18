@@ -7,16 +7,16 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware";
 
 const router = Router() ;
 
-router.post("/blog/add" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addBlog) ;
+router.put("/blog" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addBlog) ;
 
-router.post("/blog/edit" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.editBlog) ;
+router.patch("/blog" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.editBlog) ;
 
-router.post("/blog/delete" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.deleteBlog) ;
+router.delete("/blog" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.deleteBlog) ;
 
-router.post("/blog/get/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getBlogs) ;
+router.get("/blog/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getBlogs) ;
 
-router.post("/blog/comment/add" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addComment) ;
+router.put("/blog/comment" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addComment) ;
 
-router.post("/blog/comment/get/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getComments) ;
+router.get("/blog/comment/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getComments) ;
 
 export default router ;

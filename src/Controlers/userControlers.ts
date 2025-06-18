@@ -33,6 +33,39 @@ const blockUser =  async (req : Request , res: Response) : Promise<void> => {
 } ;
 
 
+
+const unblockUser =  async (req : Request , res: Response) : Promise<void> => {
+    
+    let { userID } = req.body ;
+    
+    try {
+
+         let oldUser = await User.findById(userID) ;
+
+        if (!oldUser) {
+            res.status(404).send({ message: "user not found" }) ;
+            return ;
+        }
+
+        oldUser.isBlocked = false ;
+
+        await oldUser.save() ;
+
+        res.status(201).send({massage: "user has been blocked"}) ;
+
+    } catch (error) {
+        console.error('block user error:', error) ;
+        res.status(500).send({
+            message: "block user process failed" ,
+            error: error
+        }) 
+    }
+   
+
+} ;
+
+
+
 const getUsers =  async (req: Request<{} , {} , {} , { page?: string ; limit?: string ;} > , res: Response) : Promise<void> => {
 
     const page = parseInt(req.query.page || '1', 10) ;
@@ -82,7 +115,8 @@ export default {
     
     blockUser ,
     getUsers , 
-    getNumberOfUser
+    getNumberOfUser , 
+    unblockUser
   
 
 }

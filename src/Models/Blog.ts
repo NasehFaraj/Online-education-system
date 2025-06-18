@@ -5,7 +5,7 @@ export interface IBlog {
 
     _id: Types.ObjectId ;
     title: string ;
-    userID: Types.ObjectId ;
+    BlogedBy: Types.ObjectId ;
     category?: Category ;
     createdAt: Date ;
     updatedAt: Date ;
@@ -21,7 +21,7 @@ const blogSchema = new Schema<blogDocument>(
             type: String ,
             required: true
         },
-        userID: {
+        BlogedBy: {
             type: Schema.Types.ObjectId,
             ref: "user",
             required: true
