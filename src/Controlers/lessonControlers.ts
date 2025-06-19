@@ -6,19 +6,12 @@ import { ILesson } from "../Models/Lesson" ;
 
 const addLesson =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { title , description , category , videoPath , pdfPath } = req.body ;
+    const { title , description , category , videoID , pdfID } = req.body ;
     const { userID } = req.payload ;
 
     try {
 
-        let newLesson = new Lesson ({
-            title: title ,
-            teacherID: userID ,
-            category: category ,
-            description: description ,
-            videoPath: videoPath ,
-            pdfPath: pdfPath ,
-        }) ;
+        let newLesson = new Lesson ({title , teacherID: userID , category , description , videoID , pdfID}) ;
 
         newLesson.save() ;
         
@@ -37,7 +30,7 @@ const addLesson =  async (req : Request , res: Response) : Promise<void> => {
 
 const editLesson =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { lessonID , title , description } = req.body ;
+    const { lessonID , title , description , category , videoID , pdfID } = req.body ;
     const { userID } = req.payload ;
 
     try {
@@ -54,7 +47,7 @@ const editLesson =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
         
-        await Lesson.findByIdAndUpdate(lessonID , {title , description}) ;
+        await Lesson.findByIdAndUpdate(lessonID , {title , description , category , videoID , pdfID}) ;
 
         res.status(201).send({massage: "The Lesson has been edit successfully"}) ;
 

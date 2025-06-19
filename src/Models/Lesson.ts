@@ -9,8 +9,8 @@ export interface ILesson {
     teacherID: Types.ObjectId ;
     category: Category ;
     studentsEnrolled?: Types.ObjectId[] ;
-    videoPath?: string ;
-    pdfPath?: string ;
+    videoID?: string ;
+    pdfID?: string ;
     createdAt: Date ;
     updatedAt: Date ;
 
@@ -43,10 +43,10 @@ const lessonSchema = new Schema<lessonDocument>(
             type: Schema.Types.ObjectId,
             ref: "user"
         }],
-        videoPath : {
+        videoID : {
             type: String ,
         } ,
-        pdfPath : {
+        pdfID : {
             type: String ,
         }
     },
