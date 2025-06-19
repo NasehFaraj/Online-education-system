@@ -2,7 +2,7 @@ import express, { json } from "express" ;
 import dotenv from "dotenv";
 import cors from "cors" ; 
 
-import { connectDB } from "./Database/connect";
+import { connectDB } from "./config/database";
 import postRouters from "./Routers/postRouters" ;
 import userRouters from "./Routers/userRouters" ;
 import fileRouters from "./Routers/fileRouters" ;

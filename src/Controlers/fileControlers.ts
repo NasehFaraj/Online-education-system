@@ -1,63 +1,97 @@
-import { Request , Response } from "express";
-import fs from "fs" ;
+import { Request, Response } from "express";
+import mongoose from "mongoose";
+import * as fileService from "../Services/fileService";
 
-const uploadFile =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { file } = req ;
-    
+const uploadFile = async (req: Request, res: Response): Promise<void> => {
+
+    let { userID } = req.payload;
+    let { file } = req ;
+
     try {
-        
+
         if (!file) {
-            res.status(400).json({ error: 'No file uploaded' }) ;
+            res.status(400).send({ error: "No file uploaded" }) ;
             return ;
         }
 
-        const fileType = file.mimetype.startsWith('video/') ? 'video' : 'pdf' ;
-        
-        res.json({
-            message: 'Uploaded successfully' ,
-            type: fileType ,
-            path: file.path ,
-            size: file.size
-        }) ;
-        
-    } catch (error) {
-        console.error('upload file error:' , error) ;
-        res.status(500).send({
-            message: "upload file process failed" ,
-            error: error
+        const fileID = await fileService.uploadFile(file , {
+            uploadedBy: userID ,
+            originalName: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size,
         });
+
+        res.status(201).send({message: "File uploaded successfully", fileID});
+
+    } catch (error) {
+        console.error("Upload error:", error) ;
+        res.status(500).send({ error: "Failed to upload file" }) ;
     }
-   
 
-} ;
+};
 
+const downloadFile = async (req: Request, res: Response): Promise<void> => {
 
-const streamFile = async (req : Request , res: Response) : Promise<void> => {
-
-    const { filePath } = req.body ;
+    let { fileID } = req.body ;
 
     try {
 
-        const readStream = fs.createReadStream(filePath) ;
-        readStream.pipe(res) ;
-    
-    } catch (error) {
-        console.error('stream file error:' , error) ;
-        res.status(500).send({
-            message: "stream file process failed" ,
-            error: error
+        if (!mongoose.Types.ObjectId.isValid(fileID)) {
+            res.status(400).send({ error: "Invalid file ID" });
+            return ;
+        }
+
+        const objectFileID = new mongoose.Types.ObjectId(fileID);
+        const fileInfo = await fileService.getFileInfo(objectFileID);
+
+        if (!fileInfo) {
+            res.status(404).send({ error: "File not found" });
+            return;
+        }
+
+        const fileBuffer = await fileService.downloadFile(objectFileID);
+
+        res.set({
+            "Content-Type": fileInfo.metadata?.mimetype || "application/octet-stream",
+            "Content-Length": fileInfo.length,
+            "Content-Disposition": `attachment; filename="${fileInfo.filename}"`,
         });
+
+        res.status(201).send(fileBuffer);
+
+    } catch (error) {
+        console.error("Download error:", error);
+        res.status(500).send({ error: "Failed to download file" });
     }
 
+};
 
-} ;
+const deleteFile = async (req: Request, res: Response): Promise<void> => {
 
+    let { fileID } = req.body ;
 
+    try {
+
+        if (!mongoose.Types.ObjectId.isValid(fileID)) {
+            res.status(400).send({ error: "Invalid file ID" });
+            return ;
+        }
+
+        const objectFileID = new mongoose.Types.ObjectId(fileID);
+        await fileService.deleteFile(objectFileID);
+
+        res.status(201).send({ message: "File deleted successfully" });
+
+    } catch (error) {
+        console.error("Delete error:", error);
+        res.status(500).send({ error: "Failed to delete file" });
+    }
+
+};
 
 export default {
-
-    uploadFile ,
-    streamFile
-
+    uploadFile , 
+    downloadFile , 
+    deleteFile 
 }

@@ -1,15 +1,19 @@
 import { Router } from "express" ;
+import multer from "multer";
 
 
 import fileControlers from "../Controlers/fileControlers" ;
 import { Role } from "../enums/Role";
-import { upload } from "../Services/uploadFile" ;
 import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 
 const router = Router() ;
+const upload = multer({ storage: multer.memoryStorage() });
 
-router.put("/file/upload" , usersMiddleware([Role.Teacher]) , upload.single("file") , fileControlers.uploadFile) ;
+router.put("/file" , usersMiddleware([Role.Teacher , Role.Admin]) , upload.single('file') , fileControlers.uploadFile) ;
 
-router.post("/file/stream" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.streamFile) ;
+router.delete("/file" , usersMiddleware([Role.Teacher , Role.Admin]) , fileControlers.deleteFile) ;
+
+router.get("/file" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.downloadFile) ;
+
 
 export default router ; 
