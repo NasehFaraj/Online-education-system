@@ -33,11 +33,11 @@ const uploadFile = async (req: Request, res: Response): Promise<void> => {
 
 const downloadFile = async (req: Request, res: Response): Promise<void> => {
 
-    let { fileID } = req.body ;
+    let { fileID } = req.query ;
 
     try {
 
-        if (!mongoose.Types.ObjectId.isValid(fileID)) {
+        if ((typeof fileID !== 'string') || !mongoose.Types.ObjectId.isValid(fileID)) {
             res.status(400).send({ error: "Invalid file ID" });
             return ;
         }
