@@ -6,7 +6,7 @@ interface IPost {
     postedBy: Schema.Types.ObjectId ;
     title: string ;
     article: string ;
-    photoPath?: string ;
+    photoID: string ;
     
 }
 
@@ -27,7 +27,7 @@ const postSchema = new Schema<postDocument>({
         required: true ,
         type: String 
     } ,
-    photoPath: {
+    photoID: {
         type: String 
     }
 

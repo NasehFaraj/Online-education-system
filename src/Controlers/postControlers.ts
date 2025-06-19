@@ -4,7 +4,7 @@ import { Post } from "../Models/Post";
 
 const addPost =  async (req : Request , res: Response) : Promise<void> => {
     
-    const { title , article , photoPath } = req.body ;
+    const { title , article , photoID } = req.body ;
     const { userID } = req.payload ;
 
     try {
@@ -13,7 +13,7 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
             PostedBy: userID , 
             title ,
             article ,
-            photoPath 
+            photoID 
         }) ;
 
         await newPost.save() ;
@@ -32,7 +32,7 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
 
 const editPost =  async (req : Request , res: Response) : Promise<void> => {
     
-    const { title , article , postID } = req.body ;
+    const { title , article , postID , photoID } = req.body ;
 
 
     try {
@@ -44,7 +44,7 @@ const editPost =  async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        await Post.findByIdAndUpdate(postID , {article , title}) ;
+        await Post.findByIdAndUpdate(postID , {article , title , photoID}) ;
 
         res.status(201).send({massage: "The Post has been edit successfully"}) ;
 
@@ -91,13 +91,26 @@ const deletePost =  async (req : Request , res: Response) : Promise<void> => {
 const getPosts =  async (req : Request , res: Response) : Promise<void> => {
     
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     
     try {
-        
-        const skip = (page - 1) * limit ;
 
-        const posts = await Post.find().skip(skip).limit(limit) ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
+
+        const posts = await Post.find().skip(skip).limit(limitNumber) ;
 
         res.status(201).send({posts: posts}) ;
 
