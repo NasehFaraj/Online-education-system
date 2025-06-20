@@ -7,7 +7,7 @@ interface iDefaultProfilePhoto {
     _id: Types.ObjectId ;
     role: Role ;
     gender: Gender ;
-    photoID: Types.ObjectId ,
+    photoID: Schema.Types.ObjectId ,
 }
 
 type DefaultProfilePhotoDocument = HydratedDocument<iDefaultProfilePhoto>;
@@ -28,6 +28,7 @@ const defaultProfilePhotoSchema = new Schema<DefaultProfilePhotoDocument>({
         type: Schema.Types.ObjectId , 
         required: true
     }
+    
 }, { timestamps : true }) ;
 
 
