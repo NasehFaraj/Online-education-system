@@ -14,6 +14,8 @@ import { User } from "../Models/User" ;
 import { VerifyCode } from "../Models/VerifyCode" ;
 import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
+import { DefaultProfilePhoto } from "../Models/defaultProfilePhoto";
+import { Role } from "../enums/Role";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -33,12 +35,14 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         }
     
         const hashedPassword = await hash(password , 12) ;
-    
+        const photo = await DefaultProfilePhoto.aggregate([{ $match: { role: Role.Student,gender: gender } },{ $sample: { size: 1 } }]);
+
         const newUser = new User({
             name: name ,
             email: email ,
             password: hashedPassword ,
-            gender : gender
+            gender : gender , 
+            photoID : photo[0].photoID
         });
     
         const newCode:number = (Math.random() * (999999 - 100000) + 100000) | 0 ;
@@ -188,7 +192,10 @@ const login = async (req : Request , res: Response) : Promise<void> => {
         res.status(200).send({
             message: "Login successful" ,
             token:token ,
-            isBlocked: oldUser.isBlocked
+            isBlocked: oldUser.isBlocked ,
+            name: oldUser.name ,
+            role: oldUser.role ,
+            photoID: oldUser.photoID ,
         });
 
     } catch (error) {
@@ -211,7 +218,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        let oldUser = await User.findOne({email:email}) ;
+        let oldUser = await User.findOne({email: email}) ;
 
         if(!oldUser){
             res.status(404).send({ message: "Email not registered" }) ;

@@ -12,6 +12,7 @@ interface iUser {
     gender: Gender ;
     isVerified: boolean ;
     isBlocked: boolean ;
+    photoID?: Types.ObjectId ,
 }
 
 type UserDocument = HydratedDocument<iUser>;
@@ -47,6 +48,9 @@ const userSchema = new Schema<UserDocument>({
     isBlocked : {
         type : Boolean,
         default : false
+    } , 
+    photoID: {
+        type: Schema.Types.ObjectId
     }
 }, { timestamps : true }) ;
 
