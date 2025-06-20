@@ -10,7 +10,7 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
     try {
 
         let newPost = new Post({
-            PostedBy: userID , 
+            postedBy: userID , 
             title ,
             article ,
             photoID 
