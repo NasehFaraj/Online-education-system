@@ -206,6 +206,11 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
   
     try {
 
+        if(typeCode !== 'verify' && typeCode !== 'reset-password'){
+            res.status(403).send({massage: "bad request"}) ;
+            return ;
+        }
+
         let oldUser = await User.findOne({email:email}) ;
 
         if(!oldUser){
@@ -213,7 +218,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(!oldUser.isVerified) {
+        if(!oldUser.isVerified && typeCode === 'reset-password') {
             res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
