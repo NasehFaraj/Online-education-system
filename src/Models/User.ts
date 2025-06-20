@@ -12,7 +12,8 @@ interface iUser {
     gender: Gender ;
     isVerified: boolean ;
     isBlocked: boolean ;
-    photoID?: Schema.Types.ObjectId ,
+    photoID: Schema.Types.ObjectId ,
+
 }
 
 type UserDocument = HydratedDocument<iUser>;
