@@ -7,7 +7,8 @@ interface iDefaultProfilePhoto {
     _id: Types.ObjectId ;
     role: Role ;
     gender: Gender ;
-    photoID: Schema.Types.ObjectId ,
+    photoID: Schema.Types.ObjectId ;
+    
 }
 
 type DefaultProfilePhotoDocument = HydratedDocument<iDefaultProfilePhoto>;

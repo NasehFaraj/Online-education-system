@@ -35,7 +35,7 @@ const userSchema = new Schema<UserDocument>({
     role: {
         type: String ,
         enum: Role ,
-        default: Role.Student
+        default: Role.Admin
     } ,
     gender: {
         type: String ,

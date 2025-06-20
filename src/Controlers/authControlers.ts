@@ -16,6 +16,7 @@ import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
 import { DefaultProfilePhoto } from "../Models/defaultProfilePhoto";
 import { Role } from "../enums/Role";
+import { Gender } from "../enums/Gender";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -24,10 +25,12 @@ dotenv.config() ;
 
 const signup = async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , name , password , gender } = req.body ;
+    const { email , name , password , gender , photoID } = req.body ;
     
+
     try {
-    
+        
+
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             res.status(409).send({ message: 'Email is already registered' }) ;
@@ -38,6 +41,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         const photo =  await DefaultProfilePhoto.find({role: Role.Student , gender: gender });
 
         const randomIndex = Math.floor(Math.random() * photo.length);
+        console.log(photo[randomIndex].photoID) ;
         const randomPhotoID = photo[randomIndex].photoID ;
 
         const newUser = new User({
