@@ -35,14 +35,17 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         }
     
         const hashedPassword = await hash(password , 12) ;
-        const photo = await DefaultProfilePhoto.aggregate([{ $match: { role: Role.Student,gender: gender } },{ $sample: { size: 1 } }]);
+        const photo =  await DefaultProfilePhoto.find({role: Role.Student , gender: gender });
+
+        const randomIndex = Math.floor(Math.random() * photo.length);
+        const randomPhotoID = photo[randomIndex].photoID ;
 
         const newUser = new User({
             name: name ,
             email: email ,
             password: hashedPassword ,
             gender : gender , 
-            photoID : photo[0].photoID
+            photoID : randomPhotoID
         });
     
         const newCode:number = (Math.random() * (999999 - 100000) + 100000) | 0 ;
