@@ -97,14 +97,27 @@ const deleteLesson =  async (req : Request , res: Response) : Promise<void> => {
 
 const getLessons =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     const { userID } = req.payload ;
 
     try {
-        
-        const skip = (page - 1) * limit ;
 
-        let lessons = await Lesson.find().skip(skip).limit(limit) ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return ;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+
+        const skip = (pageNumber - 1) * limitNumber ;
+
+        let lessons = await Lesson.find().skip(skip).limit(limitNumber) ;
         let resLessons = lessons.map(Lesson => Object.assign({} , Lesson.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < lessons.length ; i ++){
@@ -132,7 +145,7 @@ const getLessons =  async (req : Request , res: Response) : Promise<void> => {
 const getLesson =  async (req : Request , res: Response) : Promise<void> => {
     
     const { userID } = req.payload ;
-    const { lessonID } = req.body ;
+    const { lessonID } = req.query ;
 
     try {
         
@@ -227,14 +240,27 @@ const deleteLessonFromLibrary =  async (req : Request , res: Response) : Promise
 
 const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     const { userID  } = req.payload ; 
 
     try {
 
-        const skip = (page - 1) * limit ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return ;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
 
-        let myLibrary = await Library.find({userID: userID}).skip(skip).limit(limit) ; ;
+        const skip = (pageNumber - 1) * limitNumber ;
+
+        let myLibrary = await Library.find({userID: userID}).skip(skip).limit(limitNumber) ; ;
 
         let lessonMyLibrary:ILesson[] = [] ;
 
@@ -328,14 +354,27 @@ const getNumberOfMyLessons = async (req : Request , res: Response) : Promise<voi
 const getMyLessons = async (req : Request , res: Response) : Promise<void> => {
 
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     const { userID } = req.payload ;
 
     try {
         
-        const skip = (page - 1) * limit ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return ;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
 
-        let lessons = await Lesson.find({teacherID: userID}).skip(skip).limit(limit) ;
+        const skip = (pageNumber - 1) * limitNumber ;
+
+        let lessons = await Lesson.find({teacherID: userID}).skip(skip).limit(limitNumber) ;
         let resLessons = lessons.map(Lesson => Object.assign({} , Lesson.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < lessons.length ; i ++){
