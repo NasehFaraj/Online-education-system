@@ -5,7 +5,6 @@ import path from "path";
 import dotenv from "dotenv";
 import cors from "cors" ; 
 
-
 import { connectDB } from "./config/database";
 import postRouters from "./Routers/postRouters" ;
 import userRouters from "./Routers/userRouters" ;
