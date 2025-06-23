@@ -43,63 +43,61 @@ const io = new Server(server, {
     }
 });
 
-const activeStreams: Record<string, string> = {}; // { streamId: broadcasterSocketId }
+// let wCap = new cv.VideoCapture(0) ;
+// wCap.set(cv.CAP_PROP_FRAME_WIDTH , 640) ;  
+// wCap.set(cv.CAP_PROP_FRAME_HEIGHT , 480) ; 
+// wCap.set(cv.CAP_PROP_FPS, 15) ;            
 
-// app.use(express.static(path.join(__dirname, '../public')));
+// function getFrame() {
 
-io.on('connection', (socket) => {
-    console.log('مستخدم متصل:', socket.id);
+//     try {
+//         const frame = wCap.read();
 
-    socket.on('start-stream', (streamId) => {
-        activeStreams[streamId] = socket.id;
-        socket.join(streamId);
-        console.log(`بث جديد بدأ: ${streamId}`);
-    });
+//         if (frame.empty) {
+//             wCap.reset();
+//             return getFrame();
+//         }
 
-    socket.on('join-stream', (streamId) => {
-        if (activeStreams[streamId]) {
-            socket.join(streamId);
-            socket.emit('stream-joined', streamId);
-            console.log(`مشاهد انضم للبث: ${streamId}`);
+//         const processedFrame = frame.cvtColor(cv.COLOR_BGR2RGB);
 
-            socket.to(activeStreams[streamId]).emit('new-viewer', socket.id);
-        } else {
-            socket.emit('stream-not-found', streamId);
-        }
-    });
+//         return processedFrame;
+//     } catch (error) {
+//         console.error('خطأ في قراءة الإطار:', error);
+//         return new cv.Mat();
+//     }
 
-    socket.on('offer', (data) => {
-        socket.to(data.to).emit('offer', data);
-    });
+// }
 
-    socket.on('answer', (data) => {
-        socket.to(data.to).emit('answer', data);
-    });
+// io.on('connection', (socket) => {
 
-    socket.on('ice-candidate', (data) => {
-        socket.to(data.to).emit('ice-candidate', data);
-    });
+//     console.log('client is connected:', socket.id) ;
 
-    socket.on('end-stream', (streamId) => {
-        if (activeStreams[streamId] === socket.id) {
-            delete activeStreams[streamId];
-            socket.to(streamId).emit('stream-ended');
-            console.log(`البث انتهى: ${streamId}`);
-        }
-    });
+//     const interval = setInterval(() => {
+//         try {
+//             const frame = getFrame();
 
-    socket.on('disconnect', () => {
-        console.log('مستخدم انقطع:', socket.id);
+//             if (!frame.empty) {
+//                 const jpgBuffer = cv.imencode('.jpg', frame).toString('base64');
+//                 socket.emit('image', jpgBuffer);
+//             }
+//         } catch (error) {
+//             console.error(error) ;
+//         }
+//     }, 100) ; 
 
-        for (const streamId in activeStreams) {
-            if (activeStreams[streamId] === socket.id) {
-                delete activeStreams[streamId];
-                io.to(streamId).emit('stream-ended');
-                console.log(`بث تلقائيًا انتهى: ${streamId}`);
-            }
-        }
-    });
-});
+//     socket.on('disconnect', () => {
+//         console.log('client is disconnected:', socket.id);
+//         clearInterval(interval);
+//     }) ;
+// }) ;
+
+// process.on('SIGINT', () => {
+//     wCap.release();
+//     process.exit();
+// });
+
+
+
 
 server.listen(process.env.PORT , async () => {
 
