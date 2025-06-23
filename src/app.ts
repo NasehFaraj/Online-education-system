@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename) ;
 
 
 dotenv.config() ;
-app.use(express.static(path.join(__dirname , '../../../test')));
+// app.use(express.static(path.join(__dirname , '../../../test')));
 
 app.use(json()) ;
 app.use(cors()) ;
