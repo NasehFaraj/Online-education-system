@@ -6,7 +6,7 @@ declare namespace NodeJS {
         
         [key : string] : string | number | StringValue | undefined ;
         DATABASE_URL: string ;
-        PORT : string ;
+        PORT : number ;
         JWT_SECRET : string ;
         MAIL_USERNAME : string ;
         MAIL_HOST : string ;

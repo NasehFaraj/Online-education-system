@@ -34,13 +34,13 @@ app.use(quiztRouters) ;
 app.use(lessonRouters) ;
 
 
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//     cors: {
+//         origin: "*",
+//         methods: ["GET", "POST"]
+//     }
+// });
 
 // let wCap = new cv.VideoCapture(0) ;
 // wCap.set(cv.CAP_PROP_FRAME_WIDTH , 640) ;  
@@ -61,7 +61,7 @@ const io = new Server(server, {
 
 //         return processedFrame;
 //     } catch (error) {
-//         console.error('خطأ في قراءة الإطار:', error);
+//         console.error(error);
 //         return new cv.Mat();
 //     }
 
@@ -98,7 +98,7 @@ const io = new Server(server, {
 
 
 
-server.listen(process.env.PORT , async () => {
+app.listen(process.env.PORT , async () => {
 
     await connectDB() ;
 
@@ -106,5 +106,7 @@ server.listen(process.env.PORT , async () => {
 
 }) ;
 
-
+app.get("/" , (req , res)=> {
+    res.send("hello") ;
+})
 

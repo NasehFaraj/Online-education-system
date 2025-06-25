@@ -69,7 +69,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             
             const htmlContent = await ejs.renderFile(templatePath , {emailSubject: emailSubject , name: name , code: newCode }) ;
 
-            await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
+            // await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
 
             await newUser.save() ;
             await newVerifyCode.save() ;

@@ -15,4 +15,6 @@ router.delete("/post" , usersMiddleware([Role.Admin]) , postControlers.deletePos
 
 router.get("/post/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , postControlers.getPosts) ;
 
+router.get("/post" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , postControlers.getPost) ;
+
 export default router ;

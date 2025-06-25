@@ -28,7 +28,7 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
         });
     }
    
-} ;
+} 
 
 const editPost =  async (req : Request , res: Response) : Promise<void> => {
     
@@ -58,7 +58,7 @@ const editPost =  async (req : Request , res: Response) : Promise<void> => {
    
     
 
-} ;
+} 
 
 const deletePost =  async (req : Request , res: Response) : Promise<void> => {
     
@@ -85,7 +85,7 @@ const deletePost =  async (req : Request , res: Response) : Promise<void> => {
         });
     }
 
-} ;
+} 
 
 
 const getPosts =  async (req : Request , res: Response) : Promise<void> => {
@@ -123,7 +123,28 @@ const getPosts =  async (req : Request , res: Response) : Promise<void> => {
     }
 
 
-} ;
+} 
+
+const getPost =  async (req : Request , res: Response) : Promise<void> => {
+
+    let { postID } = req.query ;
+
+
+    try {
+
+        const post = await Post.findById(postID) ;
+
+        res.status(201).send({post: post}) ;
+
+    } catch (error) {
+        console.error('get post error:' , error) ;
+        res.status(500).send({
+            message: "get post process failed" ,
+            error: error
+        });
+    }
+
+} 
 
 
 export default {
@@ -131,6 +152,7 @@ export default {
     addPost ,
     editPost ,
     deletePost , 
-    getPosts
+    getPosts , 
+    getPost
 
 }
