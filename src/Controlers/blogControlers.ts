@@ -92,13 +92,26 @@ const deleteBlog =  async (req : Request , res: Response) : Promise<void> => {
 const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
     
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     
     try {
         
-        const skip = (page - 1) * limit ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
 
-        const blogs = await Blog.find().skip(skip).limit(limit) ;
+        const blogs = await Blog.find().skip(skip).limit(limitNumber) ;
 
         res.status(201).send({blogs: blogs}) ;
 
@@ -141,13 +154,26 @@ const addComment =  async (req : Request , res: Response) : Promise<void> => {
 const getComments =  async (req : Request , res: Response) : Promise<void> => {
     
 
-    const { page , limit , blogID } = req.body ;
+    const { page , limit , blogID } = req.query ;
     
     try {
         
-        const skip = (page - 1) * limit ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
 
-        const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limit) ;
+        const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limitNumber) ;
 
         res.status(201).send({comments: comments}) ;
 
