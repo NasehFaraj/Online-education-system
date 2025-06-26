@@ -15,5 +15,8 @@ router.get("/user/count" , usersMiddleware([Role.Admin]) , userControlers.getNum
 
 router.get("/user" , usersMiddleware([Role.Admin]) , userControlers.getUsers) ;
 
+router.patch("/user/change/name" , usersMiddleware([Role.Admin]) , userControlers.changeName) ; 
+
+router.patch("/user/change/photo" , usersMiddleware([Role.Admin]) , userControlers.changeName) ; 
 
 export default router ;

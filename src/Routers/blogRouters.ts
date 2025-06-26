@@ -15,8 +15,10 @@ router.delete("/blog" , usersMiddleware([Role.Student , Role.Teacher , Role.Admi
 
 router.get("/blog/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getBlogs) ;
 
+router.get("/blog/my/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getMyBlogs) ; 
+
 router.put("/blog/comment" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addComment) ;
 
-router.get("/blog/comment/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getComments) ;
+router.get("/blog/comment/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getComments) ; 
 
 export default router ;

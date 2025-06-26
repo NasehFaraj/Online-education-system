@@ -12,7 +12,7 @@ interface iUser {
     gender: Gender ;
     isVerified: boolean ;
     isBlocked: boolean ;
-    photoID: Schema.Types.ObjectId ,
+    photoID: string ,
 
 }
 
@@ -51,7 +51,7 @@ const userSchema = new Schema<UserDocument>({
         default : false
     } , 
     photoID: {
-        type: Schema.Types.ObjectId
+        type: String
     }
 }, { timestamps : true }) ;
 

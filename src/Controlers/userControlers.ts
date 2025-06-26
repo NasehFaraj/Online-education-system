@@ -8,7 +8,7 @@ const blockUser =  async (req : Request , res: Response) : Promise<void> => {
     
     try {
 
-         let oldUser = await User.findById(userID) ;
+        let oldUser = await User.findById(userID) ;
 
         if (!oldUser) {
             res.status(404).send({ message: "user not found" }) ;
@@ -111,12 +111,77 @@ const getNumberOfUser = async (req : Request , res: Response) : Promise<void> =>
 
 } ; 
 
+
+const changeName =  async (req : Request , res: Response) : Promise<void> => {
+    
+    let { name } = req.body ;
+    let { userID } = req.payload ;
+    
+    try {
+
+        let oldUser = await User.findById(userID) ;
+
+        if (!oldUser) {
+            res.status(404).send({ message: "user not found" }) ;
+            return ;
+        }
+
+        oldUser.name = name ;
+
+        await oldUser.save() ;
+
+        res.status(201).send({massage: "name has been changed"}) ;
+
+    } catch (error) {
+        console.error('changed name error:', error) ;
+        res.status(500).send({
+            message: "changed name process failed" ,
+            error: error
+        }) 
+    }
+   
+
+} ;
+
+const changePhoto =  async (req : Request , res: Response) : Promise<void> => {
+    
+    let { photoID } = req.body ;
+    let { userID } = req.payload ;
+    
+    try {
+
+        let oldUser = await User.findById(userID) ;
+
+        if (!oldUser) {
+            res.status(404).send({ message: "user not found" }) ;
+            return ;
+        }
+
+        oldUser.photoID = photoID ;
+
+        await oldUser.save() ;
+
+        res.status(201).send({massage: "photo has been changed"}) ;
+
+    } catch (error) {
+        console.error('changed photo error:', error) ;
+        res.status(500).send({
+            message: "photo name process failed" ,
+            error: error
+        }) 
+    }
+   
+
+} ;
+
+
 export default {
     
     blockUser ,
     getUsers , 
     getNumberOfUser , 
-    unblockUser
-  
+    unblockUser , 
+    changeName , 
+    changePhoto
 
 }

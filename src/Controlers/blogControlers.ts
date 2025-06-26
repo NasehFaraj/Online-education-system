@@ -2,6 +2,9 @@ import { Request , Response } from "express" ;
 
 import { Blog } from "../Models/Blog";
 import { Comment } from "../Models/Comment" ;
+import { IBlogResponse } from "../Interfaces/IBlogResponse";
+import { User } from "../Models/User";
+import { ICommentResponse } from "../Interfaces/ICommentResponse";
 
 const addBlog =  async (req : Request , res: Response) : Promise<void> => {
     
@@ -11,7 +14,7 @@ const addBlog =  async (req : Request , res: Response) : Promise<void> => {
     try {
 
         let newBlog = new Blog({
-            BlogedBy: userID , 
+            blogedBy: userID , 
             title ,
             article ,
             category 
@@ -111,9 +114,26 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const blogs = await Blog.find().skip(skip).limit(limitNumber) ;
+        let blogs = await Blog.find().skip(skip).limit(limitNumber) ; 
+        let bolgsRes: IBlogResponse[] = blogs ; 
 
-        res.status(201).send({blogs: blogs}) ;
+        for(let i = 0 ; i < blogs.length ; i ++){
+
+            let oldUser = await User.findById(blogs[i].blogedBy) ;
+
+            if(!oldUser) {
+                bolgsRes[i].name = "Deleted Account" ;
+                
+            }
+            else {
+                bolgsRes[i].name = oldUser.name ;
+                bolgsRes[i].role = oldUser.role ;
+                bolgsRes[i].photoID = oldUser.photoID ;
+            }
+
+        }
+
+        res.status(201).send({blogs: bolgsRes}) ;
 
     } catch (error) {
         console.error('get Blogs error:' , error) ;
@@ -125,6 +145,63 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
 
 
 } ;
+
+
+const getMyBlogs =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { page , limit } = req.query ;
+    const { userID } = req.payload ;
+    
+    try {
+        
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
+
+        let blogs = await Blog.find({blogedBy: userID}).skip(skip).limit(limitNumber) ; 
+        let bolgsRes: IBlogResponse[] = blogs ; 
+
+        for(let i = 0 ; i < blogs.length ; i ++){
+
+            let oldUser = await User.findById(blogs[i].blogedBy) ;
+
+            if(!oldUser) {
+                bolgsRes[i].name = "Deleted Account" ;
+                
+            }
+            else {
+                bolgsRes[i].name = oldUser.name ;
+                bolgsRes[i].role = oldUser.role ;
+                bolgsRes[i].photoID = oldUser.photoID ;
+            }
+
+        }
+
+        res.status(201).send({blogs: bolgsRes}) ;
+
+    } catch (error) {
+        console.error('get my Blogs error:' , error) ;
+        res.status(500).send({
+            message: "get my Blogs process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
 
 
 const addComment =  async (req : Request , res: Response) : Promise<void> => {
@@ -174,8 +251,25 @@ const getComments =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limitNumber) ;
+        let commentsRes: ICommentResponse[] = comments ; 
 
-        res.status(201).send({comments: comments}) ;
+        for(let i = 0 ; i < comments.length ; i ++){
+
+            let oldUser = await User.findById(comments[i].userID) ;
+
+            if(!oldUser) {
+                commentsRes[i].name = "Deleted Account" ;
+                
+            }
+            else {
+                commentsRes[i].name = oldUser.name ;
+                commentsRes[i].role = oldUser.role ;
+                commentsRes[i].photoID = oldUser.photoID ;
+            }
+
+        }
+
+        res.status(201).send({comments: commentsRes}) ;
 
     } catch (error) {
         console.error('get Comments error:' , error) ;
@@ -196,6 +290,7 @@ export default {
     deleteBlog , 
     getBlogs , 
     addComment , 
-    getComments
+    getComments , 
+    getMyBlogs
 
 }

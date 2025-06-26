@@ -5,7 +5,8 @@ export interface IBlog {
 
     _id: Types.ObjectId ;
     title: string ;
-    BlogedBy: Types.ObjectId ;
+    article: string ; 
+    blogedBy: Types.ObjectId ;
     category?: Category ;
     createdAt: Date ;
     updatedAt: Date ;
@@ -21,11 +22,15 @@ const blogSchema = new Schema<blogDocument>(
             type: String ,
             required: true
         },
-        BlogedBy: {
+        blogedBy: {
             type: Schema.Types.ObjectId,
             ref: "user",
             required: true
         },
+        article: {
+            type: String , 
+            required: true 
+        } ,
         category: {
             type: String ,
             enum: Category ,
