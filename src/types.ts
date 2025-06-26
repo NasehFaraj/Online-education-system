@@ -18,7 +18,8 @@ declare namespace NodeJS {
         MAIL_PASSWORD : string ;
         ALGORITHM : Algorithm | undefined ;
         EXPIRESIN : number | StringValue | undefined ;
-        
+        OPENROUTER_API_KEY : string ; 
+
     }
 
 }

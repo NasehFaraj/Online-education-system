@@ -2,9 +2,8 @@ import { Request , Response } from "express" ;
 
 import { Blog } from "../Models/Blog";
 import { Comment } from "../Models/Comment" ;
-import { IBlogResponse } from "../Interfaces/IBlogResponse";
 import { User } from "../Models/User";
-import { ICommentResponse } from "../Interfaces/ICommentResponse";
+import { Role } from "../enums/Role";
 
 const addBlog =  async (req : Request , res: Response) : Promise<void> => {
     
@@ -115,7 +114,7 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         let blogs = await Blog.find().skip(skip).limit(limitNumber) ; 
-        let bolgsRes: IBlogResponse[] = blogs ; 
+        let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
 
@@ -171,7 +170,7 @@ const getMyBlogs =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         let blogs = await Blog.find({blogedBy: userID}).skip(skip).limit(limitNumber) ; 
-        let bolgsRes: IBlogResponse[] = blogs ; 
+        let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
 
@@ -251,7 +250,7 @@ const getComments =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limitNumber) ;
-        let commentsRes: ICommentResponse[] = comments ; 
+        let commentsRes = comments.map(comment => Object.assign({} , comment.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < comments.length ; i ++){
 

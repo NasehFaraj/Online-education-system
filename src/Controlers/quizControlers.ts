@@ -1,10 +1,15 @@
 import { Request , Response } from "express";
-
+import mongoose from "mongoose";
 
 import { Quiz } from "../Models/Quiz" ;
 import { TodoList } from "../Models/TodoList" ;
 import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
-import { Submission } from "../Models/Submission";
+import { Submission } from "../Models/Submission" ;
+import { generateQuiz } from "../Services/generationQuizByAIService" ;
+import * as fileService from "../Services/fileService";
+
+
+
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -346,6 +351,43 @@ const getMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
 
 }
 
+const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { title , description , teacherID , fileID } = req.query ;
+
+    try {
+        
+        if ((typeof fileID !== 'string') || !mongoose.Types.ObjectId.isValid(fileID)) {
+            res.status(400).send({ error: "Invalid file ID" });
+            return ;
+        }
+
+        const objectFileID = new mongoose.Types.ObjectId(fileID);
+        const fileInfo = await fileService.getFileInfo(objectFileID);
+
+        if (!fileInfo) {
+            res.status(404).send({ error: "File not found" }) ;
+            return ;
+        }
+
+        const fileBuffer = await fileService.downloadFile(objectFileID) ;
+                
+        const questions = await generateQuiz(fileBuffer) ;
+        const newQuiz = new Quiz({title , description , teacherID , questions}) ;
+
+        res.status(201).send({quiz: questions}) ;
+
+    } catch (error) {
+        console.error('AI generate quiz error:' , error) ;
+        res.status(500).send({
+            message: "AI generate quiz process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
 
 
 export default {
@@ -361,6 +403,7 @@ export default {
     submitSolution ,
     getNumberOfQuizes ,
     getNumberOfMyQuizzes , 
-    getMyQuizzes
+    getMyQuizzes , 
+    AIGenerateQuiz ,
 
 }
