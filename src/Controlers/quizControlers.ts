@@ -7,6 +7,8 @@ import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
 import { Submission } from "../Models/Submission" ;
 import { generateQuiz } from "../Services/generationQuizByAIService" ;
 import * as fileService from "../Services/fileService";
+import { Lesson } from "../Models/Lesson";
+import { AIQuiz } from "../Models/AIQuiz";
 
 
 
@@ -353,16 +355,23 @@ const getMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
 
 const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { title , description , teacherID , fileID } = req.query ;
+    const { lessonID } = req.query ;
 
     try {
         
-        if ((typeof fileID !== 'string') || !mongoose.Types.ObjectId.isValid(fileID)) {
+        if ((typeof lessonID !== 'string') || !mongoose.Types.ObjectId.isValid(lessonID)) {
             res.status(400).send({ error: "Invalid file ID" });
             return ;
         }
 
-        const objectFileID = new mongoose.Types.ObjectId(fileID);
+        let oldLesson = await Lesson.findById(lessonID) ;
+
+        if(!oldLesson){
+
+            return ;
+        }
+
+        const objectFileID = new mongoose.Types.ObjectId(oldLesson.pdfID) ;
         const fileInfo = await fileService.getFileInfo(objectFileID);
 
         if (!fileInfo) {
@@ -373,7 +382,9 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
         const fileBuffer = await fileService.downloadFile(objectFileID) ;
                 
         const questions = await generateQuiz(fileBuffer) ;
-        const newQuiz = new Quiz({title , description , teacherID , questions}) ;
+        const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
+
+        await newQuiz.save() ;
 
         res.status(201).send({quiz: questions}) ;
 
