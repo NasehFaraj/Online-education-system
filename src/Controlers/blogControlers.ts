@@ -21,7 +21,7 @@ const addBlog =  async (req : Request , res: Response) : Promise<void> => {
 
         await newBlog.save() ;
 
-        res.status(201).send({massage: "The Blog has been added successfully"}) ;
+        res.status(201).send({message: "The Blog has been added successfully"}) ;
 
     } catch (error) {
         console.error('add Blog error:' , error) ;
@@ -43,13 +43,13 @@ const editBlog =  async (req : Request , res: Response) : Promise<void> => {
         let oldBlog = await Blog.findById(blogID) ;
 
         if(!oldBlog){
-            res.status(401).send({massage: "Blog not found"}) ;
+            res.status(401).send({message: "Blog not found"}) ;
             return ;
         }
 
         await Blog.findByIdAndUpdate(blogID , {article , title , category}) ;
 
-        res.status(201).send({massage: "The Blog has been edit successfully"}) ;
+        res.status(201).send({message: "The Blog has been edit successfully"}) ;
 
     } catch (error) {
         console.error('edit Blog error:' , error) ;
@@ -72,13 +72,13 @@ const deleteBlog =  async (req : Request , res: Response) : Promise<void> => {
         const oldBlog = await Blog.findById(blogID) ;
 
         if(!oldBlog) {
-            res.status(401).send({massage: "Blog not found"}) ;
+            res.status(401).send({message: "Blog not found"}) ;
             return ;
         }
 
         await Blog.findByIdAndDelete(blogID) ;
 
-        res.status(201).send({massage: "The Blog has been delete successfully"}) ;
+        res.status(201).send({message: "The Blog has been delete successfully"}) ;
 
     } catch (error) {
         console.error('delete Blog error:' , error) ;
@@ -113,7 +113,7 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let blogs = await Blog.find().skip(skip).limit(limitNumber) ; 
+        let blogs = await Blog.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
         let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
@@ -169,7 +169,7 @@ const getMyBlogs =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let blogs = await Blog.find({blogedBy: userID}).skip(skip).limit(limitNumber) ; 
+        let blogs = await Blog.find({blogedBy: userID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
         let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
@@ -214,7 +214,7 @@ const addComment =  async (req : Request , res: Response) : Promise<void> => {
 
         await newComment.save() ;
 
-        res.status(201).send({massage: "The Comment  has been added successfully"}) ;
+        res.status(201).send({message: "The Comment  has been added successfully"}) ;
 
     } catch (error) {
         console.error('add Comment  error:' , error) ;
@@ -249,7 +249,7 @@ const getComments =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limitNumber) ;
+        const comments = await Comment.find({blogID: blogID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
         let commentsRes = comments.map(comment => Object.assign({} , comment.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < comments.length ; i ++){
@@ -282,6 +282,29 @@ const getComments =  async (req : Request , res: Response) : Promise<void> => {
 } ;
 
 
+
+const getNumberOfComments =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { blogID } = req.query ;
+    
+    try {
+        
+        let numberOfComments = await Comment.countDocuments({id: blogID}) ;
+       
+        res.status(201).send({numberOfComments: numberOfComments}) ;
+
+    } catch (error) {
+        console.error('get number of Comments error:' , error) ;
+        res.status(500).send({
+            message: "get number of Comments process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
 export default {
     
     addBlog ,
@@ -290,6 +313,7 @@ export default {
     getBlogs , 
     addComment , 
     getComments , 
-    getMyBlogs
+    getMyBlogs , 
+    getNumberOfComments
 
 }
