@@ -15,7 +15,7 @@ const addLesson =  async (req : Request , res: Response) : Promise<void> => {
 
         newLesson.save() ;
         
-        res.status(201).send({massage: "The Lesson has been added successfully"}) ;
+        res.status(201).send({message: "The Lesson has been added successfully"}) ;
 
     } catch (error) {
         console.error('add Lesson error:' , error) ;
@@ -38,18 +38,18 @@ const editLesson =  async (req : Request , res: Response) : Promise<void> => {
         const oldLesson = await Lesson.findById(lessonID) ;
 
         if(!oldLesson) {
-            res.status(401).send({massage: "Lesson not found"}) ;
+            res.status(401).send({message: "Lesson not found"}) ;
             return ;
         }
 
         if(oldLesson.teacherID != userID){
-            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
         
         await Lesson.findByIdAndUpdate(lessonID , {title , description , category , videoID , pdfID}) ;
 
-        res.status(201).send({massage: "The Lesson has been edit successfully"}) ;
+        res.status(201).send({message: "The Lesson has been edit successfully"}) ;
 
     } catch (error) {
         console.error('edit Lesson error:' , error) ;
@@ -71,18 +71,18 @@ const deleteLesson =  async (req : Request , res: Response) : Promise<void> => {
         const oldLesson = await Lesson.findById(lessonID) ;
 
         if(!oldLesson) {
-            res.status(401).send({massage: "Lesson not found"}) ;
+            res.status(401).send({message: "Lesson not found"}) ;
             return ;
         }
 
         if(oldLesson.teacherID != userID){
-            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
             
         await Lesson.findByIdAndDelete(lessonID) ;
 
-        res.status(201).send({massage: "The Lesson has been delete successfully"}) ;
+        res.status(201).send({message: "The Lesson has been delete successfully"}) ;
 
     } catch (error) {
         console.error('delete Lesson error:' , error) ;
@@ -152,7 +152,7 @@ const getLesson =  async (req : Request , res: Response) : Promise<void> => {
         let oldLesson = await Lesson.findById(lessonID) ;
 
         if(!oldLesson){
-            res.status(401).send({massage: "Lesson not found"}) ;
+            res.status(401).send({message: "Lesson not found"}) ;
             return ;
         }
 
@@ -185,7 +185,7 @@ const addLessonToLibrary =  async (req : Request , res: Response) : Promise<void
         let oldLesson = await Library.findOne({lessonID: lessonID , userID: userID}) ;
 
         if(oldLesson){
-            res.status(409).send({massage: "Lesson is already added"}) ;
+            res.status(409).send({message: "Lesson is already added"}) ;
             return ;
         }
 
@@ -219,7 +219,7 @@ const deleteLessonFromLibrary =  async (req : Request , res: Response) : Promise
         let oldLesson = await Library.findOne({lessonID: lessonID , userID: userID}) ;
 
         if(!oldLesson){
-            res.status(401).send({massage: "Lesson is already deleted"}) ;
+            res.status(401).send({message: "Lesson is already deleted"}) ;
             return ;
         }
         

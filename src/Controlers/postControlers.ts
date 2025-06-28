@@ -18,7 +18,7 @@ const addPost =  async (req : Request , res: Response) : Promise<void> => {
 
         await newPost.save() ;
 
-        res.status(201).send({massage: "The Post has been added successfully"}) ;
+        res.status(201).send({message: "The Post has been added successfully"}) ;
 
     } catch (error) {
         console.error('add Post error:' , error) ;
@@ -40,13 +40,13 @@ const editPost =  async (req : Request , res: Response) : Promise<void> => {
         let oldPost = await Post.findById(postID) ;
 
         if(!oldPost){
-            res.status(401).send({massage: "Post not found"}) ;
+            res.status(401).send({message: "Post not found"}) ;
             return ;
         }
 
         await Post.findByIdAndUpdate(postID , {article , title , photoID}) ;
 
-        res.status(201).send({massage: "The Post has been edit successfully"}) ;
+        res.status(201).send({message: "The Post has been edit successfully"}) ;
 
     } catch (error) {
         console.error('edit Post error:' , error) ;
@@ -69,13 +69,13 @@ const deletePost =  async (req : Request , res: Response) : Promise<void> => {
         const oldPost = await Post.findById(postID) ;
 
         if(!oldPost) {
-            res.status(401).send({massage: "Post not found"}) ;
+            res.status(401).send({message: "Post not found"}) ;
             return ;
         }
 
         await Post.findByIdAndDelete(postID) ;
 
-        res.status(201).send({massage: "The Post has been delete successfully"}) ;
+        res.status(201).send({message: "The Post has been delete successfully"}) ;
 
     } catch (error) {
         console.error('delete Post error:' , error) ;

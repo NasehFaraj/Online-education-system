@@ -19,7 +19,7 @@ const blockUser =  async (req : Request , res: Response) : Promise<void> => {
 
         await oldUser.save() ;
 
-        res.status(201).send({massage: "user has been blocked"}) ;
+        res.status(201).send({message: "user has been blocked"}) ;
 
     } catch (error) {
         console.error('block user error:', error) ;
@@ -51,7 +51,7 @@ const unblockUser =  async (req : Request , res: Response) : Promise<void> => {
 
         await oldUser.save() ;
 
-        res.status(201).send({massage: "user has been blocked"}) ;
+        res.status(201).send({message: "user has been blocked"}) ;
 
     } catch (error) {
         console.error('block user error:', error) ;
@@ -130,7 +130,7 @@ const changeName =  async (req : Request , res: Response) : Promise<void> => {
 
         await oldUser.save() ;
 
-        res.status(201).send({massage: "name has been changed"}) ;
+        res.status(201).send({message: "name has been changed"}) ;
 
     } catch (error) {
         console.error('changed name error:', error) ;
@@ -161,7 +161,7 @@ const changePhoto =  async (req : Request , res: Response) : Promise<void> => {
 
         await oldUser.save() ;
 
-        res.status(201).send({massage: "photo has been changed"}) ;
+        res.status(201).send({message: "photo has been changed"}) ;
 
     } catch (error) {
         console.error('changed photo error:', error) ;

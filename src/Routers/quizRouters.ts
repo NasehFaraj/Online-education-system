@@ -17,7 +17,7 @@ router.post("/quiz/get/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.
 
 router.post("/quiz/get" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getQuiz) ;
 
-router.post("/course/get/number-of-quizes" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getNumberOfQuizes) ;
+router.post("/course/get/number" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getNumberOfQuizes) ;
 
 router.post("/quiz/submit-solution" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.submitSolution) ;
 
@@ -29,7 +29,7 @@ router.post("/quiz/todo/get/all" , usersMiddleware([Role.Teacher , Role.Admin , 
 
 router.post("/quiz/get/my" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.getMyQuizzes) ;
 
-router.post("/quiz/get/my/number-of-lessons" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.getNumberOfMyQuizzes) ;
+router.post("/quiz/get/my/number" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.getNumberOfMyQuizzes) ;
 
 router.get("/quiz/generate" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student])  , quizControlers.AIGenerateQuiz) ;
 

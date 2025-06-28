@@ -23,7 +23,7 @@ const addQuiz = async (req : Request , res: Response) : Promise<void> => {
 
         await newQuiz.save() ;
 
-        res.status(201).send({massage: "Quiz has been saved"}) ;
+        res.status(201).send({message: "Quiz has been saved"}) ;
 
     } catch (error) {
         console.error('add Quiz error:' , error) ;
@@ -45,18 +45,18 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
         let oldQuiz = await Quiz.findById(quizID) ;
 
         if(!oldQuiz){
-            res.status(401).send({massage: "Quiz not found"}) ;
+            res.status(401).send({message: "Quiz not found"}) ;
             return ;
         }
 
         if(oldQuiz.teacherID != teacherID){
-            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
         
         await Quiz.findByIdAndUpdate(quizID , { title , description , teacherID , questions  }) ;
 
-        res.status(201).send({massage: "Quiz has been edited"}) ;
+        res.status(201).send({message: "Quiz has been edited"}) ;
 
     } catch (error) {
         console.error('edit Quiz error:' , error) ;
@@ -78,18 +78,18 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
         let oldQuiz = await Quiz.findById(quizID);
 
         if(!oldQuiz){
-            res.status(401).send({massage: "Quiz not found"}) ;
+            res.status(401).send({message: "Quiz not found"}) ;
             return ;
         }
 
         if(oldQuiz.teacherID != teacherID){
-            res.status(403).send({massage: "You do not have permission to perform this action"}) ;
+            res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
         
         await Quiz.findByIdAndDelete(quizID) ;
 
-        res.status(201).send({massage: "Quiz has been deleted"}) ;
+        res.status(201).send({message: "Quiz has been deleted"}) ;
 
     } catch (error) {
         console.error('delete Quiz error:' , error) ;
@@ -110,16 +110,16 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
         let oldQuiz = await Quiz.findById(quizID) as IQuizResponse ;
 
         if(!oldQuiz){
-            res.status(401).send({massage: "Quiz not found"}) ;
+            res.status(401).send({message: "Quiz not found"}) ;
             return ;
         }
 
-        res.status(201).send({massage: "get Quiz has been successful" , quiz: oldQuiz}) ;
+        res.status(201).send({message: "get Quiz has been successful" , quiz: oldQuiz}) ;
 
     } catch (error) {
-        console.error('delete Quiz error:' , error) ;
+        console.error('get Quiz error:' , error) ;
         res.status(500).send({
-            message: "delete Quiz process failed" ,
+            message: "get Quiz process failed" ,
             error: error
         });
     }
@@ -134,7 +134,7 @@ const getQuizzes = async (req : Request , res: Response) : Promise<void> => {
     
         const skip = (page - 1) * limit ;
 
-        const quizes = await Quiz.find().skip(skip).limit(limit) as IQuizResponse[] ;
+        const quizes = await Quiz.find().skip(skip).limit(limit).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
 
         res.status(201).send({quizes: quizes}) ;
 
@@ -157,7 +157,7 @@ const addQuizToTodoList = async (req : Request , res: Response) : Promise<void> 
     let oldQuiz = await TodoList.findOne({quizID: quizID , userID: userID}) ;
 
     if(oldQuiz){
-        res.status(401).send({massage: "Quiz is already added"}) ;
+        res.status(401).send({message: "Quiz is already added"}) ;
         return ;
     }
 
@@ -191,7 +191,7 @@ const deleteQuizFromTodoList = async (req : Request , res: Response) : Promise<v
     let oldQuiz = await TodoList.findOne({quizID: quizID , userID: userID}) ;
 
     if(!oldQuiz){
-        res.status(401).send({massage: "Quiz not found"}) ;
+        res.status(401).send({message: "Quiz not found"}) ;
         return ;
     }
 
@@ -247,7 +247,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         let oldQuiz = await Quiz.findById(courseID) ;
         
         if(!oldQuiz){
-            res.status(401).send({massage: "Quiz not found"}) ;
+            res.status(401).send({message: "Quiz not found"}) ;
             return ;
         }
 

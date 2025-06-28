@@ -21,4 +21,6 @@ router.put("/blog/comment" , usersMiddleware([Role.Student , Role.Teacher , Role
 
 router.get("/blog/comment/all" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getComments) ; 
 
+router.get("/blog/comment/number" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getNumberOfComments) ; 
+
 export default router ;

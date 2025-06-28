@@ -221,7 +221,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
     try {
 
         if(typeCode !== 'verify' && typeCode !== 'reset-password'){
-            res.status(403).send({massage: "bad request"}) ;
+            res.status(403).send({message: "bad request"}) ;
             return ;
         }
 

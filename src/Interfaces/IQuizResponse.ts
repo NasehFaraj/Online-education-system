@@ -1,7 +1,17 @@
-import { IQuiz } from "../Models/Quiz"; 
+import { Types } from "mongoose";
 
-type QuestionWithoutAnswer = Omit<IQuiz["questions"][number], "correctAnswer"> ;
+export type QuestionWithoutAnswer = {
+    text: string;
+    options: string[];
 
-export interface IQuizResponse extends Omit<IQuiz , "questions"> {
-    questions: QuestionWithoutAnswer[] ;
+};
+
+export interface IQuizResponse {
+    _id: Types.ObjectId;
+    title: string;
+    description: string;
+    teacherID: Types.ObjectId;
+    questions: QuestionWithoutAnswer[];
+    createdAt?: Date;
+    updatedAt?: Date;
 }
