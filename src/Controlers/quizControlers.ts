@@ -382,9 +382,9 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
         const fileBuffer = await fileService.downloadFile(objectFileID) ;
                 
         const questions = await generateQuiz(fileBuffer) ;
-        const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
+        // const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
 
-        await newQuiz.save() ;
+        // await newQuiz.save() ;
 
         res.status(201).send({quiz: questions}) ;
 

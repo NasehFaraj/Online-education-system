@@ -51,14 +51,12 @@ async function generateQuestionsFromText(textContext: string): Promise<QuizRespo
     2. Mark the correct answer as a number (0-3)
     3. Output ONLY JSON in this exact format:
     {
-      "questions": [
-        {
+      "questions":{
           "text": string ,
           "options": string[],
           "correctAnswer": number 0 to 3 
-        }
-      ]
-    }`;
+        }[]
+    }` ;
 
     try {
         const response = await axios.post(
