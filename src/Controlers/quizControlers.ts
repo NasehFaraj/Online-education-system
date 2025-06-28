@@ -256,7 +256,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         let { questions } = oldQuiz ;
 
         for (let i = 0; i < questions.length; i ++) {
-            if(answers[i] == questions[i])sumOfDegree ++ ;
+            if(answers[i] == questions[i].correctAnswer)sumOfDegree ++ ;
         }
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
