@@ -75,7 +75,7 @@ const getUsers =  async (req: Request<{} , {} , {} , { page?: string ; limit?: s
         
         const skip = (page - 1) * limit ;
 
-        let users = await User.find().skip(skip).limit(limit) ;
+        let users = await User.find().sort({createdAt: -1}).skip(skip).limit(limit) ;
 
         
         res.status(201).send({users: users}) ;

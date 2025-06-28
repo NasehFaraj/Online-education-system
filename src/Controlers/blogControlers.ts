@@ -113,7 +113,7 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let blogs = await Blog.find().skip(skip).limit(limitNumber) ; 
+        let blogs = await Blog.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
         let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
@@ -169,7 +169,7 @@ const getMyBlogs =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let blogs = await Blog.find({blogedBy: userID}).skip(skip).limit(limitNumber) ; 
+        let blogs = await Blog.find({blogedBy: userID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
         let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
@@ -249,7 +249,7 @@ const getComments =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const comments = await Comment.find({blogID: blogID}).skip(skip).limit(limitNumber) ;
+        const comments = await Comment.find({blogID: blogID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
         let commentsRes = comments.map(comment => Object.assign({} , comment.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
 
         for(let i = 0 ; i < comments.length ; i ++){

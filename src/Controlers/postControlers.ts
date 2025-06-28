@@ -110,7 +110,7 @@ const getPosts =  async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const posts = await Post.find().skip(skip).limit(limitNumber) ;
+        const posts = await Post.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
 
         res.status(201).send({posts: posts}) ;
 

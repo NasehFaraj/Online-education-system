@@ -117,7 +117,7 @@ const getLessons =  async (req : Request , res: Response) : Promise<void> => {
 
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let lessons = await Lesson.find().skip(skip).limit(limitNumber) ;
+        let lessons = await Lesson.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
         let resLessons = lessons.map(Lesson => Object.assign({} , Lesson.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < lessons.length ; i ++){
@@ -260,7 +260,7 @@ const getLibrary =  async (req : Request , res: Response) : Promise<void> => {
 
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let myLibrary = await Library.find({userID: userID}).skip(skip).limit(limitNumber) ; ;
+        let myLibrary = await Library.find({userID: userID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ; ;
 
         let lessonMyLibrary:ILesson[] = [] ;
 
@@ -374,7 +374,7 @@ const getMyLessons = async (req : Request , res: Response) : Promise<void> => {
 
         const skip = (pageNumber - 1) * limitNumber ;
 
-        let lessons = await Lesson.find({teacherID: userID}).skip(skip).limit(limitNumber) ;
+        let lessons = await Lesson.find({teacherID: userID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
         let resLessons = lessons.map(Lesson => Object.assign({} , Lesson.toObject() , {isInLibrary: false})) ;
 
         for(let i = 0 ; i < lessons.length ; i ++){

@@ -134,7 +134,7 @@ const getQuizzes = async (req : Request , res: Response) : Promise<void> => {
     
         const skip = (page - 1) * limit ;
 
-        const quizes = await Quiz.find().skip(skip).limit(limit).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
+        const quizes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limit).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
 
         res.status(201).send({quizes: quizes}) ;
 
@@ -218,7 +218,7 @@ const getTodoList = async (req : Request , res: Response) : Promise<void> => {
         
         const { userID } = req.payload ;
 
-        let myTodoList = await TodoList.find({userID: userID}) ;
+        let myTodoList = await TodoList.find({userID: userID}).sort({createdAt: -1}) ;
     
         res.status(201).send({myTodoList: myTodoList}) ;
 
@@ -337,7 +337,7 @@ const getMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (page - 1) * limit ;
 
-        let quizzes = await Quiz.find({teacherID: userID}).skip(skip).limit(limit) ;
+        let quizzes = await Quiz.find({teacherID: userID}).sort({createdAt: -1}).skip(skip).limit(limit) ;
  
         res.status(201).send({quizzes: quizzes}) ;
 
