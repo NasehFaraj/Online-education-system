@@ -31,7 +31,8 @@ router.post("/quiz/get/my" , usersMiddleware([Role.Teacher , Role.Admin]) , quiz
 
 router.post("/quiz/get/my/number" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.getNumberOfMyQuizzes) ;
 
-router.get("/quiz/generate" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student])  , quizControlers.AIGenerateQuiz) ;
+router.get("/quiz/AI/generate" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student])  , quizControlers.AIGenerateQuiz) ;
 
+router.post("/quiz/AI/submit-solution" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.AISubmitSolution) ;
 
 export default router ;

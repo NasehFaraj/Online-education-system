@@ -239,14 +239,14 @@ const getTodoList = async (req : Request , res: Response) : Promise<void> => {
 
 const submitSolution = async (req : Request , res: Response) : Promise<void> => { 
 
-    let { answers , courseID } = req.body ;
+    let { answers , quizID } = req.body ;
     let { userID } = req.payload ;
     
     try {
 
         let sumOfDegree = 0 ;
 
-        let oldQuiz = await Quiz.findById(courseID) ;
+        let oldQuiz = await Quiz.findById(quizID) ;
         
         if(!oldQuiz){
             res.status(401).send({message: "Quiz not found"}) ;
@@ -262,7 +262,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
         
         let newSubmission = new Submission({
-            courseID ,
+            quizID ,
             studentId: userID ,
             answers ,
             score
@@ -400,6 +400,52 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
 } ;
 
 
+const AISubmitSolution = async (req : Request , res: Response) : Promise<void> => { 
+
+    let { answers , quizID } = req.body ;
+    let { userID } = req.payload ;
+    
+    try {
+
+        let sumOfDegree = 0 ;
+
+        let oldQuiz = await AIQuiz.findById(quizID) ;
+        
+        if(!oldQuiz){
+            res.status(401).send({message: "Quiz not found"}) ;
+            return ;
+        }
+
+        let { questions } = oldQuiz ;
+
+        for (let i = 0; i < questions.length; i ++) {
+            if(answers[i] == questions[i])sumOfDegree ++ ;
+        }
+
+        let score = ((sumOfDegree / questions.length) * 100) | 0 ;
+        
+        let newSubmission = new Submission({
+            quizID ,
+            studentId: userID ,
+            answers ,
+            score
+        })
+
+        await newSubmission.save() ;
+
+        res.status(201).send({score: score}) ;
+
+    } catch (error) {
+        console.error('submit solutiont error:' , error) ;
+        res.status(500).send({
+            message: "submit solution process failed" ,
+            error: error
+        });
+    }
+
+} ; 
+
+
 
 export default {
 
@@ -416,5 +462,6 @@ export default {
     getNumberOfMyQuizzes , 
     getMyQuizzes , 
     AIGenerateQuiz ,
+    AISubmitSolution ,
 
 }

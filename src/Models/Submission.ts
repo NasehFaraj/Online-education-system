@@ -3,7 +3,7 @@ import { Schema , model , HydratedDocument , Types } from "mongoose";
 interface ISubmission {
 
     _id: Types.ObjectId ;
-    courseID: Types.ObjectId ;
+    quizID: Types.ObjectId ;
     studentId: Types.ObjectId ;
     answers: number[] ;
     score?: number ;
@@ -15,7 +15,7 @@ type submissionDocument = HydratedDocument<ISubmission> ;
 
 const submissionSchema = new Schema<submissionDocument>({
     
-    courseID: {
+    quizID: {
         type: Schema.Types.ObjectId,
         ref: "User" , 
         required: true
