@@ -4,14 +4,12 @@ import mongoose from "mongoose";
 import { Quiz } from "../Models/Quiz" ;
 import { TodoList } from "../Models/TodoList" ;
 import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
+import { IAIQuizResponse } from "../Interfaces/IAIQuizResponse" ;
 import { Submission } from "../Models/Submission" ;
-import { generateQuiz } from "../Services/generationQuizByAIService" ;
+import { GeneratedQuiz, generateQuiz } from "../Services/generationQuizByAIService" ;
 import * as fileService from "../Services/fileService";
-import { Lesson } from "../Models/Lesson";
-import { AIQuiz } from "../Models/AIQuiz";
-
-
-
+import { Lesson } from "../Models/Lesson" ;
+import { AIQuiz } from "../Models/AIQuiz" ;
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -109,7 +107,7 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
 
     try {
         
-        let oldQuiz = await Quiz.findById(quizID) as IQuizResponse ;
+        let oldQuiz = await Quiz.findById(quizID).select('-questions.correctAnswer') as IQuizResponse ;
 
         if(!oldQuiz){
             res.status(401).send({message: "Quiz not found"}) ;
@@ -381,12 +379,13 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
 
         const fileBuffer = await fileService.downloadFile(objectFileID) ;
                 
-        const questions = await generateQuiz(fileBuffer) ;
-        // const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
+        const { questions } = await generateQuiz(fileBuffer) as GeneratedQuiz ;
 
-        // await newQuiz.save() ;
+        const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
 
-        res.status(201).send({quiz: questions}) ;
+        await newQuiz.save() ;
+
+        res.status(201).send({quiz: newQuiz as IAIQuizResponse}) ;
 
     } catch (error) {
         console.error('AI generate quiz error:' , error) ;

@@ -25,17 +25,19 @@ async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
     return fullText.split(' ').slice(0, 1500).join(' ');
 }
 
-interface Question {
+interface GeneratedQuestion {
+  id: number;
   text: string;
   options: string[];
   correctAnswer: number;
 }
 
-interface QuizResponse {
-  questions: Question[];
+export interface GeneratedQuiz {
+  generated_at: string;
+  questions: GeneratedQuestion[];
 }
 
-async function generateQuestionsFromText(textContext: string): Promise<QuizResponse> {
+async function generateQuestionsFromText(textContext: string): Promise<GeneratedQuiz> {
     if (!OPENROUTER_API_KEY) {
         throw new Error("OpenRouter API key not found.");
     }
@@ -96,7 +98,7 @@ async function generateQuestionsFromText(textContext: string): Promise<QuizRespo
         }
 
         const jsonString = content.substring(jsonStart, jsonEnd + 1);
-        const quizData: QuizResponse = JSON.parse(jsonString);
+        const quizData: GeneratedQuiz = JSON.parse(jsonString);
 
         return quizData;
 

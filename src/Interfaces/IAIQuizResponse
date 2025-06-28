@@ -6,11 +6,10 @@ type QuestionWithoutAnswer = {
 
 };
 
-export interface IQuizResponse {
+export interface IAIQuizResponse {
     _id: Types.ObjectId;
     title: string;
     description: string;
-    teacherID: Types.ObjectId;
     questions: QuestionWithoutAnswer[];
     createdAt?: Date;
     updatedAt?: Date;
