@@ -278,7 +278,7 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
             return ; 
         }
 
-        if(oldUser.isVerified) {
+        if(!oldUser.isVerified) {
             res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
