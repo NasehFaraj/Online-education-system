@@ -10,6 +10,7 @@ import { GeneratedQuiz, generateQuiz } from "../Services/generationQuizByAIServi
 import * as fileService from "../Services/fileService";
 import { Lesson } from "../Models/Lesson" ;
 import { AIQuiz } from "../Models/AIQuiz" ;
+import { Role } from "../enums/Role";
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -39,6 +40,7 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
 
     const { quizID , title , description , category , questions  } = req.body ;
     const teacherID = req.payload.userID ;
+    const { role } = req.payload ;
 
     try {
 
@@ -49,7 +51,7 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(oldQuiz.teacherID != teacherID){
+        if(oldQuiz.teacherID != teacherID || role == Role.Admin){
             res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
@@ -72,7 +74,8 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
 
     const { quizID } = req.body ;
     const teacherID = req.payload.userID ;
-
+    const { role } = req.payload ;
+ 
     try {
 
         let oldQuiz = await Quiz.findById(quizID);
@@ -82,7 +85,7 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(oldQuiz.teacherID != teacherID){
+        if(oldQuiz.teacherID != teacherID || role == Role.Admin){
             res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }

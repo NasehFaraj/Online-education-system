@@ -11,7 +11,7 @@ router.put("/quiz" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControle
 
 router.patch("/quiz" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.editQuiz) ;
 
-router.delete("/quiz/delete" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.deleteQuiz) ;
+router.delete("/quiz" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.deleteQuiz) ;
 
 router.get("/quiz/all" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getQuizzes) ;
 
