@@ -13,25 +13,29 @@ interface IPost {
 
 type postDocument = HydratedDocument<IPost> ;
 
-const postSchema = new Schema<postDocument>({
+const postSchema = new Schema<postDocument>(
+    
+    {
+        postedBy : {
+            type: Schema.Types.ObjectId , 
+            required: true 
+        } ,
+        title: {
+            type: String , 
+            required: true 
+        },
+        article: {
+            required: true ,
+            type: String 
+        } ,
+        photoID: {
+            type: String 
+        }
 
-    postedBy : {
-        type: Schema.Types.ObjectId , 
-        required: true 
     } ,
-    title: {
-        type: String , 
-        required: true 
-    },
-    article: {
-        required: true ,
-        type: String 
-    } ,
-    photoID: {
-        type: String 
-    }
+    { timestamps: true }
 
-}) ;
+) ;
 
 
 export const Post = model<postDocument>("Post" , postSchema);
