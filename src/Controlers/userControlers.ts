@@ -68,14 +68,26 @@ const unblockUser =  async (req : Request , res: Response) : Promise<void> => {
 
 const getUsers =  async (req: Request<{} , {} , {} , { page?: string ; limit?: string ;} > , res: Response) : Promise<void> => {
 
-    const page = parseInt(req.query.page || '1', 10) ;
-    const limit = parseInt(req.query.limit || '10', 10) ;
+    const { page , limit } = req.query ;
 
     try {
+          
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
         
-        const skip = (page - 1) * limit ;
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
 
-        let users = await User.find().sort({createdAt: -1}).skip(skip).limit(limit) ;
+        let users = await User.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
 
         
         res.status(201).send({users: users}) ;
@@ -166,7 +178,7 @@ const changePhoto =  async (req : Request , res: Response) : Promise<void> => {
     } catch (error) {
         console.error('changed photo error:', error) ;
         res.status(500).send({
-            message: "photo name process failed" ,
+            message: "change photo process failed" ,
             error: error
         }) 
     }
@@ -192,12 +204,12 @@ const changeRole =  async (req : Request , res: Response) : Promise<void> => {
 
         await oldUser.save() ;
 
-        res.status(201).send({message: "photo has been changed"}) ;
+        res.status(201).send({message: "role has been changed"}) ;
 
     } catch (error) {
-        console.error('changed photo error:', error) ;
+        console.error('changed role error:', error) ;
         res.status(500).send({
-            message: "photo name process failed" ,
+            message: "change role process failed" ,
             error: error
         }) 
     }

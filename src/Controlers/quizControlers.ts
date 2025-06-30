@@ -103,7 +103,7 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
 
 const getQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { quizID } = req.body ;
+    const { quizID } = req.query ;
 
     try {
         
@@ -128,13 +128,26 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
 
 const getQuizzes = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
 
     try {
-    
-        const skip = (page - 1) * limit ;
+        
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
 
-        const quizes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limit).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
+        const quizes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limitNumber).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
 
         res.status(201).send({quizes: quizes}) ;
 
@@ -214,9 +227,9 @@ const deleteQuizFromTodoList = async (req : Request , res: Response) : Promise<v
 
 const getTodoList = async (req : Request , res: Response) : Promise<void> => { 
 
+    const { userID } = req.payload ;
+    
     try {
-        
-        const { userID } = req.payload ;
 
         let myTodoList = await TodoList.find({userID: userID}).sort({createdAt: -1}) ;
     
@@ -332,14 +345,27 @@ const getNumberOfMyQuizzes = async (req : Request , res: Response) : Promise<voi
 const getMyQuizzes = async (req : Request , res: Response) : Promise<void> => {
 
 
-    const { page , limit } = req.body ;
+    const { page , limit } = req.query ;
     const { userID } = req.payload ;
 
     try {
         
-        const skip = (page - 1) * limit ;
+        if (typeof page !== 'string' || typeof limit !== 'string') {
+            res.status(400).send({ error: "Page and limit must be strings" });
+            return;
+        }
+        
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+        
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            res.status(400).send({ error: "Invalid pagination parameters" }) ;
+            return ;
+        }
+        
+        const skip = (pageNumber - 1) * limitNumber ;
 
-        let quizzes = await Quiz.find({teacherID: userID}).sort({createdAt: -1}).skip(skip).limit(limit) ;
+        let quizzes = await Quiz.find({teacherID: userID}).sort({createdAt: -1}).skip(skip).limit(limitNumber) ;
  
         res.status(201).send({quizzes: quizzes}) ;
 
