@@ -51,7 +51,7 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(oldQuiz.teacherID != teacherID || role == Role.Admin){
+        if(oldQuiz.teacherID != teacherID && role != Role.Admin){
             res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
@@ -85,7 +85,7 @@ const deleteQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(oldQuiz.teacherID != teacherID || role == Role.Admin){
+        if(oldQuiz.teacherID != teacherID && role != Role.Admin){
             res.status(403).send({message: "You do not have permission to perform this action"}) ;
             return ;
         }
