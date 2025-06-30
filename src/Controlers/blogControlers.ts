@@ -290,7 +290,7 @@ const getNumberOfComments =  async (req : Request , res: Response) : Promise<voi
     
     try {
         
-        let numberOfComments = await Comment.countDocuments({id: blogID}) ;
+        let numberOfComments = await Comment.countDocuments({blogID: blogID}) ;
        
         res.status(201).send({numberOfComments: numberOfComments}) ;
 
