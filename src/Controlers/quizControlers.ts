@@ -265,11 +265,11 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         }
 
         let { questions } = oldQuiz ;
-        let correctAnswer: number[] = [] ;
+        let correctAnswers: number[] = [] ;
 
         for (let i = 0; i < questions.length; i ++) {
             if(answers[i] == questions[i].correctAnswer)sumOfDegree ++ ;
-            correctAnswer.push(questions[i].correctAnswer) ;
+            correctAnswers.push(questions[i].correctAnswer) ;
         }
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
@@ -283,7 +283,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
 
         await newSubmission.save() ;
 
-        res.status(201).send({score , answers , correctAnswer}) ;
+        res.status(201).send({score , answers , correctAnswers}) ;
 
     } catch (error) {
         console.error('submit solutiont error:' , error) ;
@@ -444,11 +444,11 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
         }
 
         let { questions } = oldQuiz ;
-        let correctAnswer: number[] = [] ;
+        let correctAnswers: number[] = [] ;
 
         for (let i = 0; i < questions.length; i ++) {
             if(answers[i] == questions[i].correctAnswer)sumOfDegree ++ ;
-            correctAnswer.push(questions[i].correctAnswer) ;
+            correctAnswers.push(questions[i].correctAnswer) ;
         }
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
@@ -462,7 +462,7 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
 
         await newSubmission.save() ;
 
-        res.status(201).send({score , answers , correctAnswer}) ;
+        res.status(201).send({score , answers , correctAnswers}) ;
 
     } catch (error) {
         console.error('submit solutiont error:' , error) ;
