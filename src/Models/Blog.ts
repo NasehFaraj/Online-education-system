@@ -1,5 +1,4 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
-import { Category } from "../enums/Category" ;
 
 export interface IBlog {
 
@@ -7,7 +6,7 @@ export interface IBlog {
     title: string ;
     article: string ; 
     blogedBy: Types.ObjectId ;
-    category?: Category ;
+    category?: string ;
     createdAt: Date ;
     updatedAt: Date ;
 
@@ -32,8 +31,7 @@ const blogSchema = new Schema<blogDocument>(
             required: true 
         } ,
         category: {
-            type: String ,
-            enum: Category ,
+            type: String 
         }
     },
     { timestamps: true }

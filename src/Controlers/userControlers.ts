@@ -175,6 +175,37 @@ const changePhoto =  async (req : Request , res: Response) : Promise<void> => {
 } ;
 
 
+const changeRole =  async (req : Request , res: Response) : Promise<void> => {
+    
+    let { newRole , userID } = req.body ;
+    
+    try {
+
+        let oldUser = await User.findById(userID) ;
+
+        if (!oldUser) {
+            res.status(404).send({ message: "user not found" }) ;
+            return ;
+        }
+
+        oldUser.role = newRole ;
+
+        await oldUser.save() ;
+
+        res.status(201).send({message: "photo has been changed"}) ;
+
+    } catch (error) {
+        console.error('changed photo error:', error) ;
+        res.status(500).send({
+            message: "photo name process failed" ,
+            error: error
+        }) 
+    }
+   
+
+} ;
+
+
 export default {
     
     blockUser ,
@@ -182,6 +213,7 @@ export default {
     getNumberOfUser , 
     unblockUser , 
     changeName , 
-    changePhoto
+    changePhoto , 
+    changeRole
 
 }

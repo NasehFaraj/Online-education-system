@@ -19,4 +19,6 @@ router.patch("/user/change/name" , usersMiddleware([Role.Admin]) , userControler
 
 router.patch("/user/change/photo" , usersMiddleware([Role.Admin]) , userControlers.changePhoto) ; 
 
+router.patch("/user/change/role" , usersMiddleware([Role.Admin]) , userControlers.changeRole) ; 
+
 export default router ;

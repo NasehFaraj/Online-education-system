@@ -14,12 +14,12 @@ import { AIQuiz } from "../Models/AIQuiz" ;
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { title , description  , questions  } = req.body ;
+    const { title , description , category , questions  } = req.body ;
     const teacherID = req.payload.userID ;
 
     try {
         
-        let newQuiz = new Quiz({ title , description  , teacherID , questions }) ;
+        let newQuiz = new Quiz({ title , description , category , teacherID , questions }) ;
 
         await newQuiz.save() ;
 
@@ -37,7 +37,7 @@ const addQuiz = async (req : Request , res: Response) : Promise<void> => {
 
 const editQuiz = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { quizID , title , description , questions  } = req.body ;
+    const { quizID , title , description , category , questions  } = req.body ;
     const teacherID = req.payload.userID ;
 
     try {
@@ -54,7 +54,7 @@ const editQuiz = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
         
-        await Quiz.findByIdAndUpdate(quizID , { title , description , teacherID , questions  }) ;
+        await Quiz.findByIdAndUpdate(quizID , { title , description , category , teacherID , questions  }) ;
 
         res.status(201).send({message: "Quiz has been edited"}) ;
 
@@ -252,9 +252,11 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         }
 
         let { questions } = oldQuiz ;
+        let correctAnswer: number[] = [] ;
 
         for (let i = 0; i < questions.length; i ++) {
             if(answers[i] == questions[i].correctAnswer)sumOfDegree ++ ;
+            correctAnswer.push(questions[i].correctAnswer) ;
         }
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
@@ -268,7 +270,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
 
         await newSubmission.save() ;
 
-        res.status(201).send({score: score}) ;
+        res.status(201).send({score , answers , correctAnswer}) ;
 
     } catch (error) {
         console.error('submit solutiont error:' , error) ;
@@ -287,7 +289,7 @@ const getNumberOfQuizes = async (req : Request , res: Response) : Promise<void> 
 
         let numberOfQuizzes = await Quiz.countDocuments() ;
 
-        res.status(201).send({numberOfQuizzes: numberOfQuizzes}) ;
+        res.status(201).send({numberOfQuizzes}) ;
 
     } catch (error) {
 
@@ -416,9 +418,11 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
         }
 
         let { questions } = oldQuiz ;
+        let correctAnswer: number[] = [] ;
 
         for (let i = 0; i < questions.length; i ++) {
-            if(answers[i] == questions[i])sumOfDegree ++ ;
+            if(answers[i] == questions[i].correctAnswer)sumOfDegree ++ ;
+            correctAnswer.push(questions[i].correctAnswer) ;
         }
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
@@ -432,7 +436,7 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
 
         await newSubmission.save() ;
 
-        res.status(201).send({score: score}) ;
+        res.status(201).send({score , answers , correctAnswer}) ;
 
     } catch (error) {
         console.error('submit solutiont error:' , error) ;

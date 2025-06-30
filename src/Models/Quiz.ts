@@ -1,10 +1,12 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
+import { Category } from "../enums/Category";
 
 export interface IQuiz {
 
     _id: Types.ObjectId ;
-    title: string;
-    description: string;
+    title: string ;
+    description: string ;
+    category:  Category ;
     teacherID: Types.ObjectId;
     questions: {
         text: string;
@@ -25,6 +27,11 @@ const quizSchema = new Schema<quizDocument>(
         description: {
             type: String ,
             default: "" ,
+            required: true
+        },
+        category: {
+            type: String ,
+            enum: Category ,
             required: true
         },
         teacherID: {

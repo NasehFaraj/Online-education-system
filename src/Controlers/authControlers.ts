@@ -16,7 +16,6 @@ import { sendEmail } from "../Services/mailService" ;
 import { TypeCode } from "../enums/TypeCode" ;
 import { DefaultProfilePhoto } from "../Models/defaultProfilePhoto";
 import { Role } from "../enums/Role";
-import { Gender } from "../enums/Gender";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -69,7 +68,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
             
             const htmlContent = await ejs.renderFile(templatePath , {emailSubject: emailSubject , name: name , code: newCode }) ;
 
-            // await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
+            await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
 
             await newUser.save() ;
             await newVerifyCode.save() ;
@@ -221,7 +220,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
     try {
 
         if(typeCode !== 'verify' && typeCode !== 'reset-password'){
-            res.status(403).send({message: "bad request"}) ;
+            res.status(403).send({message: "valid typeCode required"}) ;
             return ;
         }
 
@@ -268,24 +267,49 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
 const resetPassword =  async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , code , newPassword } = req.body ;
+    const { email , code , newPassword } : { email: string , code: string , newPassword: string } = req.body ;
     
     try {
 
-        const oldUser = await User.findOne({ email:email }) ;
+        if (!email || !email.includes('@')) {
+            res.status(400).json({ error: "Valid email required" }) ;
+            return ;
+        }
+
+        if (!newPassword) {
+            res.status(400).json({ error: "newPassword required" }) ;
+            return ;
+        }
+        
+        if (!code || code.length !== 6) {
+            res.status(400).json({ error: "code must be a string of 6 digit" }) ;
+            return ;
+        }
+
+       
+        const [oldUser, verificationCode] = await Promise.all([
+            User.findOne({ email }) ,
+            VerifyCode.findOne({ email })
+        ]);
+
         if (!oldUser) {
             res.status(404).send({ message: "User not found" }) ;
             return ; 
         }
+
 
         if(!oldUser.isVerified) {
             res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
 
-        const verificationCode = await VerifyCode.findOne({ email: email}) ;
         if (!verificationCode || verificationCode.code != code) {
             res.status(401).send({ message: "Invalid verification code"}) ;
+            return ;
+        }
+
+        if (verificationCode.expiresAt < new Date()) {
+            res.status(410).json({ message: "Verification code expired" }) ;
             return ;
         }
 
@@ -294,40 +318,26 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
         const session = await startSession();
         session.startTransaction();
 
-        try { 
+         try {
 
-            await VerifyCode.findByIdAndDelete(verificationCode._id) ;
-            await User.findByIdAndUpdate(oldUser._id , { password: hashedPassword}) ;
-      
-
-            const token = jwt.sign(
-                {
-                    userID: oldUser._id ,
-                    email: oldUser.email ,
-                    name: oldUser.name ,
-                    role: oldUser.role
-                } ,
-                process.env.JWT_SECRET! ,
-                {
-                    expiresIn: '1h' ,
-                    algorithm: 'HS256'
-                }
-            ) ;
-
-            res.status(200).send({
-                message: "Email verified successfully",
-                token:token 
-            }) ;
+            session.startTransaction() ;
+            
+            await VerifyCode.deleteOne({ _id: verificationCode._id }).session(session) ;
+            await User.updateOne({ _id: oldUser._id } , { password: hashedPassword }).session(session) ;
 
             await session.commitTransaction() ;
-            session.endSession() ;
 
-        } catch (error) {
-            await session.abortTransaction();
-            console.error('Transaction Error:' , error) ;
-            res.status(500).send({ message: 'An error occurred reset password' }) ;
-            session.endSession() ;
-        } 
+            res.status(200).json({ message: "Password reset successfully" }) ;
+
+        } catch (transactionError) {
+
+            await session.abortTransaction() ;
+            console.error('Transaction failed:', transactionError) ;
+            res.status(500).json({ message: 'Password reset transaction failed' }) ;
+
+        } finally {
+            session.endSession();
+        }
 
 
     } catch (error) {
