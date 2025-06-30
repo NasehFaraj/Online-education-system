@@ -49,7 +49,7 @@ async function generateQuestionsFromText(textContext: string): Promise<Generated
     ${shortText}
     
     Requirements:
-    1. Each question must have 4 options
+    1. Each question must have 4 options just one correct
     2. Mark the correct answer as a number (0-3)
     3. Output ONLY JSON in this exact format:
     {
