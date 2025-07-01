@@ -1,12 +1,12 @@
 import { HydratedDocument , Schema , model , Types } from "mongoose";
-import { TypeCode } from "../enums/CodeType"; 
+import { CodeType } from "../enums/CodeType"; 
 
 interface IVerifyCode {
 
     _id: Types.ObjectId ;
     email: string ;
     code: string ;
-    typeCode: TypeCode ;
+    typeCode: CodeType ;
     expiresAt: Date ;
 
 }
@@ -24,7 +24,7 @@ const verifyCodeSchema = new Schema<VerifyCodeDocument>({
     },
     typeCode: {
         type: String ,
-        enum: Object.values(TypeCode) ,
+        enum: CodeType ,
         required: true
     } ,
     expiresAt: {
