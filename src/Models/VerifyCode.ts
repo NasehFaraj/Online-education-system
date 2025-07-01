@@ -1,5 +1,5 @@
 import { HydratedDocument , Schema , model , Types } from "mongoose";
-import { TypeCode } from "../enums/TypeCode"; 
+import { TypeCode } from "../enums/CodeType"; 
 
 interface IVerifyCode {
 

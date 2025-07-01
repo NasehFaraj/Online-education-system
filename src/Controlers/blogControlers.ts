@@ -4,6 +4,8 @@ import { Blog } from "../Models/Blog";
 import { Comment } from "../Models/Comment" ;
 import { User } from "../Models/User";
 import { Role } from "../enums/Role";
+import { Vote } from "../Models/Vote";
+import { VoteType } from "../enums/VoteType";
 
 const addBlog =  async (req : Request , res: Response) : Promise<void> => {
     
@@ -305,6 +307,79 @@ const getNumberOfComments =  async (req : Request , res: Response) : Promise<voi
 
 } ;
 
+
+const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { blogID } = req.query ;
+    const { userID } = req.payload ;
+    
+    try {
+        
+        await Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
+
+        res.status(201).send({massage: "Upvote has been added"}) ;         
+
+    } catch (error) {
+        console.error('add upvote error:' , error) ;
+        res.status(500).send({
+            message: "add upvote process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
+const deleteUpvote =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { blogID } = req.query ;
+    const { userID } = req.payload ;
+
+    try {
+        
+        await Vote.findOneAndDelete({userID , blogID , voteType: VoteType.Upvote}) ; 
+
+        res.status(201).send({massage: "Upvote has been deletee"}) ; 
+        
+
+    } catch (error) {
+        console.error('delete upvote error:' , error) ;
+        res.status(500).send({
+            message: "delete upvote process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
+const getNumberOfUpvotes =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { blogID } = req.query ;
+    
+    try {
+        
+        let numberOfUpvotes  = await Vote.countDocuments({blogID: blogID}) ;
+       
+        res.status(201).send({numberOfUpvotes}) ;
+
+    } catch (error) {
+        console.error('get number of upvotes error:' , error) ;
+        res.status(500).send({
+            message: "get number of upvotes process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
+
+
+
 export default {
     
     addBlog ,
@@ -314,6 +389,9 @@ export default {
     addComment , 
     getComments , 
     getMyBlogs , 
-    getNumberOfComments
+    getNumberOfComments , 
+    addUpvote , 
+    deleteUpvote , 
+    getNumberOfUpvotes
 
 }

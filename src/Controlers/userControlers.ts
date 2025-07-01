@@ -66,7 +66,7 @@ const unblockUser =  async (req : Request , res: Response) : Promise<void> => {
 
 
 
-const getUsers =  async (req: Request<{} , {} , {} , { page?: string ; limit?: string ;} > , res: Response) : Promise<void> => {
+const getUsers =  async (req: Request , res: Response) : Promise<void> => {
 
     const { page , limit } = req.query ;
 

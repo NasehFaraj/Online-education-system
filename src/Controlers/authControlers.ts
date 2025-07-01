@@ -13,7 +13,7 @@ import dotenv from 'dotenv' ;
 import { User } from "../Models/User" ;
 import { VerifyCode } from "../Models/VerifyCode" ;
 import { sendEmail } from "../Services/mailService" ;
-import { TypeCode } from "../enums/TypeCode" ;
+import { CodeType } from "../enums/CodeType" ;
 import { DefaultProfilePhoto } from "../Models/defaultProfilePhoto";
 import { Role } from "../enums/Role";
 
@@ -55,7 +55,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
-            typeCode: TypeCode.Verify ,
+            typeCode: CodeType.Verify ,
         }) ;
     
         const templatePath = path.join(__dirname , "../Views/emailTemplets/verify-email.ejs") ;
@@ -248,7 +248,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
         await newVerifyCode.save() ;
   
         const templatePath = path.join(__dirname , "../Views/emailTemplets/verify-email.ejs") ;
-        const emailSubject = (typeCode == TypeCode.Verify ? 'Email Verification' : 'Reset Password') ;
+        const emailSubject = (typeCode == CodeType.Verify ? 'Email Verification' : 'Reset Password') ;
 
         const htmlContent = await ejs.renderFile(templatePath , { emailSubject:emailSubject,  name: oldUser.name , code: newCode }) ;
 

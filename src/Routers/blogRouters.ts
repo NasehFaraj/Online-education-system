@@ -23,4 +23,10 @@ router.get("/blog/comment/all" , usersMiddleware([Role.Student , Role.Teacher , 
 
 router.get("/blog/comment/number" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getNumberOfComments) ; 
 
+router.put("/blog/upvote" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.addUpvote) ;
+
+router.delete("/blog/upvote" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.deleteUpvote) ; 
+
+router.get("/blog/comment/number" , usersMiddleware([Role.Student , Role.Teacher , Role.Admin]) , blogControlers.getNumberOfUpvotes) ; 
+
 export default router ;
