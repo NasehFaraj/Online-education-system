@@ -55,7 +55,7 @@ const signup = async (req : Request , res: Response) : Promise<void> => {
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
-            typeCode: CodeType.Verify ,
+            codeType: CodeType.Verify ,
         }) ;
     
         const templatePath = path.join(__dirname , "../Views/emailTemplets/verify-email.ejs") ;
