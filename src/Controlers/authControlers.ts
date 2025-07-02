@@ -215,12 +215,12 @@ const login = async (req : Request , res: Response) : Promise<void> => {
 
 const sendCode = async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , typeCode } = req.body ;
+    const { email , codeType } = req.body ;
   
     try {
 
-        if(typeCode !== 'verify' && typeCode !== 'reset-password'){
-            res.status(403).send({message: "valid typeCode required"}) ;
+        if(codeType !== 'verify' && codeType !== 'reset-password'){
+            res.status(403).send({message: "valid codeType required"}) ;
             return ;
         }
 
@@ -231,26 +231,25 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        if(!oldUser.isVerified && typeCode === 'reset-password') {
+        if(!oldUser.isVerified && codeType === 'reset-password') {
             res.status(409).send({ message: 'Email is not Verified' }) ;
             return ;
         }
 
-        await VerifyCode.findOneAndDelete({email:email , typeCode:typeCode}) ;
+        await VerifyCode.findOneAndDelete({email:email , codeType:codeType}) ;
         
         const newCode = (Math.random() * (999999 - 100000) + 100000) | 0 ;
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
-            typeCode: typeCode ,
+            typeCode: codeType ,
         }) ;
   
         await newVerifyCode.save() ;
   
-        const templatePath = path.join(__dirname , "../Views/emailTemplets/verify-email.ejs") ;
-        const emailSubject = (typeCode == CodeType.Verify ? 'Email Verification' : 'Reset Password') ;
-
-        const htmlContent = await ejs.renderFile(templatePath , { emailSubject:emailSubject,  name: oldUser.name , code: newCode }) ;
+        const templatePath = (codeType == CodeType.Verify ? path.join(__dirname , "../Views/emailTemplets/verify-email.ejs") : path.join(__dirname , "../Views/emailTemplets/reset-password.ejs")) ;
+        const emailSubject = (codeType == CodeType.Verify ? 'Email Verification' : 'Reset Password') ;
+        const htmlContent = await ejs.renderFile(templatePath , {name: oldUser.name , code: newCode}) ;
 
         await sendEmail(process.env.MAIL_USERNAME || "" , email , emailSubject , htmlContent) ;
         

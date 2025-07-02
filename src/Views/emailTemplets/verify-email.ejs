@@ -1,40 +1,168 @@
 <!DOCTYPE html>
-
 <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email - Online education platform</title>
+    <style type="text/css">
+        /* Client-specific styles */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
         
-        <h1> <%= emailSubject %> </h1>
-
-        <p style = "font-size : 15px ;"> 
+        /* Reset styles */
+        body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
         
-            Hello <%= name %>
+        /* Main styles */
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            color: #333333;
+            background-color: #f5f7fa;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background-color: #2563eb;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            background-color: #ffffff;
+        }
+        
+        h1 {
+            color: #1e40af;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .button {
+            display: block;
+            width: 80%;
+            max-width: 240px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px auto;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #e2e8f0;
+            margin: 25px 0;
+        }
+        
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            background-color: #f1f5f9;
+        }
+        
+        .code-box {
+            background-color: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            margin: 25px 0;
+            font-family: monospace;
+            font-size: 24px;
+            letter-spacing: 5px;
+            color: #1e40af;
+        }
+        
+        .small-text {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        @media screen and (max-width: 480px) {
+            .content {
+                padding: 30px 20px;
+            }
             
-            <br>
-            <br>
+            h1 {
+                font-size: 20px;
+            }
             
-            You registered an account on our website , your code is : <b> <%= code %> </b>
+            p {
+                font-size: 14px;
+            }
             
-            
-            <br>
-            <br>
+            .button {
+                width: 90%;
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Email container -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" bgcolor="#f5f7fa">
+                <table class="email-container" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header" bgcolor="#2563eb">
+                            <a href="https://online-education-system-7cqh.onrender.com/" class="logo">Online education platform</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td class="content" bgcolor="#ffffff">
+                            <h1>Verify Your Email Address</h1>
+                            
+                            <p>Hi <%= name %> Thank you for signing up with Online education platform! To complete your registration, please verify your email address by code below:</p>
+                                                        
+                            <div class="code-box"><%= code %></div>
 
-            <b>If you don't ask for the code, just ignore it.</b>
-
-            <br>
-            <br>
-
-            Kind Regards , Educational Academy
-            
-            <br> 
-            <br> 
-
-        </p>
-
-    </body>
-
+                            <p>If you didn't create an account with us, please ignore this email.</p>
+                            
+                            <div class="divider"></div>                            
+                            
+                            <p class="small-text">This code will expire in 1 hours.</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="footer" bgcolor="#f1f5f9">
+                            <p>&copy; 2025 Online education platform. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
 </html>

@@ -6,7 +6,7 @@ interface IVerifyCode {
     _id: Types.ObjectId ;
     email: string ;
     code: string ;
-    typeCode: CodeType ;
+    codeType: CodeType ;
     expiresAt: Date ;
 
 }
@@ -22,7 +22,7 @@ const verifyCodeSchema = new Schema<VerifyCodeDocument>({
         type: String ,
         required: true
     },
-    typeCode: {
+    codeType: {
         type: String ,
         enum: CodeType ,
         required: true
