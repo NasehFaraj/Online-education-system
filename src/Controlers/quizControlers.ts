@@ -150,9 +150,9 @@ const getQuizzes = async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const quizes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limitNumber).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
+        const quizzes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limitNumber).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
 
-        res.status(201).send({quizes: quizes}) ;
+        res.status(201).send({quizzes}) ;
 
     } catch (error) {
         console.error('get Quizzes error:' , error) ;
