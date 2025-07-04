@@ -24,7 +24,7 @@ dotenv.config() ;
 
 const signup = async (req : Request , res: Response) : Promise<void> => {
 
-    const { email , name , password , gender , photoID } = req.body ;
+    const { email , name , password , gender } = req.body ;
     
 
     try {
@@ -106,7 +106,7 @@ const verifyEmail = async (req : Request , res: Response) : Promise<void> => {
             return ; 
         }
 
-        const verificationCode = await VerifyCode.findOne({ email: email , typeCode: "verify" }) ;
+        const verificationCode = await VerifyCode.findOne({ email: email , codeType: "verify" }) ;
         if (!verificationCode || verificationCode.code != code) {
             res.status(401).send({ message: "Invalid verification code"}) ;
             return ;
@@ -242,7 +242,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
         const newVerifyCode = new VerifyCode({
             email: email ,
             code: newCode ,
-            typeCode: codeType ,
+            codeType: codeType ,
         }) ;
   
         await newVerifyCode.save() ;
