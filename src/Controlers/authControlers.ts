@@ -318,8 +318,6 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
         session.startTransaction();
 
          try {
-
-            session.startTransaction() ;
             
             await VerifyCode.deleteOne({ _id: verificationCode._id }).session(session) ;
             await User.updateOne({ _id: oldUser._id } , { password: hashedPassword }).session(session) ;
