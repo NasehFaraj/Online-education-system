@@ -1,5 +1,6 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 import { Category } from "../enums/Category" ;
+import { Level } from "../enums/Level";
 
 export interface ILesson {
 
@@ -8,6 +9,7 @@ export interface ILesson {
     description: string ;
     teacherID: Types.ObjectId ;
     category: Category ;
+    level: Level ;
     studentsEnrolled?: Types.ObjectId[] ;
     videoID?: string ;
     pdfID?: string ;
@@ -48,6 +50,11 @@ const lessonSchema = new Schema<lessonDocument>(
         } ,
         pdfID : {
             type: String ,
+        } ,
+        level : {
+            type : String ,
+            enum : Level , 
+            required: true
         }
     },
     { timestamps: true }
