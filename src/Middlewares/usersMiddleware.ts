@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express' ;
 import jwt from 'jsonwebtoken' ;
 import dotenv from 'dotenv' ;
 import { Role } from '../enums/Role' ;
-import { payload } from '../Interfaces/payloadInterface';
+import { payload } from '../Interfaces/IPayload';
 
 dotenv.config() ;
 

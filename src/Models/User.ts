@@ -8,6 +8,7 @@ interface iUser {
     name: string ;
     email: string ;
     password: string ;
+    googleID: string ;
     role: Role ;
     gender: Gender ;
     isVerified: boolean ;
@@ -32,6 +33,9 @@ const userSchema = new Schema<UserDocument>({
         type: String ,
         required: true
     } ,
+    googleID : {
+        type: String ,
+    }, 
     role: {
         type: String ,
         enum: Role ,

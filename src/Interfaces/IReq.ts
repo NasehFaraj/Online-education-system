@@ -1,4 +1,4 @@
-import { payload } from "./payloadInterface";
+import { payload } from "./IPayload";
 
 
 declare global {
