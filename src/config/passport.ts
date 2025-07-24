@@ -3,6 +3,7 @@ import passport, { Profile } from 'passport';
 import { Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth2';
 import { User } from '../Models/User';
 import { Request } from 'express'; 
+import { Gender } from '../enums/Gender';
 
 dotenv.config();
 
@@ -40,7 +41,10 @@ passport.use(new GoogleStrategy(
                     const newUser = await User.create({
                         googleID: profile.id,
                         name: profile.displayName,
-                        email: profile.emails?.[0]?.value
+                        email: profile.emails?.[0]?.value ,
+                        gender: Gender.Female ,
+                        password: "sdknfcwiojpiqwerojpfioqjpeofkp" 
+                                    
                     });
                     return done(null, newUser);
                 }
