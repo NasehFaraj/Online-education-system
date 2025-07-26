@@ -16,6 +16,7 @@ import { sendEmail } from "../Services/mailService" ;
 import { CodeType } from "../enums/CodeType" ;
 import { DefaultProfilePhoto } from "../Models/defaultProfilePhoto";
 import { Role } from "../enums/Role";
+import { isToken } from "typescript";
 
 const __filename = fileURLToPath(import.meta.url) ;
 const __dirname = path.dirname(__filename) ;
@@ -348,6 +349,34 @@ const resetPassword =  async (req : Request , res: Response) : Promise<void> => 
 
 } ;
 
+
+const OAuth2Google =  async (req : Request , res: Response) : Promise<void> => {
+
+    try {
+
+        const { payload } = req ;
+
+        const signOptions: SignOptions = {
+            expiresIn: (process.env.EXPIRESIN as number | StringValue) || '1h' ,
+            algorithm: (process.env.ALGORITHM as Algorithm) || 'HS256'
+        };
+
+        const token = jwt.sign(payload , process.env.JWT_SECRET || "" , signOptions) ; 
+
+        res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`) ;
+
+    } catch (error) {
+        console.error('OAuth2Google error:', error) ;
+        res.status(500).send({
+            message: "OAuth2Google process failed" ,
+            error: error
+        });
+    }
+
+}
+
+
+
 export default {
 
     signup ,
@@ -355,5 +384,6 @@ export default {
     login ,
     sendCode ,
     resetPassword ,
+    OAuth2Google
 
 } ;

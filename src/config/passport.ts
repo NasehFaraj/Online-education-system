@@ -1,59 +1,111 @@
-import dotenv from 'dotenv';
-import passport, { Profile } from 'passport';
-import { Strategy as GoogleStrategy, VerifyCallback } from 'passport-google-oauth2';
-import { User } from '../Models/User';
-import { Request } from 'express'; 
+import dotenv from 'dotenv' ;
+import passport from 'passport' ;
+import { Strategy as GoogleStrategy , StrategyOptionsWithRequest, VerifyCallback, VerifyFunctionWithRequestAndParams } from 'passport-google-oauth2';
+import { User } from '../Models/User' ;
+import { Request } from 'express' ; 
+import { randomBytes } from 'crypto' ;
+import { hash } from "bcryptjs" ;
 import { Gender } from '../enums/Gender';
+import { payload } from '../Interfaces/IPayload';
 
 dotenv.config();
 
-const GOOGLE_CLIENT_ID = process.env.MAIL_CLIENT_ID as string;
-const GOOGLE_CLIENT_SECRET = process.env.MAIL_CLIENT_SECRET as string;
-const CALLBACK_URL = process.env.CALLBACK_URL as string;
+const GOOGLE_CLIENT_ID = process.env.MAIL_CLIENT_ID ;
+const GOOGLE_CLIENT_SECRET = process.env.MAIL_CLIENT_SECRET  ;
+const CALLBACK_URL = process.env.CALLBACK_URL ;
 
-passport.use(new GoogleStrategy(
-    {
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: CALLBACK_URL,
-        passReqToCallback: true,
-    },
-    async function (
-        req: Request ,
-        accessToken: string ,
-        refreshToken: string ,
-        profile: any ,
-        done: VerifyCallback
-    ) {
-        try {
-            let user = await User.findOne({ googleId: profile.id });
 
-            if (user) {
-                return done(null, user);
-            } else {
-                const user = await User.findOne({ googleId: profile.id });
+let options:StrategyOptionsWithRequest = {
+    clientID: GOOGLE_CLIENT_ID || "" ,
+    clientSecret: GOOGLE_CLIENT_SECRET || "" ,
+    callbackURL: CALLBACK_URL || "" ,
+    passReqToCallback: true ,
+} ;
 
-                if (user) {
-                    user.googleID = profile.id;
-                    await user.save();
-                    return done(null, user);
-                } else {
-                    const newUser = await User.create({
-                        googleID: profile.id,
-                        name: profile.displayName,
-                        email: profile.emails?.[0]?.value ,
-                        gender: Gender.Female ,
-                        password: "sdknfcwiojpiqwerojpfioqjpeofkp" 
-                                    
-                    });
-                    return done(null, newUser);
-                }
+
+let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToken: string , refreshToken: string , profile: any , done: VerifyCallback) => {
+        
+    try {
+
+        let user = await User.findOne({ googleID: profile.id }) ;
+
+        if (user) {
+
+            let userInfo: payload = {
+                userID: user.id ,
+                role: user.role ,
+                name: user.name ,
+                email: user.email 
             }
-        } catch (error) {
-            return done(error as Error, false);
+
+            req.payload = userInfo ; 
+            return done(null , user) ;
+            
         }
+
+        user = await User.findOne({ email: profile.profile.emails?.[0]?.value }) ;
+
+        if (user) {
+
+            user.googleID = profile.id ;
+
+            let userInfo: payload = {
+                userID: user.id ,
+                role: user.role ,
+                name: user.name ,
+                email: user.email 
+            }
+
+            await user.save() ;
+
+            req.payload = userInfo ; 
+            return done(null , user) ;
+        } 
+
+
+        let randomPassword: string = randomBytes(10).toString('hex').slice(0 , 10) ;
+        let hashPassword: string = await hash(randomPassword , 12) ;
+
+        const newUser = await User.create({
+
+            googleID: profile.id,
+            name: profile.displayName,
+            email: profile.emails?.[0]?.value ,
+            gender: profile.gender || Gender.Male ,
+            password: hashPassword
+                        
+        }) ;
+
+        
+        let userInfo: payload = {
+            userID: newUser.id ,
+            role: newUser.role ,
+            name: newUser.name ,
+            email: newUser.email 
+        }
+
+        await newUser.save() ;
+
+        req.payload = userInfo ; 
+        return done(null , user) ;
+            
+    } catch (error) {
+        return done(error as Error , false) ;
     }
-));
+
+} ;
+
+let strategy = new GoogleStrategy(options , verify) ;
+
+passport.use(strategy) ;
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser((user: Express.User, done) => {
+    done(null, user);
+});
 
 export default passport ;
 
