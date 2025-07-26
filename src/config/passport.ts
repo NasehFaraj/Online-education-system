@@ -43,7 +43,7 @@ let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToke
             
         }
 
-        user = await User.findOne({ email: profile.profile.emails?.[0]?.value }) ;
+        user = await User.findOne({ email: profile.emails?.[0]?.value }) ;
 
         if (user) {
 
