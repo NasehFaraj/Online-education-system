@@ -97,6 +97,7 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
     
 
     const { page , limit } = req.query ;
+    const { userID } = req.payload ;
     
     try {
         
@@ -116,7 +117,7 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         let blogs = await Blog.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
-        let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0"})) ; 
+        let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0" , vote: "none"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
 
@@ -131,6 +132,10 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
                 bolgsRes[i].role = oldUser.role ;
                 bolgsRes[i].photoID = oldUser.photoID ;
             }
+
+            let oldVote = await Vote.findOne({userID , blogID: blogs[i].id}) ;
+
+            if(oldVote)bolgsRes[i].vote = oldVote.voteType ;
 
         }
 
