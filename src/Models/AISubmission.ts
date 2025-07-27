@@ -20,7 +20,7 @@ const AISubmissionSchema = new Schema<AISubmissionDocument>({
         ref: "User" , 
         required: true
     },
-    studentId: {
+    studentID: {
         type: Schema.Types.ObjectId,
         ref: "User" , 
         required: true
