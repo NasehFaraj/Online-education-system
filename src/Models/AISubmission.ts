@@ -1,6 +1,6 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 
-interface ISubmission {
+interface IAISubmission {
 
     _id: Types.ObjectId ;
     quizID: Types.ObjectId ;
@@ -11,16 +11,16 @@ interface ISubmission {
 }
 
 
-type submissionDocument = HydratedDocument<ISubmission> ;
+type AISubmissionDocument = HydratedDocument<IAISubmission> ;
 
-const submissionSchema = new Schema<submissionDocument>({
+const AISubmissionSchema = new Schema<AISubmissionDocument>({
     
     quizID: {
         type: Schema.Types.ObjectId,
         ref: "User" , 
         required: true
     },
-    studentID: {
+    studentId: {
         type: Schema.Types.ObjectId,
         ref: "User" , 
         required: true
@@ -38,4 +38,4 @@ const submissionSchema = new Schema<submissionDocument>({
 }) ;
 
 
-export const Submission = model<submissionDocument>("Submission" , submissionSchema);
+export const AISubmission = model<AISubmissionDocument>("AISubmission" , AISubmissionSchema);

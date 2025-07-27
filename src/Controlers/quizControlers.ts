@@ -11,6 +11,7 @@ import * as fileService from "../Services/fileService";
 import { Lesson } from "../Models/Lesson" ;
 import { AIQuiz } from "../Models/AIQuiz" ;
 import { Role } from "../enums/Role";
+import { AISubmission } from "../Models/AISubmission";
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -283,7 +284,7 @@ const submitSolution = async (req : Request , res: Response) : Promise<void> => 
         
         let newSubmission = new Submission({
             quizID ,
-            studentId: userID ,
+            studentID: userID ,
             answers ,
             score
         })
@@ -464,9 +465,9 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
 
         let score = ((sumOfDegree / questions.length) * 100) | 0 ;
         
-        let newSubmission = new Submission({
+        let newSubmission = new AISubmission({
             quizID ,
-            studentId: userID ,
+            studentID: userID ,
             answers ,
             score
         })
@@ -486,6 +487,46 @@ const AISubmitSolution = async (req : Request , res: Response) : Promise<void> =
 } ; 
 
 
+const getMySubmission = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { userID } = req.payload ;
+    
+    try {
+        
+        let submissions = await Submission.find({studentID: userID}) ;
+
+        res.status(201).send({submissions}) ;
+
+    } catch (error) {
+        console.error('get my submission error:' , error) ;
+        res.status(500).send({
+            message: "get my submission process failed" ,
+            error: error
+        });
+    }
+
+};
+
+
+const getAIMySubmission = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { userID } = req.payload ;
+    
+    try {
+        
+        let submissions = await AISubmission.find({studentID: userID}) ;
+
+        res.status(201).send({submissions}) ;
+
+    } catch (error) {
+        console.error('get my AI submission error:' , error) ;
+        res.status(500).send({
+            message: "get my AI submission process failed" ,
+            error: error
+        });
+    }
+
+};
 
 export default {
 
@@ -503,5 +544,8 @@ export default {
     getMyQuizzes , 
     AIGenerateQuiz ,
     AISubmitSolution ,
+    getMySubmission ,
+    getAIMySubmission ,
+
 
 }
