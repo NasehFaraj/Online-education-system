@@ -320,7 +320,7 @@ const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
     
     try {
         
-        Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
+        await Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
 
         res.status(201).send({massage: "Upvote has been added"}) ;
 
