@@ -211,9 +211,44 @@ const changeRole =  async (req : Request , res: Response) : Promise<void> => {
         res.status(500).send({
             message: "change role process failed" ,
             error: error
-        }) 
+        }) ;
     }
    
+
+} ;
+
+const getMyInfo =  async (req : Request , res: Response) : Promise<void> => {
+
+    const { userID } = req.payload ;
+
+    try {
+        
+        let oldUser = await User.findById(userID) ;
+
+        if(!oldUser){
+            res.status(404).send({massage: "user not found"}) ;
+            return ;
+        }
+
+
+        res.status(201).send({
+            info: {
+                name: oldUser.name ,
+                email: oldUser.email ,
+                role: oldUser.role ,
+                photoID: oldUser.photoID 
+            }
+        })
+
+
+    } catch (error) {
+        console.error('get my info error:', error) ;
+        res.status(500).send({
+            message: "get my info process failed" ,
+            error: error
+        }) ;
+    }
+
 
 } ;
 
@@ -226,6 +261,7 @@ export default {
     unblockUser , 
     changeName , 
     changePhoto , 
-    changeRole
+    changeRole , 
+    getMyInfo
 
 }

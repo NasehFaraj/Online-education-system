@@ -198,11 +198,7 @@ const login = async (req : Request , res: Response) : Promise<void> => {
 
         res.status(200).send({
             message: "Login successful" ,
-            token:token ,
-            isBlocked: oldUser.isBlocked ,
-            name: oldUser.name ,
-            role: oldUser.role ,
-            photoID: oldUser.photoID ,
+            token:token 
         });
 
     } catch (error) {
