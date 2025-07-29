@@ -7,6 +7,8 @@ import { randomBytes } from 'crypto' ;
 import { hash } from "bcryptjs" ;
 import { Gender } from '../enums/Gender';
 import { payload } from '../Interfaces/IPayload';
+import { Role } from '../enums/Role';
+import { DefaultProfilePhoto } from '../Models/defaultProfilePhoto';
 
 dotenv.config();
 
@@ -65,6 +67,11 @@ let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToke
 
         let randomPassword: string = randomBytes(10).toString('hex').slice(0 , 10) ;
         let hashPassword: string = await hash(randomPassword , 12) ;
+        const photo =  await DefaultProfilePhoto.find({role: Role.Student , gender: profile.gender || Gender.Male });
+
+        const randomIndex = Math.floor(Math.random() * photo.length);
+        console.log(photo[randomIndex].photoID) ;
+        const randomPhotoID = photo[randomIndex].photoID ;
 
         const newUser = await User.create({
 
