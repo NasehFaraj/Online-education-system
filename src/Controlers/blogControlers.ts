@@ -314,18 +314,15 @@ const getNumberOfComments =  async (req : Request , res: Response) : Promise<voi
 
 
 const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
-    
 
-    const { blogID } = req.query ;
+    const { blogID } = req.body ;
     const { userID } = req.payload ;
     
     try {
         
-        let newUpvote = new Vote({userID , blogID , voteType: VoteType.Upvote}) ; 
+        Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
 
-        await newUpvote.save() ;
-
-        res.status(201).send({massage: "Upvote has been added"}) ;         
+        res.status(201).send({massage: "Upvote has been added"}) ;
 
     } catch (error) {
         console.error('add upvote error:' , error) ;
