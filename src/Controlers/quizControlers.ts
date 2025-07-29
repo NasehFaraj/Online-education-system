@@ -493,7 +493,7 @@ const getMySubmission = async (req : Request , res: Response) : Promise<void> =>
     
     try {
         
-        let submissions = await Submission.find({studentID: userID}) ;
+        let submissions = await Submission.find({studentID: userID}).sort({createdAt: -1}) ;
 
         res.status(201).send({submissions}) ;
 
@@ -514,7 +514,7 @@ const getAIMySubmission = async (req : Request , res: Response) : Promise<void> 
     
     try {
         
-        let submissions = await AISubmission.find({studentID: userID}) ;
+        let submissions = await AISubmission.find({studentID: userID}).sort({createdAt: -1}) ;
 
         res.status(201).send({submissions}) ;
 
