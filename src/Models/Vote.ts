@@ -6,7 +6,7 @@ export interface IVote {
     
     _id: Types.ObjectId ;
     userID: Schema.Types.ObjectId ;
-    blogID: Schema.Types.ObjectId ;
+    blogID: string ;
     voteType: VoteType ; 
 
 }
@@ -20,7 +20,7 @@ const VoteSchema = new Schema<VoteDocument>({
         required: true 
     } ,
     blogID: {
-        type: Schema.Types.ObjectId ,
+        type: String ,
         required: true
     } , 
     voteType: {

@@ -321,7 +321,9 @@ const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
     
     try {
         
-        await Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
+        let newUpvote = new Vote({userID , blogID , voteType: VoteType.Upvote}) ; 
+
+        await newUpvote.save() ;
 
         res.status(201).send({massage: "Upvote has been added"}) ;         
 
