@@ -15,27 +15,28 @@ type AISubmissionDocument = HydratedDocument<IAISubmission> ;
 
 const AISubmissionSchema = new Schema<AISubmissionDocument>({
     
-    quizID: {
-        type: Schema.Types.ObjectId,
-        ref: "User" , 
-        required: true
-    },
-    studentID: {
-        type: Schema.Types.ObjectId,
-        ref: "User" , 
-        required: true
-    },
-    answers: {
-        type: [Number] ,
-        required: true
-    },
-    score: {
-        type: Number ,
-        min: 0 ,
-        max: 100
-    }
-
-}) ;
+        quizID: {
+            type: Schema.Types.ObjectId,
+            ref: "User" , 
+            required: true
+        },
+        studentID: {
+            type: Schema.Types.ObjectId,
+            ref: "User" , 
+            required: true
+        },
+        answers: {
+            type: [Number] ,
+            required: true
+        },
+        score: {
+            type: Number ,
+            min: 0 ,
+            max: 100
+        }
+    } ,
+    { timestamps: true }
+) ;
 
 
 export const AISubmission = model<AISubmissionDocument>("AISubmission" , AISubmissionSchema);

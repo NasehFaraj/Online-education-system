@@ -15,27 +15,28 @@ type submissionDocument = HydratedDocument<ISubmission> ;
 
 const submissionSchema = new Schema<submissionDocument>({
     
-    quizID: {
-        type: Schema.Types.ObjectId,
-        ref: "User" , 
-        required: true
+        quizID: {
+            type: Schema.Types.ObjectId,
+            ref: "User" , 
+            required: true
+        },
+        studentID: {
+            type: Schema.Types.ObjectId,
+            ref: "User" , 
+            required: true
+        },
+        answers: {
+            type: [Number] ,
+            required: true
+        },
+        score: {
+            type: Number ,
+            min: 0 ,
+            max: 100
+        }
     },
-    studentID: {
-        type: Schema.Types.ObjectId,
-        ref: "User" , 
-        required: true
-    },
-    answers: {
-        type: [Number] ,
-        required: true
-    },
-    score: {
-        type: Number ,
-        min: 0 ,
-        max: 100
-    }
-
-}) ;
+    { timestamps: true }
+) ;
 
 
 export const Submission = model<submissionDocument>("Submission" , submissionSchema);
