@@ -106,13 +106,13 @@ let strategy = new GoogleStrategy(options , verify) ;
 
 passport.use(strategy) ;
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
+passport.serializeUser((user , done) => {
+    done(null , user) ;
+}) ;
 
 passport.deserializeUser((user: Express.User, done) => {
-    done(null, user);
-});
+    done(null , user) ;
+}) ;
 
 export default passport ;
 

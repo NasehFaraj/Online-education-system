@@ -357,16 +357,13 @@ const OAuth2Google =  async (req : Request , res: Response) : Promise<void> => {
             algorithm: (process.env.ALGORITHM as Algorithm) || 'HS256'
         };
 
-        const token = jwt.sign(payload , process.env.JWT_SECRET || "" , signOptions) ; 
+        const token =  jwt.sign(payload , process.env.JWT_SECRET || "" , signOptions) ; 
 
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`) ;
 
     } catch (error) {
         console.error('OAuth2Google error:', error) ;
-        res.status(500).send({
-            message: "OAuth2Google process failed" ,
-            error: error
-        });
+        res.redirect(`${process.env.FRONTEND_URL}/login/failed`)
     }
 
 }
