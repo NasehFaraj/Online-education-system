@@ -363,11 +363,19 @@ const OAuth2Google =  async (req : Request , res: Response) : Promise<void> => {
 
     } catch (error) {
         console.error('OAuth2Google error:', error) ;
-        res.redirect(`${process.env.FRONTEND_URL}/login/failed`)
+        res.status(500).send({
+            message: "OAuth2Google process failed" ,
+            error: error
+        });
     }
 
 }
 
+const OAuth2Failed =  async (req : Request , res: Response) : Promise<void> => {
+
+    res.redirect(`${process.env.FRONTEND_URL}/login/failed`) ;
+
+}
 
 
 export default {
@@ -377,6 +385,7 @@ export default {
     login ,
     sendCode ,
     resetPassword ,
-    OAuth2Google
+    OAuth2Google , 
+    OAuth2Failed
 
 } ;

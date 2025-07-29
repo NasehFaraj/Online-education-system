@@ -15,8 +15,10 @@ router.post("/auth/send-code" , authControlers.sendCode) ;
 
 router.post("/auth/reset-password" , authControlers.resetPassword) ;
 
-router.get('/auth/google' , passport.authenticate('google' , { scope: ['email', 'profile'] })) ;
+router.get("/auth/google" , passport.authenticate('google' , { scope: ['email', 'profile'] })) ;
 
-router.get('/auth/google/callback' , passport.authenticate('google' , {failureRedirect: '/login/failed'}) , authControlers.OAuth2Google) ;
+router.get("/auth/google/callback" , passport.authenticate('google' , {failureRedirect: '/login/failed'}) , authControlers.OAuth2Google) ; 
+
+router.get("login/failed" , authControlers.OAuth2Failed) ;
 
 export default router ;
