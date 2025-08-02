@@ -1,6 +1,6 @@
 import { Request , Response } from "express" ;
 
-import { Blog } from "../Models/Blog";
+import { Blog, IBlog } from "../Models/Blog";
 import { Comment } from "../Models/Comment" ;
 import { User } from "../Models/User";
 import { Role } from "../enums/Role";
@@ -117,29 +117,29 @@ const getBlogs =  async (req : Request , res: Response) : Promise<void> => {
         const skip = (pageNumber - 1) * limitNumber ;
 
         let blogs = await Blog.find().sort({createdAt: -1}).skip(skip).limit(limitNumber) ; 
-        let bolgsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0" , vote: "none"})) ; 
+        let blogsRes = blogs.map(blog => Object.assign({} , blog.toObject() , {name: "name" , role: Role.Admin , photoID: "0" , vote: "none"})) ; 
 
         for(let i = 0 ; i < blogs.length ; i ++){
 
             let oldUser = await User.findById(blogs[i].blogedBy) ;
 
             if(!oldUser) {
-                bolgsRes[i].name = "Deleted Account" ;
+                blogsRes[i].name = "Deleted Account" ;
                 
             }
             else {
-                bolgsRes[i].name = oldUser.name ;
-                bolgsRes[i].role = oldUser.role ;
-                bolgsRes[i].photoID = oldUser.photoID ;
+                blogsRes[i].name = oldUser.name ;
+                blogsRes[i].role = oldUser.role ;
+                blogsRes[i].photoID = oldUser.photoID ;
             }
 
             let oldVote = await Vote.findOne({userID , blogID: blogs[i].id}) ;
 
-            if(oldVote)bolgsRes[i].vote = oldVote.voteType ;
+            if(oldVote)blogsRes[i].vote = oldVote.voteType ;
 
         }
 
-        res.status(201).send({blogs: bolgsRes}) ;
+        res.status(201).send({blogs: blogsRes}) ;
 
     } catch (error) {
         console.error('get Blogs error:' , error) ;
@@ -381,6 +381,56 @@ const getNumberOfUpvotes =  async (req : Request , res: Response) : Promise<void
 
 } ;
 
+const getBlog =  async (req : Request , res: Response) : Promise<void> => {
+    
+
+    const { blogID } = req.query ;
+    const { userID } = req.payload ;
+    
+    try {
+        
+        let blog = await Blog.findById(blogID) ;
+
+
+        if(!blog){
+            res.status(404).send({message: "blog not found"}) ;
+            return ;
+        }
+
+        let blogRes = blog.toObject() as IBlog & { 
+            name?: string ; 
+            role?: string ; 
+            photoID?: string ;
+            vote?: string ;
+        } ; 
+
+        let oldUser = await User.findById(blog.blogedBy) ;
+
+        if(!oldUser) {
+            blogRes.name = "Deleted Account" ;
+        }
+        else {
+            blogRes.name = oldUser.name ;
+            blogRes.role = oldUser.role ;
+            blogRes.photoID = oldUser.photoID ;
+        }
+
+        let oldVote = await Vote.findOne({userID , blogID: blog.id}) ;
+
+        if(oldVote)blogRes.vote = oldVote.voteType ;
+
+        res.status(201).send({blog: blogRes}) ;
+
+    } catch (error) {
+        console.error('get Blogs error:' , error) ;
+        res.status(500).send({
+            message: "get Blogs process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
 
 
 
@@ -396,6 +446,7 @@ export default {
     getNumberOfComments , 
     addUpvote , 
     deleteUpvote , 
-    getNumberOfUpvotes
+    getNumberOfUpvotes ,
+    getBlog
 
 }
