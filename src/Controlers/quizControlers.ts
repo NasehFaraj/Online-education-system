@@ -5,13 +5,13 @@ import { Quiz } from "../Models/Quiz" ;
 import { TodoList } from "../Models/TodoList" ;
 import { IQuizResponse } from "../Interfaces/IQuizResponse" ;
 import { IAIQuizResponse } from "../Interfaces/IAIQuizResponse" ;
-import { Submission } from "../Models/Submission" ;
+import { ISubmission, Submission } from "../Models/Submission" ;
 import { GeneratedQuiz, generateQuiz } from "../Services/generationQuizByAIService" ;
 import * as fileService from "../Services/fileService";
 import { Lesson } from "../Models/Lesson" ;
 import { AIQuiz } from "../Models/AIQuiz" ;
 import { Role } from "../enums/Role";
-import { AISubmission } from "../Models/AISubmission";
+import { AISubmission, IAISubmission } from "../Models/AISubmission";
 
 
 const addQuiz = async (req : Request , res: Response) : Promise<void> => { 
@@ -528,6 +528,94 @@ const getAIMySubmission = async (req : Request , res: Response) : Promise<void> 
 
 };
 
+const getMyStatistics = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { userID } = req.payload ;
+
+    try {
+
+        let AISubmissions = await AISubmission.find({studentID: userID}) ;
+        let   submissions = await   Submission.find({studentID: userID}) ;
+
+        let AISubmissionsByCategory: {[key: string]: IAISubmission[]} = {};
+        let submissionsByCategory: {[key: string]: ISubmission[]} = {};
+
+        for(let i = 0 ; i < AISubmissions.length ; i ++){
+
+            let originQuiz = await Quiz.findById(AISubmissions[i].quizID) ;
+
+            if(!originQuiz)continue ;
+
+            AISubmissionsByCategory[originQuiz.category].push(AISubmissions[i]) ;
+        
+        }
+
+
+        for(let i = 0 ; i < submissions.length ; i ++){
+
+            let originQuiz = await Quiz.findById(submissions[i].quizID) ;
+
+            if(!originQuiz)continue ;
+
+            submissionsByCategory[originQuiz.category].push(submissions[i]) ;
+        
+        }
+
+        let AIStatisticsByCategory: {[key: string]: number} = {} ;
+        let   statisticsByCategory: {[key: string]: number} = {} ;
+
+        for (const category in AISubmissionsByCategory) {
+
+            if (AISubmissionsByCategory.hasOwnProperty(category)) {
+
+                const submissions = AISubmissionsByCategory[category] ;
+                let sum = 0 , num = 0 ;
+
+                for (const ele of submissions) {
+                    sum += ele.score || 0 ;  
+                    num ++ ;
+                }
+
+                AIStatisticsByCategory[category] = Math.round(sum / num) ;
+
+            }
+
+        }
+
+        for (const category in submissionsByCategory) {
+
+            if (submissionsByCategory.hasOwnProperty(category)) {
+
+                const submissions = submissionsByCategory[category] ;
+                let sum = 0 , num = 0 ;
+
+                for (const ele of submissions) {
+                    sum += ele.score || 0 ;  
+                    num ++ ;
+                }
+
+                statisticsByCategory[category] = Math.round(sum / num) ;
+
+            }
+
+        }
+
+        res.status(201).send({statistics: {
+            statisticsByCategory ,
+            AIStatisticsByCategory
+        }}) ;
+
+    } catch (error) {
+        console.error('get my statistics error:' , error) ;
+        res.status(500).send({
+            message: "get my statistics process failed" ,
+            error: error
+        });
+    }
+
+
+} ;
+
 export default {
 
     addQuiz ,
@@ -546,6 +634,7 @@ export default {
     AISubmitSolution ,
     getMySubmission ,
     getAIMySubmission ,
+    getMyStatistics
 
 
 }

@@ -19,6 +19,6 @@ router.get("/auth/google" , passport.authenticate('google' , { scope: ['email', 
 
 router.get("/auth/google/callback" , passport.authenticate('google' , {failureRedirect: '/login/failed'}) , authControlers.OAuth2Google) ; 
 
-router.get("login/failed" , authControlers.OAuth2Failed) ;
+router.get("/login/failed" , authControlers.OAuth2Failed) ;
 
 export default router ;

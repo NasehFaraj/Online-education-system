@@ -39,4 +39,6 @@ router.get("/quiz/Submission" , usersMiddleware([Role.Teacher , Role.Admin , Rol
 
 router.get("/quiz/AI/Submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAIMySubmission) ;
 
+router.get("/quiz/statistics" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMyStatistics) ;
+
 export default router ;

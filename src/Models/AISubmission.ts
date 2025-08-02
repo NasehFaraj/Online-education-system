@@ -1,6 +1,6 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
 
-interface IAISubmission {
+export interface IAISubmission {
 
     _id: Types.ObjectId ;
     quizID: Types.ObjectId ;
