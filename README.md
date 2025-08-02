@@ -41,18 +41,31 @@ A scalable **RESTful API** built with **TypeScript**, **Node.js**, **Express.js*
 3. **Configure environment variables**  
    Create a `.env` file in the root with the following content:
    ```env
-   DATABASE_URL=your_mongodb_uri
+   # Database
+   DATABASE_URL=mongodb://localhost:27017/
+
+   # Email (OAuth2 via Gmail)
    EMAIL_SERVICE=Gmail
-   MAIL_USERNAME=your_email
-   MAIL_PASSWORD=your_password_or_app_token
-   MAIL_CLIENT_ID=your_client_id
-   MAIL_CLIENT_SECRET=your_client_secret
+   MAIL_USERNAME=your_email@gmail.com
+   MAIL_PASSWORD=your_generated_password_or_app_password
+   MAIL_CLIENT_ID=your_google_client_id
+   MAIL_CLIENT_SECRET=your_google_client_secret
    MAIL_REFRESH_TOKEN=your_refresh_token
    MAIL_REDIRECT_URL=http://localhost/callback
-   PORT=3000
+
+   # JWT
    JWT_SECRET=your_jwt_secret
-   EXPIRESIN=300
+   EXPIRESIN=2592000
    ALGORITHM=HS256
+
+   # Application
+   PORT=3000
+   SESSION_SECRET=your_session_secret
+   CALLBACK_URL=http://localhost/auth/google/callback
+   FRONTEND_URL=https://yourfrontenddomain.com
+
+   # Optional AI API
+   OPENROUTER_API_KEY=your_openrouter_key
    ```
 
 4. **Build the project**
@@ -99,7 +112,7 @@ src/
 ## 👨‍💻 Author
 
 **Naseh Faraj**  
-Backend Developer | Full-stack Enthusiast  
+Backend Developer | Software Developer
 - GitHub: [@NasehFaraj](https://github.com/NasehFaraj)  
 - LinkedIn: [linkedin.com/in/naseh-faraj-432b7b233](https://linkedin.com/in/naseh-faraj-432b7b233)  
 - Telegram: [@NasehFaraj](https://t.me/NasehFaraj)
