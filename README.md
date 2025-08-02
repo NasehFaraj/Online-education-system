@@ -1,121 +1,108 @@
- 
-# Online Education System
+# 📚 Online Education System
 
-# 📚 Project Overview
-
-This is a simple and scalable Online Education System built with Node.js, TypeScript, MongoDB, and JWT for authentication. The system aims to provide a platform where users can register, log in, browse, and manage courses, quizzes, and educational content. The platform also supports features like user favorites, dynamic content management, and secure API endpoint
-
-# 🚀 Tech Stack
-
-- Node.js + Express
-- TypeScript
-- MongoDB + Mongoose
-- JWT (JSON Web Tokens) for authentication
-
-# ⚙️ Features
-
-- Authentication: JWT-based authentication for secure login and registration
-
-- Courses Management: Users can add, edit, delete, and view courses
-
-- Quizzes: Interactive quizzes that allow users to take tests related to the courses
-
-- Favorites: Users can save their favorite courses to access them later
-
-- RESTful API: Clean and scalable API for backend interactions
-
-- Modular Architecture: Well-organized code structure that supports easy maintenance and future updates
-
-
-# 🛠️ Installation & Running Locally
-
-1. Clone the repository:
-
-   git clone https://github.com/NasehFaraj/Online-education-system
-   cd Online-education-system
-
-2. Install dependencies:
-
-npm install
-
-3. Setup environment variables:
-
-Create a .env file in the root directory and add the following:
-
-
-# 🌱 Environment Variables
-
-### Database
-
-DATABASE_URL=your-mongodb-uri
-
-### Email Service (Gmail SMTP or OAuth2)
-
-EMAIL_SERVICE=Gmail
-
-MAIL_USERNAME=your-email@gmail.com
-
-MAIL_PASSWORD=your-app-password-or-oauth-password
-
-MAIL_CLIENT_ID=your-client-id
-
-MAIL_CLIENT_SECRET=your-client-secret
-
-MAIL_REFRESH_TOKEN=your-refresh-token
-
-MAIL_REDIRECT_URL=http://localhost/callback
-
-
-### App
-
-PORT=3000
-
-
-### JWT
-
-JWT_SECRET=your-jwt-secret
-
-EXPIRESIN=300
-
-ALGORITHM=HS256
-
-
-
-4. Build the server:
-
-npm run build
-
-
-5. Run the development server:
-
-
-node dist/app.js
-
-
-Visit http://localhost:5000 to start interacting with the app.
-
-
-# 🧪 API Testing
-
-Use Postman or any REST client to test the API endpoints. All routes are defined in the /routes directory.
-
-
-# 💼 Deployment
-
-For deployment, you can use platforms like Render, Heroku, or Vercel. You can set up Continuous Integration (CI) to automatically deploy changes to your application.
-
-# 🔨 Future Features
-
-Add a recommendation engine for course suggestions
-
-User role management (Admin, Student, etc.)
-
-Enhanced analytics dashboard for instructors
-
+A scalable **RESTful API** built with **TypeScript**, **Node.js**, **Express.js**, and **MongoDB**. It provides a robust backend for managing courses, quizzes, user authentication, and favorite lists. JWT is used for authentication and role-based access control.
 
 ---
 
-# 👨‍💻 Author
+## 🚀 Features
 
-Naseh Faraj
-Backend Developer | GitHub: @NasehFaraj | Linkedin: https://linkedin.com/in/naseh-faraj-432b7b233
+- **User Authentication** with JWT (Login & Register)
+- **Course Management**: Create, edit, delete, and view educational courses
+- **Quiz System**: Attach quizzes to courses and allow users to take them
+- **Favorites**: Save and retrieve favorite courses per user
+- **Modular Structure**: Organized codebase with controllers, services, models, and routes
+- **Scalable Setup** with clear separation of concerns and environment variables
+
+---
+
+## 🧰 Tech Stack
+
+- **Backend**: Node.js, Express.js, TypeScript
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT, OAuth2
+- **Email Service**: Nodemailer with Gmail OAuth2
+- **Environment**: Configurable via `.env` file
+
+---
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/NasehFaraj/Online-education-system
+   cd Online-education-system
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**  
+   Create a `.env` file in the root with the following content:
+   ```env
+   DATABASE_URL=your_mongodb_uri
+   EMAIL_SERVICE=Gmail
+   MAIL_USERNAME=your_email
+   MAIL_PASSWORD=your_password_or_app_token
+   MAIL_CLIENT_ID=your_client_id
+   MAIL_CLIENT_SECRET=your_client_secret
+   MAIL_REFRESH_TOKEN=your_refresh_token
+   MAIL_REDIRECT_URL=http://localhost/callback
+   PORT=3000
+   JWT_SECRET=your_jwt_secret
+   EXPIRESIN=300
+   ALGORITHM=HS256
+   ```
+
+4. **Build the project**
+   ```bash
+   npm run build
+   ```
+
+5. **Start the server**
+   ```bash
+   node dist/app.js
+   ```
+
+6. **Explore the API**
+   Visit `http://localhost:3000` using Postman or any API client.
+
+---
+
+## 🧪 Testing
+
+You can test all routes using:
+- [Postman](https://www.postman.com/)
+- [Insomnia](https://insomnia.rest/)
+- Any REST client of your choice
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── config/
+├── controllers/
+├── enums/
+├── interface/
+├── middleware/
+├── models/
+├── routes/
+├── services/
+└── app.ts
+```
+
+---
+
+## 👨‍💻 Author
+
+**Naseh Faraj**  
+Backend Developer | Full-stack Enthusiast  
+- GitHub: [@NasehFaraj](https://github.com/NasehFaraj)  
+- LinkedIn: [linkedin.com/in/naseh-faraj-432b7b233](https://linkedin.com/in/naseh-faraj-432b7b233)  
+- Telegram: [@NasehFaraj](https://t.me/NasehFaraj)
+
+
+
