@@ -1,10 +1,12 @@
 import { Schema , model , HydratedDocument , Types } from "mongoose";
+import { Category } from "../enums/Category";
 
 export interface IIAQuiz {
 
     _id: Types.ObjectId ;
     title: string;
-    description: string;
+    description: string; 
+    category:  Category ;
     questions: {
         text: string;
         options: string[];
@@ -24,6 +26,11 @@ const AIQuizSchema = new Schema<AIQuizDocument>(
         description: {
             type: String ,
             default: "" ,
+            required: true
+        },
+         category: {
+            type: String ,
+            enum: Category ,
             required: true
         },
         questions: [{

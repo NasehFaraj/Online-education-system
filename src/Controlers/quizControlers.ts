@@ -401,7 +401,7 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
         let oldLesson = await Lesson.findById(lessonID) ;
 
         if(!oldLesson){
-
+            res.status(404).send({massage:"lesson not found"}) ;
             return ;
         }
 
@@ -417,7 +417,7 @@ const AIGenerateQuiz = async (req : Request , res: Response) : Promise<void> => 
                 
         const { questions } = await generateQuiz(fileBuffer) as GeneratedQuiz ;
 
-        const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions}) ;
+        const newQuiz = new AIQuiz({title :oldLesson.title , description :oldLesson.description , questions , category: oldLesson.category}) ;
 
         await newQuiz.save() ;
 
@@ -494,8 +494,21 @@ const getMySubmission = async (req : Request , res: Response) : Promise<void> =>
     try {
         
         let submissions = await Submission.find({studentID: userID}).sort({createdAt: -1}) ;
+        let submissionsRes = submissions.map(submission => Object.assign({} , submission.toObject() , {title: "" , description: "" , category: ""})) ; 
 
-        res.status(201).send({submissions}) ;
+        for(let i = 0 ; i < submissions.length ; i ++){
+        
+            let oldQuiz = await Quiz.findById(submissions[i].quizID) ;
+
+            if(oldQuiz) {
+                submissionsRes[i].title = oldQuiz.title ;
+                submissionsRes[i].description = oldQuiz.description ;
+                submissionsRes[i].category = oldQuiz.category ;
+            }
+
+        }
+
+        res.status(201).send({submissionsRes}) ;
 
     } catch (error) {
         console.error('get my submission error:' , error) ;
@@ -515,8 +528,22 @@ const getAIMySubmission = async (req : Request , res: Response) : Promise<void> 
     try {
         
         let submissions = await AISubmission.find({studentID: userID}).sort({createdAt: -1}) ;
+        let submissionsRes = submissions.map(submission => Object.assign({} , submission.toObject() , {title: "" , description: "" , category: ""})) ; 
 
-        res.status(201).send({submissions}) ;
+        for(let i = 0 ; i < submissions.length ; i ++){
+        
+            let oldQuiz = await AIQuiz.findById(submissions[i].quizID) ;
+
+            if(oldQuiz) {
+                submissionsRes[i].title = oldQuiz.title ;
+                submissionsRes[i].description = oldQuiz.description ;
+                submissionsRes[i].category = oldQuiz.category ;
+            }
+
+        }
+
+
+        res.status(201).send({submissionsRes}) ;
 
     } catch (error) {
         console.error('get my AI submission error:' , error) ;
