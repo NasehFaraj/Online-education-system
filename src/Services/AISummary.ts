@@ -4,13 +4,13 @@ import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 dotenv.config();
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY ;
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions" ;
 
 async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
-    const data = new Uint8Array(pdfBuffer);
+    const data = new Uint8Array(pdfBuffer) ;
 
-    const doc = await getDocument(data).promise;
+    const doc = await getDocument(data).promise ;
     const numPages = doc.numPages;
     let fullText = '';
 
@@ -22,7 +22,7 @@ async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
         fullText += pageText + ' ';
     }
 
-    return fullText.split(' ').slice(0, 1500).join(' ');
+    return fullText.split(' ').slice(0 , 1500).join(' ') ;
 }
 
 interface GeneratedQuestion {
@@ -37,27 +37,21 @@ export interface GeneratedQuiz {
     questions: GeneratedQuestion[];
 }
 
-async function generateQuestionsFromText(textContext: string): Promise<GeneratedQuiz> {
+async function summaryFromText(textContext: string): Promise<GeneratedQuiz> {
     if (!OPENROUTER_API_KEY) {
         throw new Error("OpenRouter API key not found.");
     }
 
     const shortText = textContext.split(' ').slice(0, 800).join(' ');
 
-    const prompt = `Generate 5 multiple-choice questions from the following text: 
+    const prompt = `Summarize this text: 
     
     ${shortText}
     
     Requirements:
-    1. Each question must have 4 options just one correct
-    2. Mark the correct answer as a number (0-3)
-    3. Output ONLY JSON in this exact format:
+    Output ONLY JSON in this exact format:
     {
-      "questions":{
-          "text": string ,
-          "options": string[],
-          "correctAnswer": number 0 to 3 
-        }[]
+      "text":string
     }` ;
 
     try {
@@ -113,7 +107,7 @@ async function generateQuestionsFromText(textContext: string): Promise<Generated
     }
 }
 
-export async function generateQuiz(pdfBuffer: Buffer): Promise<object> {
+export async function AISummary(pdfBuffer: Buffer): Promise<object> {
     console.log("Service: Extracting text from PDF buffer...");
     const text = await extractTextFromPdf(pdfBuffer);
 
@@ -121,18 +115,10 @@ export async function generateQuiz(pdfBuffer: Buffer): Promise<object> {
         throw new Error("No text could be extracted from the PDF.");
     }
 
-    console.log("Service: Generating questions from text using OpenRouter...");
-    const quizData = await generateQuestionsFromText(text);
+    console.log("Service: summary from text using OpenRouter...") ;
+    const summary = await summaryFromText(text) ;
 
-    console.log("Service: Processing complete.");
+    console.log("Service: Processing complete.") ;
 
-    return {
-        generated_at: new Date().toISOString(),
-        questions: quizData.questions.map((q, index) => ({
-            id: index + 1,
-            text: q.text,
-            options: q.options,
-            correctAnswer: q.correctAnswer
-        }))
-    };
+    return summary
 }
