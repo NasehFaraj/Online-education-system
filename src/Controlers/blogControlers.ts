@@ -320,7 +320,7 @@ const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
     
     try {
 
-        let oldVote = await Vote.find({userID , blogID , voteType: VoteType.Upvote}) ;
+        let oldVote = await Vote.findOne({userID , blogID , voteType: VoteType.Upvote}) ;
 
         if(oldVote){
             res.status(402).send({message: "upvote is already added"}) ;
