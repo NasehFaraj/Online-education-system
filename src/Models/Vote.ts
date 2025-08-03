@@ -5,7 +5,7 @@ import { VoteType } from "../enums/VoteType";
 export interface IVote {
     
     _id: Types.ObjectId ;
-    userID: Schema.Types.ObjectId ;
+    userID: string ;
     blogID: string ;
     voteType: VoteType ; 
 
@@ -16,7 +16,7 @@ type VoteDocument = HydratedDocument<IVote>;
 const VoteSchema = new Schema<VoteDocument>({
     
     userID: {
-        type: Schema.Types.ObjectId ,
+        type: String ,
         required: true 
     } ,
     blogID: {
