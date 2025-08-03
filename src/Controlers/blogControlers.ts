@@ -352,7 +352,7 @@ const deleteUpvote =  async (req : Request , res: Response) : Promise<void> => {
         
         await Vote.findOneAndDelete({userID , blogID , voteType: VoteType.Upvote}) ; 
 
-        res.status(201).send({message: "Upvote has been deletee"}) ; 
+        res.status(201).send({message: "Upvote has been deleted"}) ; 
         
 
     } catch (error) {
