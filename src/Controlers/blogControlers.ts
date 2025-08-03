@@ -345,7 +345,7 @@ const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
 const deleteUpvote =  async (req : Request , res: Response) : Promise<void> => {
     
 
-    const { blogID } = req.query ;
+    const { blogID } = req.body ;
     const { userID } = req.payload ;
 
     try {
