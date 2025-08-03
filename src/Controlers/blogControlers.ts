@@ -319,10 +319,17 @@ const addUpvote =  async (req : Request , res: Response) : Promise<void> => {
     const { userID } = req.payload ;
     
     try {
-        
+
+        let oldVote = await Vote.find({userID , blogID , voteType: VoteType.Upvote}) ;
+
+        if(oldVote){
+            res.status(401).send({message: "upvote is already added"}) ;
+            return ;
+        }
+         
         await Vote.insertOne({userID , blogID , voteType: VoteType.Upvote}) ; 
 
-        res.status(201).send({massage: "Upvote has been added"}) ;
+        res.status(201).send({message: "Upvote has been added"}) ;
 
     } catch (error) {
         console.error('add upvote error:' , error) ;
@@ -345,7 +352,7 @@ const deleteUpvote =  async (req : Request , res: Response) : Promise<void> => {
         
         await Vote.findOneAndDelete({userID , blogID , voteType: VoteType.Upvote}) ; 
 
-        res.status(201).send({massage: "Upvote has been deletee"}) ; 
+        res.status(201).send({message: "Upvote has been deletee"}) ; 
         
 
     } catch (error) {
