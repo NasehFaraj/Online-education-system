@@ -569,7 +569,7 @@ const getMyStatistics = async (req : Request , res: Response) : Promise<void> =>
 
         for(let i = 0 ; i < AISubmissions.length ; i ++) {
             
-            let originQuiz = await Quiz.findById(AISubmissions[i].quizID ) ;
+            let originQuiz = await AIQuiz.findById(AISubmissions[i].quizID) ;
             
             if(!originQuiz) continue ;
             
