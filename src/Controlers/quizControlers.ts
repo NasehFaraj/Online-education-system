@@ -643,6 +643,33 @@ const getMyStatistics = async (req : Request , res: Response) : Promise<void> =>
 
 } ;
 
+const getAIQuiz = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { quizID } = req.query ; 
+
+    try {
+        
+        let oldQuiz = await AIQuiz.findById(quizID) ;
+
+        if(!oldQuiz){
+            res.status(401).send({message: "Quiz not found"}) ;
+            return ;
+        }
+
+        res.status(201).send({message: "get Quiz has been successful" , quiz: oldQuiz}) ;
+
+    } catch (error) {
+        console.error('get AI quiz error:' , error) ;
+        res.status(500).send({
+            message: "get AI quiz process failed" ,
+            error: error
+        });
+    }
+
+
+} ; 
+
+
 export default {
 
     addQuiz ,
@@ -661,7 +688,8 @@ export default {
     AISubmitSolution ,
     getMySubmission ,
     getAIMySubmission ,
-    getMyStatistics
+    getMyStatistics , 
+    getAIQuiz
 
 
 }

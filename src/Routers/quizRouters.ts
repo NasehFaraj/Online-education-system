@@ -31,13 +31,15 @@ router.get("/quiz/my" , usersMiddleware([Role.Teacher , Role.Admin]) , quizContr
 
 router.get("/quiz/my/number" , usersMiddleware([Role.Teacher , Role.Admin]) , quizControlers.getNumberOfMyQuizzes) ;
 
+router.get("/quiz/AI" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student])  , quizControlers.getAIQuiz) ;
+
 router.get("/quiz/AI/generate" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student])  , quizControlers.AIGenerateQuiz) ;
 
 router.put("/quiz/AI/submit-solution" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.AISubmitSolution) ;
 
-router.get("/quiz/Submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMySubmission) ;
+router.get("/quiz/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMySubmission) ;
 
-router.get("/quiz/AI/Submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAIMySubmission) ;
+router.get("/quiz/AI/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAIMySubmission) ;
 
 router.get("/quiz/statistics" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMyStatistics) ;
 
