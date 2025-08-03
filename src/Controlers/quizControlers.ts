@@ -557,90 +557,85 @@ const getAIMySubmission = async (req : Request , res: Response) : Promise<void> 
 
 const getMyStatistics = async (req : Request , res: Response) : Promise<void> => { 
 
-    const { userID } = req.payload ;
+    const { userID } = req.payload;
 
     try {
 
         let AISubmissions = await AISubmission.find({studentID: userID}) ;
-        let   submissions = await   Submission.find({studentID: userID}) ;
+        let submissions = await Submission.find({studentID: userID}) ;
 
-        let AISubmissionsByCategory: {[key: string]: IAISubmission[]} = {};
-        let submissionsByCategory: {[key: string]: ISubmission[]} = {};
+        let AISubmissionsByCategory: {[key: string]: IAISubmission[]} = {} ;
+        let submissionsByCategory: {[key: string]: ISubmission[]} = {} ;
 
-        for(let i = 0 ; i < AISubmissions.length ; i ++){
-
-            let originQuiz = await Quiz.findById(AISubmissions[i].quizID) ;
-
-            if(!originQuiz)continue ;
-
+        for(let i = 0 ; i < AISubmissions.length ; i ++) {
+            
+            let originQuiz = await Quiz.findById(AISubmissions[i].quizID ) ;
+            
+            if(!originQuiz) continue ;
+            
+            if(!AISubmissionsByCategory[originQuiz.category]) {
+                AISubmissionsByCategory[originQuiz.category] = [] ;
+            }
+            
             AISubmissionsByCategory[originQuiz.category].push(AISubmissions[i]) ;
-        
         }
 
-
-        for(let i = 0 ; i < submissions.length ; i ++){
+        for(let i = 0 ; i < submissions.length ; i ++) {
 
             let originQuiz = await Quiz.findById(submissions[i].quizID) ;
-
-            if(!originQuiz)continue ;
-
+            if(!originQuiz) continue ;
+            
+            if(!submissionsByCategory[originQuiz.category]) {
+                submissionsByCategory[originQuiz.category] = [] ;
+            }
+            
             submissionsByCategory[originQuiz.category].push(submissions[i]) ;
-        
         }
 
         let AIStatisticsByCategory: {[key: string]: number} = {} ;
-        let   statisticsByCategory: {[key: string]: number} = {} ;
+        let statisticsByCategory: {[key: string]: number} = {} ;
 
         for (const category in AISubmissionsByCategory) {
 
             if (AISubmissionsByCategory.hasOwnProperty(category)) {
-
+            
                 const submissions = AISubmissionsByCategory[category] ;
                 let sum = 0 , num = 0 ;
-
+            
                 for (const ele of submissions) {
-                    sum += ele.score || 0 ;  
+                    sum += ele.score || 0 ;
                     num ++ ;
                 }
-
                 AIStatisticsByCategory[category] = Math.round(sum / num) ;
-
             }
-
         }
 
         for (const category in submissionsByCategory) {
-
             if (submissionsByCategory.hasOwnProperty(category)) {
-
                 const submissions = submissionsByCategory[category] ;
                 let sum = 0 , num = 0 ;
-
                 for (const ele of submissions) {
-                    sum += ele.score || 0 ;  
+                    sum += ele.score || 0 ;
                     num ++ ;
                 }
-
                 statisticsByCategory[category] = Math.round(sum / num) ;
-
             }
-
         }
 
-        res.status(201).send({statistics: {
-            statisticsByCategory ,
-            AIStatisticsByCategory
-        }}) ;
+        res.status(201).send({
+            statistics: {
+                statisticsByCategory ,
+                AIStatisticsByCategory
+            }
+        });
 
     } catch (error) {
-        console.error('get my statistics error:' , error) ;
+        console.error('get my statistics error:', error) ;
         res.status(500).send({
             message: "get my statistics process failed" ,
             error: error
-        });
+        }) ;
     }
-
-
 } ;
 
 const getAIQuiz = async (req : Request , res: Response) : Promise<void> => { 
