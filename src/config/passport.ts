@@ -79,8 +79,9 @@ let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToke
             name: profile.displayName,
             email: profile.emails?.[0]?.value ,
             gender: profile.gender || Gender.Male ,
-            password: hashPassword
-                        
+            password: hashPassword , 
+            isVerified: true 
+            
         }) ;
 
         
