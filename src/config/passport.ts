@@ -73,13 +73,14 @@ let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToke
         console.log(photo[randomIndex].photoID) ;
         const randomPhotoID = photo[randomIndex].photoID ;
 
-        const newUser = await User.create({
+        const newUser = new User({
 
             googleID: profile.id,
             name: profile.displayName,
             email: profile.emails?.[0]?.value ,
             gender: profile.gender || Gender.Male ,
             password: hashPassword , 
+            photoID: randomPhotoID ,
             isVerified: true 
             
         }) ;
