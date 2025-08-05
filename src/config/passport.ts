@@ -96,7 +96,7 @@ let verify:VerifyFunctionWithRequestAndParams = async (req: Request , accessToke
         await newUser.save() ;
 
         req.payload = userInfo ; 
-        return done(null , user) ;
+        return done(null , newUser) ;
             
     } catch (error) {
         return done(error as Error , false) ;
