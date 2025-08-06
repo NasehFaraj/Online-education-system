@@ -133,6 +133,7 @@ const getQuiz = async (req : Request , res: Response) : Promise<void> => {
 const getQuizzes = async (req : Request , res: Response) : Promise<void> => { 
 
     const { page , limit } = req.query ;
+    const { userID } = req.payload ;
 
     try {
         
@@ -151,9 +152,20 @@ const getQuizzes = async (req : Request , res: Response) : Promise<void> => {
         
         const skip = (pageNumber - 1) * limitNumber ;
 
-        const quizzes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limitNumber).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
+        let quizzes = await Quiz.find().sort({createdAt: -1}).skip(skip).limit(limitNumber).select('-questions.correctAnswer').lean() as IQuizResponse[] ;
+        let quizzesRes = quizzes.map(quiz => Object.assign({} , quiz , { isAtTodoList: false })) ;
 
-        res.status(201).send({quizzes}) ;
+        for(let i = 0 ; i < quizzes.length ; i ++){
+        
+            let oldEle = await TodoList.findOne({quizID: quizzes[i]._id , userID: userID}) ;
+
+            if(oldEle) {
+                quizzesRes[i].isAtTodoList = true ;
+            }
+
+        }
+
+        res.status(201).send({quizzes: quizzesRes}) ;
 
     } catch (error) {
         console.error('get Quizzes error:' , error) ;
