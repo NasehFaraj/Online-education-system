@@ -236,8 +236,21 @@ const getTodoList = async (req : Request , res: Response) : Promise<void> => {
     try {
 
         let myTodoList = await TodoList.find({userID: userID}).sort({createdAt: -1}) ;
+        let myTodoListRes = myTodoList.map(quiz => Object.assign({} , quiz.toObject() , {title: "" , description: "" , category: ""})) ; 
+
+        for(let i = 0 ; i < myTodoList.length ; i ++){
+        
+            let oldQuiz = await Quiz.findById(myTodoList[i].quizID) ;
+
+            if(oldQuiz) {
+                myTodoListRes[i].title = oldQuiz.title ;
+                myTodoListRes[i].description = oldQuiz.description ;
+                myTodoListRes[i].category = oldQuiz.category ;
+            }
+
+        }
     
-        res.status(201).send({myTodoList: myTodoList}) ;
+        res.status(201).send({myTodoList: myTodoListRes}) ;
 
     } catch (error) {
         console.error('get todo list error:' , error) ;
@@ -508,7 +521,7 @@ const getMySubmission = async (req : Request , res: Response) : Promise<void> =>
 
         }
 
-        res.status(201).send({submissionsRes}) ;
+        res.status(201).send({submissions: submissionsRes}) ;
 
     } catch (error) {
         console.error('get my submission error:' , error) ;
@@ -543,7 +556,7 @@ const getAIMySubmission = async (req : Request , res: Response) : Promise<void> 
         }
 
 
-        res.status(201).send({submissionsRes}) ;
+        res.status(201).send({submissions: submissionsRes}) ;
 
     } catch (error) {
         console.error('get my AI submission error:' , error) ;
