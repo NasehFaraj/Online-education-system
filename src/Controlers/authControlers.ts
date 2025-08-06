@@ -233,7 +233,7 @@ const sendCode = async (req : Request , res: Response) : Promise<void> => {
             return ;
         }
 
-        await VerifyCode.findOneAndDelete({email:email , codeType:codeType}) ;
+        await VerifyCode.findOneAndDelete({email:email , codeType: codeType}) ;
         
         const newCode = (Math.random() * (999999 - 100000) + 100000) | 0 ;
         const newVerifyCode = new VerifyCode({
