@@ -690,6 +690,48 @@ const getAIQuiz = async (req : Request , res: Response) : Promise<void> => {
 } ; 
 
 
+const getSubmission = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { submissionID } = req.query ;
+    
+    try {
+        
+        let submission = await Submission.findById(submissionID) ; 
+
+        res.status(201).send({submission: submission}) ;
+
+    } catch (error) {
+        console.error('get submission error:' , error) ;
+        res.status(500).send({
+            message: "get submission process failed" ,
+            error: error
+        });
+    }
+
+};
+
+
+const getAISubmission = async (req : Request , res: Response) : Promise<void> => { 
+
+    const { submissionID } = req.query ;
+    
+    try {
+        
+        let submission = await AISubmission.findById(submissionID) ; 
+
+        res.status(201).send({submission: submission}) ;
+
+    } catch (error) {
+        console.error('get AI submission error:' , error) ;
+        res.status(500).send({
+            message: "get AI submission process failed" ,
+            error: error
+        });
+    }
+
+};
+
+
 export default {
 
     addQuiz ,
@@ -709,7 +751,9 @@ export default {
     getMySubmission ,
     getAIMySubmission ,
     getMyStatistics , 
-    getAIQuiz
+    getAIQuiz ,
+    getSubmission ,
+    getAISubmission 
 
 
 }

@@ -37,10 +37,15 @@ router.get("/quiz/AI/generate" , usersMiddleware([Role.Teacher , Role.Admin , Ro
 
 router.put("/quiz/AI/submit-solution" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.AISubmitSolution) ;
 
-router.get("/quiz/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMySubmission) ;
+router.get("/quiz/submission/all/my" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMySubmission) ;
 
-router.get("/quiz/AI/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAIMySubmission) ;
+router.get("/quiz/AI/submission/all/my" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAIMySubmission) ;
 
 router.get("/quiz/statistics" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getMyStatistics) ;
+
+router.get("/quiz/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getSubmission) ;
+
+router.get("/quiz/AI/submission" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , quizControlers.getAISubmission) ;
+
 
 export default router ;
