@@ -697,8 +697,9 @@ const getSubmission = async (req : Request , res: Response) : Promise<void> => {
     try {
         
         let submission = await Submission.findById(submissionID) ; 
+        let quizInfo = await Quiz.findById(submission?.quizID) ;
 
-        res.status(201).send({submission: submission}) ;
+        res.status(201).send({submission , quizInfo}) ;
 
     } catch (error) {
         console.error('get submission error:' , error) ;
@@ -718,8 +719,10 @@ const getAISubmission = async (req : Request , res: Response) : Promise<void> =>
     try {
         
         let submission = await AISubmission.findById(submissionID) ; 
+        let quizInfo = await AIQuiz.findById(submission?.quizID) ;
 
-        res.status(201).send({submission: submission}) ;
+
+        res.status(201).send({submission , quizInfo}) ;
 
     } catch (error) {
         console.error('get AI submission error:' , error) ;
