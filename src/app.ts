@@ -22,8 +22,8 @@ dotenv.config() ;
 
 app.use(json()) ;
 app.use(cors()) ;
-server.use(helmet()) ;
-server.use(morgan('combined')) ;
+app.use(helmet()) ;
+app.use(morgan('combined')) ;
     
 
 app.use(session({
