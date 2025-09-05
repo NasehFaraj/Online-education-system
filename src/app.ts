@@ -2,6 +2,9 @@ import express, { json } from "express" ;
 import dotenv from "dotenv";
 import cors from "cors" ; 
 import session from "express-session";
+import helmet from 'helmet' ;
+import morgan from 'morgan' ;
+
 
 import passport from "./config/passport" ;
 import { connectDB } from "./config/database";
@@ -19,6 +22,8 @@ dotenv.config() ;
 
 app.use(json()) ;
 app.use(cors()) ;
+server.use(helmet()) ;
+server.use(morgan('combined')) ;
     
 
 app.use(session({
