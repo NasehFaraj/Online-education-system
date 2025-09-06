@@ -9,9 +9,9 @@ import { usersMiddleware } from "../Middlewares/usersMiddleware" ;
 const router = Router() ;
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.put("/file" , usersMiddleware([Role.Teacher , Role.Admin]) , upload.single('file') , fileControlers.uploadFile) ;
+router.put("/file" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , upload.single('file') , fileControlers.uploadFile) ;
 
-router.delete("/file" , usersMiddleware([Role.Teacher , Role.Admin]) , fileControlers.deleteFile) ;
+router.delete("/file" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.deleteFile) ;
 
 router.get("/file" , usersMiddleware([Role.Teacher , Role.Admin , Role.Student]) , fileControlers.downloadFile) ;
 
